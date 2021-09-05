@@ -1,14 +1,14 @@
 <template>
   <div>
 
-   
     <el-row :gutter="20">
       顶部
+      <button @click="dianwo()">asdf</button>
     </el-row>
     <el-row :gutter="20">
       <el-col :span="12">
         1
- <div v-katex="expression"></div>
+        <div v-katex="expression"></div>
       </el-col>
       <!-- 右边 -->
       <el-col :span="12">
@@ -29,7 +29,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="难度:" prop="nandu">
-              <el-rate  v-model="formData.nandu" show-text  :max="6" :texts="['非常简单','简单','一般或典型','典型或难','很难','难或偏']"></el-rate>
+              <el-rate v-model="formData.nandu" show-text :max="6" :texts="['非常简单','简单','一般或典型','典型或难','很难','难或偏']"></el-rate>
             </el-form-item>
             <el-form-item label="答案1:" prop="daan1">
               <el-input v-model="formData.daan1" type="textarea" placeholder="请输入答案1:" :autosize="{minRows: 4, maxRows: 4}"
@@ -61,8 +61,12 @@
 <script>
 
 import _ from 'lodash'  // lodash工具库
+import  {dbquery} from '../lib/mysql_pool'
+import mysql from 'mysql2'
+import Vue from 'vue'
+
 export default {
-  name: 'App',
+  name: 'About',
   components: {
 
   },
@@ -70,7 +74,7 @@ export default {
   data() {
     return {
       formData: {
-        timu: '',
+        timu: '1',
         xuanxiang: '',
         leixing: '选择题',
         nandu: 3,
@@ -112,7 +116,7 @@ export default {
         "value": "解答题"
       }],
 
-   
+
     }
   },
   computed: {
@@ -124,20 +128,27 @@ export default {
   created() { },
   mounted() { },
   methods: {
+    // 保存按钮
     submitForm() {
       this.$refs['elForm'].validate(valid => {
-        if (!valid) return
-        // TODO 提交表单
+         if (!valid) return
+ var a= dbquery("select * from mathtable")._rows;
+ var a=[[1]]
+ console.log(a)
+// console.log(rows);
+// console.log(fields)
       })
     },
     resetForm() {
       this.$refs['elForm'].resetFields()
     },
-  }
+  },
+  mounted() {
+
+  },
 }
 
 </script>
 <style>
-
 </style>
 
