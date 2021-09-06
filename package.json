@@ -20,13 +20,14 @@
     "miment": "^0.0.9",
     "mysql2": "^2.3.0",
     "path": "^0.12.7",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.6.5",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
     "vuex": "^3.6.2",
     "xes-katex": "^1.2.30"
   },
   "devDependencies": {
-    "@types/mysql": "^2.15.19",
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-router": "~4.3.0",
     "@vue/cli-plugin-vuex": "~4.3.0",

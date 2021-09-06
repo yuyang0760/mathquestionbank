@@ -54,15 +54,11 @@
         </div>
       </el-col>
     </el-row>
-
   </div>
-
 </template>
 <script>
 
 import _ from 'lodash'  // lodash工具库
-import  {dbquery} from '../lib/mysql_pool'
-import mysql from 'mysql2'
 import Vue from 'vue'
 
 export default {
@@ -73,6 +69,8 @@ export default {
   props: [],
   data() {
     return {
+      titles: null,  // 所有题目类 ,数据库中对应一个表
+      connect: null,
       formData: {
         timu: '1',
         xuanxiang: '',
@@ -130,21 +128,46 @@ export default {
   methods: {
     // 保存按钮
     submitForm() {
-      this.$refs['elForm'].validate(valid => {
-         if (!valid) return
- var a= dbquery("select * from mathtable")._rows;
- var a=[[1]]
- console.log(a)
-// console.log(rows);
-// console.log(fields)
+      this.$refs['elForm'].validate(async valid => {
+        if (!valid) return
+
+        // 保存按钮后
+        var title = await this.titles.findAll();
+        title.forEach(element => {
+          console.log(element.timu)
+        });
+
       })
     },
+    // 重置按钮
     resetForm() {
       this.$refs['elForm'].resetFields()
     },
   },
   mounted() {
+    console.log("mounted")
 
+    // 连接数据库
+    const Sequelize = require("sequelize");
+    const initModels = require("../lib/models/init-models").initModels;
+    const connect = new Sequelize({
+      host: 'localhost',
+      username: 'root',
+      password: '123456',
+      database: 'electron_math_db',
+      dialect: 'mysql',
+      dialectModule: require('mysql2'), // 重要,不然会出错
+      benchmark: true
+    })
+    console.log("连接数据库")
+    this.connect = connect;
+    this.titles = initModels(connect).titles;
+  },
+  destroyed() {
+    // 断开数据库
+    console.log("destroyed")
+    this.connect.close();
+    console.log("关闭数据库")
   },
 }
 
