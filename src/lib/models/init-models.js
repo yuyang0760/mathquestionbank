@@ -8,6 +8,13 @@ function initModels(sequelize) {
     titles, //表就是题目,改个名字
   };
 }
-module.exports = initModels;
+// 创建titles表格
+async function createTable(sequelize){
+  var titles = _titles(sequelize, DataTypes);
+  await titles.sync({ alter: true  })
+}
+
+
 module.exports.initModels = initModels;
-module.exports.default = initModels;
+
+module.exports.createTable = createTable;

@@ -8,49 +8,68 @@
     <el-row :gutter="20">
       <el-col :span="12">
         1
-        <div v-katex="expression"></div>
+        <div v-for="item in TimuList" :key="item.id" class="timu">
+          <div v-katex="item.formData.id+item.formData.timu">
+          </div>
+          <el-button>编辑</el-button>
+          <el-button>删除</el-button>
+        </div>
+
       </el-col>
       <!-- 右边 -->
       <el-col :span="12">
+
         <div>
-          <el-form ref="elForm" label-position="right" :model="formData" :rules="rules" size="medium" label-width="69px">
-            <el-form-item label="题目:" prop="timu">
-              <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 4}"
-                :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item label="选项:" prop="xuanxiang">
-              <el-input v-model="formData.xuanxiang" type="textarea" placeholder="请输入选项:" :autosize="{minRows: 2, maxRows: 4}"
-                :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item label="类型:" prop="leixing">
-              <el-select v-model="formData.leixing" placeholder="请选择类型:" clearable :style="{width: '100%'}">
-                <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value"
-                  :disabled="item.disabled"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="难度:" prop="nandu">
-              <el-rate v-model="formData.nandu" show-text :max="6" :texts="['非常简单','简单','一般或典型','典型或难','很难','难或偏']"></el-rate>
-            </el-form-item>
-            <el-form-item label="答案1:" prop="daan1">
-              <el-input v-model="formData.daan1" type="textarea" placeholder="请输入答案1:" :autosize="{minRows: 4, maxRows: 4}"
-                :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item label="答案2:" prop="daan2">
-              <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}"
-                :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item label="解析:" prop="jiexi">
-              <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}"
-                :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item label="来源:" prop="laiyuan">
-              <el-input v-model="formData.laiyuan" placeholder="请输入来源:" :style="{width: '100%'}"></el-input>
-            </el-form-item>
-            <el-form-item size="large">
-              <el-button type="primary" @click="submitForm">保存</el-button>
+          <el-button @click="isShowNewTimu = true">添加题目</el-button>
+
+          <el-dialog title="添加题目" :visible.sync="isShowNewTimu" v-bind="$attrs" width="80%" v-on="$listeners" @open="onOpen"
+            @close="onClose">
+            <!-- <div v-katex="newTimuExpression" class="timu"></div> -->
+            <div v-katex="{content:newTimuExpression}"></div>
+            <el-form :inline="true" ref="elForm" :model="formData" :rules="rules" size="medium" label-width="69px">
+              <el-form-item label="id:" prop="id">
+                {{formData.id}}
+              </el-form-item>
+              <el-form-item label="题目:" prop="timu">
+                <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
+              </el-form-item>
+              <el-form-item label="选项:" prop="xuanxiang">
+                <el-input v-model="formData.xuanxiang" type="textarea" placeholder="请输入选项:" :autosize="{minRows: 2, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
+              </el-form-item>
+              <el-form-item label="类型:" prop="leixing">
+                <el-select v-model="formData.leixing" placeholder="请选择类型:" clearable :style="{width: '100%'}">
+                  <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value"
+                    :disabled="item.disabled"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="难度" prop="nandu">
+                <el-rate v-model="formData.nandu" show-text :max="6" :texts="['非常简单','简单','一般或典型','典型或难','很难','难或偏']"></el-rate>
+              </el-form-item>
+              <el-form-item label=" 答案1:" prop="daan1">
+                <el-input v-model="formData.daan1" type="textarea" placeholder="请输入答案1:" :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
+              </el-form-item>
+              <el-form-item label="答案2:" prop="daan2">
+                <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
+              </el-form-item>
+              <el-form-item label="解析:" prop="jiexi">
+                <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}"
+                  :style="{width: '100%'}"></el-input>
+              </el-form-item>
+              <el-form-item label="来源:" prop="laiyuan">
+                <el-input v-model="formData.laiyuan" placeholder="请输入来源:" :style="{width: '100%'}"></el-input>
+              </el-form-item>
+            </el-form>
+            <div slot="footer">
               <el-button @click="resetForm">重置</el-button>
-            </el-form-item>
-          </el-form>
+              <el-button type="primary" @click="handelConfirm">确定</el-button>
+            </div>
+
+          </el-dialog>
+
         </div>
       </el-col>
     </el-row>
@@ -60,7 +79,7 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-
+import { v4 as uuidv4 } from 'uuid'
 export default {
   name: 'About',
   components: {
@@ -69,15 +88,19 @@ export default {
   props: [],
   data() {
     return {
-      titles: null,  // 所有题目类 ,数据库中对应一个表
-      connect: null,
+
+      isShowNewTimu: false,
+      TimuList: [],   // 储存了当前页显示的所有题目
+      titles: null,  // 题目类 ,数据库查询用
+      connect: null,  // 数据库连接,销毁用
       formData: {
-        timu: '1',
+        id: null,
+        timu: '题目',
         xuanxiang: '',
         leixing: '选择题',
         nandu: 3,
-        daan1: '',
-        daan2: '',
+        daan1: '答案1',
+        daan2: '答案2',
         jiexi: '',
         laiyuan: '',
       },
@@ -118,24 +141,31 @@ export default {
     }
   },
   computed: {
-    expression() {
-      return this.formData.timu + this.formData.daan1 + this.formData.daan2;
+    // 新题字符串格式
+    newTimuExpression() {
+      return `id:${this.formData.id}$,$\\\\$
+      题目:${this.formData.timu},$\\\\$,
+      答案1:${this.formData.daan1},$\\\\$,
+      答案2:${this.formData.daan2},$\\\\$`
     }
   },
   watch: {},
-  created() { },
-  mounted() { },
   methods: {
+
+    onOpen() { },
+    onClose() { this.$refs['elForm'].resetFields() },
+    close() { this.$emit('update:visible', false) },
     // 保存按钮
-    submitForm() {
+    handelConfirm() {
       this.$refs['elForm'].validate(async valid => {
         if (!valid) return
-
-        // 保存按钮后
-        var title = await this.titles.findAll();
-        title.forEach(element => {
-          console.log(element.timu)
-        });
+        // 储存到数据库
+        const _timu = await this.titles.create(this.formData)
+        this.formData.id = _timu.id;
+        console.log("ID:" + _timu.id);
+        // 添加到 TimuList
+        this.TimuList.unshift({ formData: _.cloneDeep(this.formData) });
+        this.isShowNewTimu = false;
 
       })
     },
@@ -144,6 +174,7 @@ export default {
       this.$refs['elForm'].resetFields()
     },
   },
+  created() { },
   mounted() {
     console.log("mounted")
 
@@ -173,5 +204,17 @@ export default {
 
 </script>
 <style>
+.el-rate {
+  display: inline-block;
+  vertical-align: text-top;
+}
+.timu {
+  border: 1px solid #000;
+  height: 100px;
+}
+el-dialog {
+  width: 800px;
+  height: 600px;
+}
 </style>
 

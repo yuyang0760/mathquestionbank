@@ -58,19 +58,12 @@ module.exports = function(sequelize, DataTypes) {
     fenlei4: {
       type: DataTypes.TEXT,
       allowNull: true
-    },
-    tianjiashijian: {
-      type: DataTypes.DATE,
-      allowNull: true
-    },
-    xiugaishijian: {
-      type: DataTypes.DATE,
-      allowNull: true
     }
   }, {
     sequelize,
+    paranoid: true,  // 软删除
     tableName: 'titles',
-    timestamps: false,
+    timestamps: true,
     indexes: [
       {
         name: "PRIMARY",

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// katex
+ 
 import XesKatex from 'xes-katex'
 import 'xes-katex/dist/katex.css'
 Vue.use(xesKatex,{
@@ -12,8 +12,9 @@ Vue.use(xesKatex,{
     "{align}":"{aligned}"
   },
   options:{
-    displayMode:true,
-    throwOnError:true,
+    strict:false,
+    displayMode:false,
+    throwOnError:false,
     errorColor:'#FF0000'
   }
 })
