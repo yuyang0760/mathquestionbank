@@ -6,7 +6,7 @@ import store from './store'
 import XesKatex from 'xes-katex'
 import 'xes-katex/dist/katex.css'
 Vue.use(xesKatex,{
-  flag:[{left:'$$',right:'$$'},{left:'$',right:'$'}],
+  flag:[{left:'$',right:'$'}],
   compatible:true,
   compatibleConfig:{
     "{align}":"{aligned}"
