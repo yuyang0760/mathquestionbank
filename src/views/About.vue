@@ -190,18 +190,21 @@ export default {
   },
   methods: {
     // 查询所有题目
-    // async selectAllTimu() {
-    //   var titles = await this.titles.findAll();
-    //   console.log(titles);
-    //   var _formData=_.cloneDeep(this.formData);
-    //   titles.forEach(index => {
-    //     // 显示题目
-    //     _.forOwn(_formData, (value, key) => {
-    //       _formData[key] = titles[index][key];
-    //       this.TimuList.unshift( _formData);
-    //     });
-    //   });
-    // },
+    async selectAllTimu() {
+      var titles = await this.titles.findAll();
+      // console.log(titles);
+      var _formData = _.cloneDeep(this.formData);
+      console.log("_formData", _formData);
+      titles.forEach(index => {
+        // 显示题目
+        _.forOwn(_formData, (value, key) => {
+          _formData[key] = titles[index][key];
+        });
+        this.TimuList.unshift(_formData);
+      });
+
+      console.log(this.TimuList);
+    },
     // 添加题目
     addTimu() {
       this.formData.id = null;
