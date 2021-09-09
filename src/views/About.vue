@@ -1,35 +1,31 @@
 <template>
   <div>
     <el-container>
-      <el-aside>
-        <div style="height:100%">
-          <el-scrollbar style="height:100%">
-            1
-            <div v-for="(item,index) in TimuList" :key="item.id" class="timu">
-              <div v-katex="listShowtimu(item,index)">
-              </div>
-              <el-button @click="bianji(item.formData.id,index)">编辑</el-button>
-              <el-button @click="deleteTimu(item.formData.id,index)">删除</el-button>
-            </div>
-          </el-scrollbar>
+      <el-aside width="700px">
+
+        <div>
+          <div v-for="(item,index) in TimuList" :key="item.id" class="timu">
+            <yytitledescription v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="bianji(item.id,index)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button>
+            </yytitledescription>
+          </div>
         </div>
       </el-aside>
       <!-- 右边 -->
       <el-main>
         <div>
           <el-button @click="addTimu()">添加题目</el-button>
+          <el-button @click="selectAllTimu()">查询所有题目</el-button>
         </div>
       </el-main>
     </el-container>
-    <el-dialog top="0" :show-close="false" :visible.sync="isShowNewTimu" fullscreen v-bind="$attrs" v-on="$listeners" @open="onOpen"
-      @close="onClose">
+    <el-dialog top="0" :modal="false" :show-close="false" :visible.sync="isShowNewTimu" fullscreen v-bind="$attrs" v-on="$listeners"
+      @open="onOpen" @close="onClose">
       <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="65px" class="elform">
         <el-row>
-          <el-col :span="9">
-            <div v-katex="{content:newTimuExpression}" class="style1"></div>
-            <el-form-item label="id:" prop="id" v-show="true">
-              {{formData.id}}
-            </el-form-item>
+          <el-col :span="10">
+
             <el-row>
               <el-col :span="12">
                 <el-form-item label="类型:" prop="leixing" class="formitem">
@@ -53,21 +49,25 @@
               </el-input>
             </el-form-item>
             <el-row>
-
               <el-form-item label=" 答案1:" prop="daan1" class="formitem">
                 <el-input v-model="formData.daan1" type="text" placeholder="请输入答案1:"></el-input>
               </el-form-item>
-
+              <el-form-item label="答案2:" prop="daan2" class="formitem">
+                <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}">
+                </el-input>
+              </el-form-item>
+              <el-form-item label="解析:" prop="jiexi" class="formitem">
+                <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}">
+                </el-input>
+              </el-form-item>
             </el-row>
           </el-col>
-          <el-col :span="15">
+          <el-col :span="14">
+            <!-- 题目 -->
+            <div style="margin:20px 20px">
+              <yytitledescription v-bind="formData" :isShowMini="false"></yytitledescription>
 
-            <el-form-item label="答案2:" prop="daan2" class="formitem">
-              <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}"></el-input>
-            </el-form-item>
-            <el-form-item label="解析:" prop="jiexi" class="formitem">
-              <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}"></el-input>
-            </el-form-item>
+            </div>
             <el-form-item label="标签:" prop="biaoqian" class="formitem">
               <el-tag :key="tag" v-for="tag in formData.biaoqian" closable :disable-transitions="false" @close="handleClose(tag)">
                 {{tag}}
@@ -81,11 +81,12 @@
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="(item,index) in formData.fenlei" :key="index" class="el-breadcrumb-item">{{item}}
                 </el-breadcrumb-item>
-
               </el-breadcrumb>
-              <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei"
-                @change="fenleiHandleChange">
-              </el-cascader-panel>
+
+              <el-button @click="fenleiSelectIsShow = true" type="primary" style="margin-left: 16px;">
+                分类
+              </el-button>
+
             </el-form-item>
             <el-form-item label="来源:" prop="laiyuan" class="formitem">
               <el-input v-model="formData.laiyuan" placeholder="请输入来源:" style="width:40%;" class="elitem"></el-input>
@@ -96,6 +97,11 @@
           </el-col>
         </el-row>
       </el-form>
+      <!-- 弹出的分类页 -->
+      <el-drawer size="55%" :withHeader="false" :modal="false" :show-close="false" :visible.sync="fenleiSelectIsShow" direction="rtl">
+        <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
+        </el-cascader-panel>
+      </el-drawer>
     </el-dialog>
   </div>
 </template>
@@ -105,14 +111,16 @@ import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import leixingjson from '../lib/models/fenlei-json'
+import yytitledescription from '../components/yytitledescription.vue'
 export default {
   name: 'About',
   components: {
-
+    yytitledescription
   },
   props: [],
   data() {
     return {
+      fenleiSelectIsShow: false,
       fenleiOptions: leixingjson,   // 题目分类json数据,导数->切线 等等
       tag: {                        // 标签
         inputVisible: false,
@@ -175,61 +183,52 @@ export default {
     }
   },
   computed: {
-    // 新题字符串格式
-    newTimuExpression() {
-      console.log("newTimuExpression");
-      console.log("formdata", this.formData);
-
-      let ID = this.formData.id === null ? '' : `ID:${this.formData.id}`;
-      // let fenleiStr=this.formData.fenlei===undefined?
-      return `
-      ( ${this.formData.laiyuan} ${"★".repeat(this.formData.nandu)})   (${this.formData.fenlei.join('>')})
-      (${this.formData.biaoqian})
-      $\\\\$
-      ${this.formData.timu}$\\\\$
-      答案1:${this.formData.daan1}$\\\\\\\\$
-      答案2:${this.formData.daan2}$\\\\\\\\$
-      解析:${this.formData.jiexi}$\\\\\\\\\\\\$
-      `
-    }
-
 
   },
   watch: {
 
   },
   methods: {
-    addTimu(){
-      // if(this.$refs['elForm']!==undefined){
-      // this.$refs['elForm'].resetFields()
-      // }
+    // 查询所有题目
+    // async selectAllTimu() {
+    //   var titles = await this.titles.findAll();
+    //   console.log(titles);
+    //   var _formData=_.cloneDeep(this.formData);
+    //   titles.forEach(index => {
+    //     // 显示题目
+    //     _.forOwn(_formData, (value, key) => {
+    //       _formData[key] = titles[index][key];
+    //       this.TimuList.unshift( _formData);
+    //     });
+    //   });
+    // },
+    // 添加题目
+    addTimu() {
+      this.formData.id = null;
       this.isShowNewTimu = true
     },
-    // 显示左边题目
-    listShowtimu(item, index) {
-      console.log("listshowtimu",item.formData);
-     
-      return `
-      ( ${item.formData.laiyuan} ${"★".repeat(item.formData.nandu)})   (${item.formData.fenlei.join('>')})
-      (${item.formData.biaoqian})
-      $\\\\$
-      第${index}题 ${item.formData.timu}$\\\\$
-      答案1:${item.formData.daan1}$\\\\\\\\$
-      答案2:${item.formData.daan2}$\\\\\\\\$
-      解析:${item.formData.jiexi}$\\\\\\\\\\\\$
-      `
-    },
+
     // 删除题目 id是数据库id,index是显示数组的index
-    async deleteTimu(id, index) {
-      // 根据id删除数据库
-      console.log("删除id", id);
-      await this.titles.destroy({
-        where: {
-          id: id
-        }
-      });
-      // 删除数组中的内容
-      this.TimuList.splice(index, 1);
+    deleteTimu(id, index) {
+
+      this.$confirm(`确定删除这道题吗 ?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+
+          // 删除数据库
+          console.log("删除id", id);
+          await this.titles.destroy({
+            where: {
+              id: id
+            }
+          });
+          // 删除数组 TimuList
+          this.TimuList.splice(index, 1);
+        })
+        .catch(() => { })
     },
     // 编辑题目
     async bianji(id, index) {
@@ -239,55 +238,50 @@ export default {
       _.forOwn(this.formData, (value, key) => {
         this.formData[key] = title[0][key];
       });
-      // this.formData = title[0];
-      console.log("bianji", this.formData);
-      this.isShowNewTimu = true;
       // 把index传过去
       this.selectIndex = index;
+      // 打开编辑
+      this.isShowNewTimu = true;
     },
     // 分类改变
     fenleiHandleChange(Value) {
-      console.log("分类", Value);
-      // this.formData.fenlei1=fenlei[0]?fenlei[0]:'';
-      // this.formData.fenlei2=fenlei[1]?fenlei[1]:'';
-      // this.formData.fenlei3=fenlei[2]?fenlei[2]:'';
-      // this.formData.fenlei4=fenlei[3]?fenlei[3]:'';
     },
     onOpen() {
-      console.log("onOpen", this.formData);
+      // console.log("onOpen", this.formData);
       this.baocunButtonDisabled = false
     },
     onClose() {
-      // this.$refs['elForm'].resetFields()   需要注释掉,不然会出错
+      this.$refs['elForm'].resetFields()   // 需要注释掉,不然会出错
     },
     close() { this.isShowNewTimu = false; this.$emit('update:visible', false) },
     // 保存按钮
     handelConfirm() {
-      console.log("刚点击保存按钮", this.formData);
+      // console.log("刚点击保存按钮", this.formData);
       this.baocunButtonDisabled = true; // 保存按钮不能按,防止数据还没返回已经按了两次
       this.$refs['elForm'].validate(async valid => {
         if (!valid) return
-        console.log("保存", this.formData.id);
+        // console.log("保存", this.formData.id);
         if (this.formData.id === null || this.formData.id === undefined) {
           // 储存到数据库
           const _timu = await this.titles.create(this.formData)
           this.formData.id = _timu.id;
-          console.log("NullID:" + _timu.id);
+          // console.log("NullID:" + _timu.id);
           // 添加到 TimuList
-          this.TimuList.unshift({ formData: _.cloneDeep(this.formData) });
+          this.TimuList.unshift(_.cloneDeep(this.formData));
         } else {
           // 修改id=xxx的数据库的值
-          console.log("我要修改了", this.formData.daan1);
+          // console.log("我要修改了", this.formData.daan1);
           await this.titles.update(this.formData, {
             where: {
               id: this.formData.id
             }
           });
-          console.log("seleindex",this.selectIndex);
-          console.log(this.formData);
+          // console.log("seleindex",this.selectIndex);
+          // console.log(this.formData);
           this.TimuList.splice(this.selectIndex, 1, _.cloneDeep(this.formData))
+
           console.log(this.TimuList)
-          console.log("notNullID:");
+          // console.log("notNullID:");
         }
         // 返回数据后再隐藏
         this.isShowNewTimu = false;
@@ -356,19 +350,7 @@ export default {
   display: inline-block;
   vertical-align: text-top;
 }
-.timu {
-  border: 1px solid #000;
-  height: 200px;
-}
-.style1 {
-  height: 300px;
-  margin: 0px;
-  margin-bottom: 20px;
-  padding: 5px;
-  border: 1px solid #96c2f1;
-  background-color: #eff7ff;
-  font-family: "微软雅黑";
-}
+
 .formitem {
   width: 100%;
 }
@@ -420,5 +402,17 @@ el-dialog {
   color: #409eff;
   cursor: text;
 }
+.el-breadcrumb-item1 {
+  color: #ff5640;
+}
+/* 选择分类的高度 */
+.el-cascader-menu__wrap {
+  height: 600px;
+}
+.timuShowlabel {
+  width: 60px;
+}
+/* .timuShowcontent {
+} */
 </style>
 
