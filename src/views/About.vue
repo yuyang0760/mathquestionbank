@@ -195,14 +195,14 @@ export default {
       // console.log(titles);
       var _formData = _.cloneDeep(this.formData);
       console.log("_formData", _formData);
-      titles.forEach(index => {
+      for (let index = 0; index < 3; index++) {
+        
         // 显示题目
         _.forOwn(_formData, (value, key) => {
           _formData[key] = titles[index][key];
         });
-        this.TimuList.unshift(_formData);
-      });
-
+        this.TimuList.unshift(_.cloneDeep(_formData));
+      }
       console.log(this.TimuList);
     },
     // 添加题目
