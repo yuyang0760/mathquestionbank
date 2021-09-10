@@ -38,7 +38,22 @@ module.exports = function (sequelize, DataTypes) {
     },
     xuanxiang: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      set(value) {
+        if (value === null || value === undefined) {
+          this.setDataValue('xuanxiang', '');
+        } else {
+          this.setDataValue('xuanxiang', value.join('★'));
+        }
+      },
+      get() {
+        const rawValue = this.getDataValue('xuanxiang');
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+          return [];
+        } else {
+          return rawValue.split('★');
+        }
+      }
     },
     biaoqian: {
       type: DataTypes.TEXT,

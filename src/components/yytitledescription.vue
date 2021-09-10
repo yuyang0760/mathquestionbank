@@ -47,7 +47,7 @@
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="''+timu+'$\\\\$'+xuanxiang"></div>
+          <div v-katex="''+timu+'$\\\\$ A. '+xuanxiang[0]+'$\\\\$ B. '+xuanxiang[1]+'$\\\\$ C. '+xuanxiang[2]+'$\\\\$ D. '+xuanxiang[3]"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
@@ -79,14 +79,14 @@ export default {
       type: Number
     },
     tihao: {
-      tihao: Number
+      type: Number
     },
     timu: {
       type: String, //name的类型是字符串
       // required: true, //name是必要的
     },
     xuanxiang: {
-      type: String
+      type: Array
     },
     daan1: {
       type: String,

@@ -36,7 +36,7 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="类型:" prop="leixing" class="formitem">
-                  <el-select v-model="formData.leixing" placeholder="请选择类型:" clearable>
+                  <el-select v-model="formData.leixing" placeholder="请选择类型:">
                     <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value"
                       :disabled="item.disabled"></el-option>
                   </el-select>
@@ -50,11 +50,10 @@
             </el-row>
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
-              <el-button @click="pasteTimu()">粘贴</el-button>
             </el-form-item>
-            <el-form-item label="选项:" prop="xuanxiang" class="formitem">
-              <el-input v-model="formData.xuanxiang" type="textarea" placeholder="请输入选项:" :autosize="{minRows: 4, maxRows: 5}">
-              </el-input>
+            <el-form-item label="选项:" class="formitem" v-show="formData.leixing=='选择题'">
+              <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
+              <el-button @click="pasteTimu()">自动粘贴</el-button>
             </el-form-item>
             <el-row>
               <el-form-item label=" 答案1:" prop="daan1" class="formitem">
@@ -120,12 +119,14 @@ import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import leixingjson from '../tools/fenlei-json'
 import yytitledescription from '../components/yytitledescription.vue'
+import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
-import {clipboard} from 'electron';
+import { clipboard } from 'electron';
 export default {
   name: 'About',
   components: {
-    yytitledescription
+    yytitledescription,
+    yytitlexuanxiang
   },
   props: [],
   data() {
@@ -154,7 +155,7 @@ export default {
         jiexi: '',
         nandu: 2,
         laiyuan: '',
-        xuanxiang: '',
+        xuanxiang: ['', '', '', ''],
         biaoqian: [],   // 标签
         fenlei: [],        // 分类 和数据库中的fenlei1,fenlei2,fenlei3,fenlei4同步
 
@@ -204,8 +205,18 @@ export default {
 
   },
   methods: {
-    pasteTimu(){
-      this.formData.timu= clipboard.readText();
+    // 粘贴题目按钮
+    pasteTimu() {
+      var text = clipboard.readText();
+      text = text.replace(/[\n\r]/g, '★');
+      console.log(text);
+      var patt1 = new RegExp(`(.*)A.?(.*)B.?(.*)C.?(.*)D.?(.*)`);
+      var a = patt1.exec(text);
+      console.log(a);
+      if(a){
+      this.formData.timu = a[1].replace(/★/g,'');
+      this.formData.xuanxiang=[a[2].replace(/★/g,''),a[3].replace(/★/g,''),a[4].replace(/★/g,''),a[5].replace(/★/g,'')];
+      }
     },
     getHeight() {
       this.conheight.height = window.innerHeight - 30 + 'px';
@@ -271,15 +282,15 @@ export default {
     },
     onClose() {
       // this.$refs['elForm'].resetFields()   // 需要注释掉,不然会出错
-      this.formData.id=null;
-      this.formData.timu="";
-      this.formData.leixing='选择题';
-      this.formData.daan1="";
-      this.formData.daan2="";
-      this.formData.jiexi="";
-      this.formData.nandu=2;
-      this.formData.laiyuan="";
-      this.formData.xuanxiang="";
+      this.formData.id = null;
+      this.formData.timu = "";
+      this.formData.leixing = '选择题';
+      this.formData.daan1 = "";
+      this.formData.daan2 = "";
+      this.formData.jiexi = "";
+      // this.formData.nandu = 2;
+      this.formData.laiyuan = "";
+      this.formData.xuanxiang = ['', '', '', ''];
       // this.formData.biaoqian=[];
       // this.formData.fenlei=[];
 
@@ -288,9 +299,9 @@ export default {
     // 保存按钮
     handelConfirm() {
       // console.log("刚点击保存按钮", this.formData);
-      this.baocunButtonDisabled = true; // 保存按钮不能按,防止数据还没返回已经按了两次
       this.$refs['elForm'].validate(async valid => {
         if (!valid) return
+        this.baocunButtonDisabled = true; // 保存按钮不能按,防止数据还没返回已经按了两次
         // console.log("保存", this.formData.id);
         if (this.formData.id === null || this.formData.id === undefined) {
           // 储存到数据库
