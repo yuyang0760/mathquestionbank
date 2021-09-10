@@ -9,8 +9,8 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </td>
-        <td colspan="2" class="yy-descriptions-td" style="text-align: right">
-          <span style="margin-right:10px">{{isMini&&(id!==null)?`ID:${id}`:""}}</span> 
+        <td colspan="5" class="yy-descriptions-td" style="text-align: right">
+          <span style="margin-right:10px">{{miniShowHeaderRight()}}</span>
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
           <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
             size="mini"></el-button>
@@ -33,7 +33,7 @@
           <div v-katex="daan1"></div>
         </td>
       </tr>
-      <tr class="yy-descriptions-row"  v-show="!isMini">
+      <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">ID:</th>
         <td colspan="1" class="yy-descriptions-td" style="width:120px">{{id}}</td>
         <th colspan="1" class="yy-descriptions-th">题号:</th>
@@ -71,7 +71,7 @@ export default {
   name: "yytitledescription",
   //接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
   props: {
-        isShowMini: {       // 是否迷你显示
+    isShowMini: {       // 是否迷你显示
       type: Boolean,
       default: true
     },
@@ -118,6 +118,16 @@ export default {
 
   },
   methods: {
+    miniShowHeaderRight() {
+      if (this.isMini) {
+        // if (this.id !== null && this.id !== undefined) {
+        //   return "难度:" + '★'.repeat(this.nandu) + " ID:" + this.id;
+        // } else {
+        return '★'.repeat(this.nandu);
+        // }
+      }
+    },
+
     miniShow() {
       this.isMini = !this.isMini;
     }
@@ -146,7 +156,6 @@ export default {
   font-size: 14px;
   color: #606266;
   border-collapse: collapse;
-
 }
 .yy-descriptions-th {
   /* 自己修改的 */

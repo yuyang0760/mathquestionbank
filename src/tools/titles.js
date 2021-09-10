@@ -79,14 +79,14 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.VIRTUAL,      // 自己创造出来的属性,类型用这个
       set(value) {
         // throw new Error('不要尝试设置 `fullName` 的值!');
-        console.log("fenleiset")
+        // console.log("fenleiset")
         this.fenlei1 = value[0] ? value[0] : '';
         this.fenlei2 = value[1] ? value[1] : '';
         this.fenlei3 = value[2] ? value[2] : '';
         this.fenlei4 = value[3] ? value[3] : '';
       },
       get() {
-        console.log("fenleiget")
+        // console.log("fenleiget")
         return _.compact([this.fenlei1, this.fenlei2, this.fenlei3, this.fenlei4]);
       }
     }

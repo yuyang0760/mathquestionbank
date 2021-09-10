@@ -1924,6 +1924,11 @@ base@^0.11.1:
     mixin-deep "^1.2.0"
     pascalcase "^0.1.1"
 
+batch-processor@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/batch-processor/-/batch-processor-1.0.0.tgz#75c95c32b748e0850d10c2b168f6bdbe9891ace8"
+  integrity sha1-dclcMrdI4IUNEMKxaPa9vpiRrOg=
+
 batch@0.6.1:
   version "0.6.1"
   resolved "https://registry.npmjs.org/batch/-/batch-0.6.1.tgz#dc34314f4e679318093fc760272525f94bf25c16"
@@ -3681,6 +3686,13 @@ electron@^11.4.12:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
     extract-zip "^1.0.3"
+
+element-resize-detector@^1.1.12:
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/element-resize-detector/-/element-resize-detector-1.2.3.tgz#5078d9b99398fe4c589f8c8df94ff99e5d413ff3"
+  integrity sha512-+dhNzUgLpq9ol5tyhoG7YLoXL3ssjfFW+0gpszXPwRU6NjGr1fVHMEAF8fVzIiRJq57Nre0RFeIjJwI8Nh2NmQ==
+  dependencies:
+    batch-processor "1.0.0"
 
 element-ui@^2.15.6:
   version "2.15.6"
@@ -9445,6 +9457,14 @@ vue-cli-plugin-electron-builder@~1.4.6:
     webpack-chain "^5.0.0"
     yargs "^14.0.0"
 
+vue-happy-scroll@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/vue-happy-scroll/-/vue-happy-scroll-2.1.1.tgz#31973792e47be514808bf619ab953f8f84667240"
+  integrity sha512-3Xy6L+rdpNSB214yHxiF3O/l5/CIT8pxSUBn6PBN6CG94EakwcoSyCbkCTNgjEmtJQHp6pVgUwYFYro4fU43NQ==
+  dependencies:
+    element-resize-detector "^1.1.12"
+    vue "^2.0.0"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
@@ -9494,7 +9514,7 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^2.5.17, vue@^2.6.11:
+vue@^2.0.0, vue@^2.5.17, vue@^2.6.11:
   version "2.6.14"
   resolved "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==

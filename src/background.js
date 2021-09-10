@@ -15,11 +15,14 @@ async function createWindow() {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
+    // resizable:false,
+    // fullscreen :true,
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
     }
   })
+  // win.maximize()
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode

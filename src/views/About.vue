@@ -1,15 +1,20 @@
 <template>
   <div>
     <el-container>
-      <el-aside width="700px">
-
-        <div>
-          <div v-for="(item,index) in TimuList" :key="item.id" class="timu">
-            <yytitledescription v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="bianji(item.id,index)"></el-button>
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button>
-            </yytitledescription>
-          </div>
+      <el-aside width="820px">
+        <div style="width:800px;" :style="conheight">
+          <happy-scroll size="10" resize>
+            <div style="margin-right:28px">
+              <ul>
+                <li v-for="(item,index) in TimuList" :key="item.id">
+                  <yytitledescription v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
+                    <el-button type="primary" icon="el-icon-edit" size="mini" @click="bianji(item.id,index)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button>
+                  </yytitledescription>
+                </li>
+              </ul>
+            </div>
+          </happy-scroll>
         </div>
       </el-aside>
       <!-- 右边 -->
@@ -17,9 +22,11 @@
         <div>
           <el-button @click="addTimu()">添加题目</el-button>
           <el-button @click="selectAllTimu()">查询所有题目</el-button>
+          <el-button @click="clearAllTimu()">清空所有题目</el-button>
         </div>
       </el-main>
     </el-container>
+
     <el-dialog top="0" :modal="false" :show-close="false" :visible.sync="isShowNewTimu" fullscreen v-bind="$attrs" v-on="$listeners"
       @open="onOpen" @close="onClose">
       <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="65px" class="elform">
@@ -42,10 +49,11 @@
               </el-col>
             </el-row>
             <el-form-item label="题目:" prop="timu" class="formitem">
-              <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 5, maxRows: 5}"></el-input>
+              <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
+              <el-button @click="pasteTimu()">粘贴</el-button>
             </el-form-item>
             <el-form-item label="选项:" prop="xuanxiang" class="formitem">
-              <el-input v-model="formData.xuanxiang" type="textarea" placeholder="请输入选项:" :autosize="{minRows: 3, maxRows: 3}">
+              <el-input v-model="formData.xuanxiang" type="textarea" placeholder="请输入选项:" :autosize="{minRows: 4, maxRows: 5}">
               </el-input>
             </el-form-item>
             <el-row>
@@ -110,8 +118,10 @@
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import leixingjson from '../lib/models/fenlei-json'
+import leixingjson from '../tools/fenlei-json'
 import yytitledescription from '../components/yytitledescription.vue'
+import { titlesCopy } from '../tools/mytools'
+import {clipboard} from 'electron';
 export default {
   name: 'About',
   components: {
@@ -120,6 +130,9 @@ export default {
   props: [],
   data() {
     return {
+      conheight: {           // 高度自适应
+        height: ''
+      },
       fenleiSelectIsShow: false,
       fenleiOptions: leixingjson,   // 题目分类json数据,导数->切线 等等
       tag: {                        // 标签
@@ -134,14 +147,14 @@ export default {
       connect: null,  // 数据库连接,销毁用
       formData: {
         id: null,
-        timu: '$a^2+1=?$',
+        timu: '',
         leixing: '选择题',
-        daan1: 'A',
-        daan2: '因为$a^2=4$',
-        jiexi: '这就是解析$a^3$',
-        nandu: 4,
-        laiyuan: '全国二卷',
-        xuanxiang: '选项',
+        daan1: '',
+        daan2: '',
+        jiexi: '',
+        nandu: 2,
+        laiyuan: '',
+        xuanxiang: '',
         biaoqian: [],   // 标签
         fenlei: [],        // 分类 和数据库中的fenlei1,fenlei2,fenlei3,fenlei4同步
 
@@ -182,6 +195,8 @@ export default {
 
     }
   },
+
+
   computed: {
 
   },
@@ -189,21 +204,22 @@ export default {
 
   },
   methods: {
+    pasteTimu(){
+      this.formData.timu= clipboard.readText();
+    },
+    getHeight() {
+      this.conheight.height = window.innerHeight - 30 + 'px';
+    },
+    //清空所有题目
+    clearAllTimu() {
+      this.TimuList = [];
+    },
     // 查询所有题目
     async selectAllTimu() {
+      // 查询数据库
       var titles = await this.titles.findAll();
-      // console.log(titles);
-      var _formData = _.cloneDeep(this.formData);
-      console.log("_formData", _formData);
-      for (let index = 0; index < 3; index++) {
-        
-        // 显示题目
-        _.forOwn(_formData, (value, key) => {
-          _formData[key] = titles[index][key];
-        });
-        this.TimuList.unshift(_.cloneDeep(_formData));
-      }
-      console.log(this.TimuList);
+      // 显示
+      this.TimuList = titlesCopy(this.formData, titles);
     },
     // 添加题目
     addTimu() {
@@ -254,7 +270,19 @@ export default {
       this.baocunButtonDisabled = false
     },
     onClose() {
-      this.$refs['elForm'].resetFields()   // 需要注释掉,不然会出错
+      // this.$refs['elForm'].resetFields()   // 需要注释掉,不然会出错
+      this.formData.id=null;
+      this.formData.timu="";
+      this.formData.leixing='选择题';
+      this.formData.daan1="";
+      this.formData.daan2="";
+      this.formData.jiexi="";
+      this.formData.nandu=2;
+      this.formData.laiyuan="";
+      this.formData.xuanxiang="";
+      // this.formData.biaoqian=[];
+      // this.formData.fenlei=[];
+
     },
     close() { this.isShowNewTimu = false; this.$emit('update:visible', false) },
     // 保存按钮
@@ -283,7 +311,7 @@ export default {
           // console.log(this.formData);
           this.TimuList.splice(this.selectIndex, 1, _.cloneDeep(this.formData))
 
-          console.log(this.TimuList)
+          // console.log(this.TimuList)
           // console.log("notNullID:");
         }
         // 返回数据后再隐藏
@@ -319,13 +347,17 @@ export default {
     // #endregion
 
   },
-  created() { },
+  created() {
+    console.log("create");
+    window.addEventListener('resize', this.getHeight);
+    this.getHeight()
+  },
   mounted() {
     console.log("About_mounted")
 
     // 连接数据库
     const Sequelize = require("sequelize");
-    const initModels = require("../lib/models/init-models").initModels;
+    const initModels = require("../tools/init-models").initModels;
     const connect = new Sequelize({
       host: 'localhost',
       username: 'root',
@@ -414,6 +446,12 @@ el-dialog {
 }
 .timuShowlabel {
   width: 60px;
+}
+ul,
+li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 /* .timuShowcontent {
 } */
