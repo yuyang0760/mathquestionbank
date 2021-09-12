@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
+      版本:{{version}}
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
@@ -9,8 +10,14 @@
 </template>
 <script>
 import Vue from 'vue';
+import version from "../package.json"
 export default {
   name: 'About',
+  data() {
+    return {
+      version:version.version
+    }
+  },
   mounted() {
     console.log("APP_mounted")
 
