@@ -1,6 +1,6 @@
 {
   "name": "mathquestionbank",
-  "version": "0.1.0",
+  "version": "0.0.11",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,6 +9,10 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yuyang0760/mathquestionbank.git"
   },
   "main": "background.js",
   "dependencies": {
