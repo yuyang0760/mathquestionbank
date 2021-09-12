@@ -205,7 +205,7 @@ export default {
 
   },
   methods: {
-    // 粘贴题目按钮
+    // 自动粘贴题目按钮
     pasteTimu() {
       var text = clipboard.readText();
       text = text.replace(/[\n\r]/g, '★');
@@ -229,7 +229,7 @@ export default {
     async selectAllTimu() {
       // 查询数据库
       var titles = await this.titles.findAll();
-      console.log(titles)
+      // console.log(titles)
       // 显示
       this.TimuList = titlesCopy(this.formData, titles);
     },
@@ -360,12 +360,12 @@ export default {
 
   },
   created() {
-    console.log("create");
+    console.log("About_created");
     window.addEventListener('resize', this.getHeight);
     this.getHeight()
   },
   mounted() {
-    console.log("About_mounted")
+   console.log("About_mounted")
 
     // 连接数据库
     const Sequelize = require("sequelize");
@@ -387,7 +387,7 @@ export default {
     });
     console.log("数据库已连接")
     this.connect = sequelize;
-    this.titles = initModels(sequelize).titles;
+    this.titles = initModels(sequelize).titles;    
   },
   destroyed() {
     // 断开数据库

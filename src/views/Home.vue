@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="connectDbButtonsqlite3">创建数据库表</el-button>
+    <!-- <el-button @click="connectDbButtonsqlite3">创建数据库表</el-button> -->
   </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
     }
   },
   methods: {
+    // 创建数据库表
     async connectDbButtonsqlite3() {
       const { Sequelize, Op, Model, DataTypes } = require("sequelize");
       const sequelize = new Sequelize({
