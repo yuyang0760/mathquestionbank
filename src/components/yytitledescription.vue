@@ -30,7 +30,7 @@
         </td>
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="1" class="yy-descriptions-td">
-          <div v-katex="daan1"></div>
+          <div v-katex="daan1===null?'':daan1"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
@@ -47,19 +47,19 @@
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="''+timu+'$\\\\$ A. '+xuanxiang[0]+'$\\\\$ B. '+xuanxiang[1]+'$\\\\$ C. '+xuanxiang[2]+'$\\\\$ D. '+xuanxiang[3]"></div>
+          <div v-katex="''+timu===null?'':timu+'$\\\\$ A. '+xuanxiang[0]+'$\\\\$ B. '+xuanxiang[1]+'$\\\\$ C. '+xuanxiang[2]+'$\\\\$ D. '+xuanxiang[3]"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="daan2"></div>
+          <div v-katex="daan2===null?'':daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">解析</th>
         <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="jiexi"></div>
+          <div v-katex="jiexi===null?'':jiexi"></div>
         </td>
       </tr>
     </table>

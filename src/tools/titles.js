@@ -1,40 +1,48 @@
 const Sequelize = require('sequelize');
 const _ = require('lodash');
+
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('titles', {
     id: {
       autoIncrement: true,
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     timu: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true,
+      defaultValue:""
     },
     leixing: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:"选择题"
     },
     daan1: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     daan2: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     jiexi: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     nandu: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      defaultValue:2
     },
     laiyuan: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     xuanxiang: {
       type: DataTypes.TEXT,
@@ -76,19 +84,23 @@ module.exports = function (sequelize, DataTypes) {
     },
     fenlei1: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     fenlei2: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     fenlei3: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     fenlei4: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
+      defaultValue:""
     },
     fenlei: {
       type: DataTypes.VIRTUAL,      // 自己创造出来的属性,类型用这个

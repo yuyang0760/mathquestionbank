@@ -213,9 +213,9 @@ export default {
       var patt1 = new RegExp(`(.*)A.?(.*)B.?(.*)C.?(.*)D.?(.*)`);
       var a = patt1.exec(text);
       console.log(a);
-      if(a){
-      this.formData.timu = a[1].replace(/★/g,'');
-      this.formData.xuanxiang=[a[2].replace(/★/g,''),a[3].replace(/★/g,''),a[4].replace(/★/g,''),a[5].replace(/★/g,'')];
+      if (a) {
+        this.formData.timu = a[1].replace(/★/g, '');
+        this.formData.xuanxiang = [a[2].replace(/★/g, ''), a[3].replace(/★/g, ''), a[4].replace(/★/g, ''), a[5].replace(/★/g, '')];
       }
     },
     getHeight() {
@@ -229,6 +229,7 @@ export default {
     async selectAllTimu() {
       // 查询数据库
       var titles = await this.titles.findAll();
+      console.log(titles)
       // 显示
       this.TimuList = titlesCopy(this.formData, titles);
     },
@@ -369,24 +370,30 @@ export default {
     // 连接数据库
     const Sequelize = require("sequelize");
     const initModels = require("../tools/init-models").initModels;
-    const connect = new Sequelize({
-      host: 'localhost',
-      username: 'root',
-      password: '123456',
-      database: 'electron_math_db',
-      dialect: 'mysql',
-      dialectModule: require('mysql2'), // 重要,不然会出错
-      benchmark: true
-    })
+    // const connect = new Sequelize({
+    //   host: 'localhost',
+    //   username: 'root',
+    //   password: '123456',
+    //   database: 'electron_math_db',
+    //   dialect: 'mysql',
+    //   dialectModule: require('mysql2'), // 重要,不然会出错
+    //   benchmark: true
+    // })
+    const sequelize = new Sequelize({
+      dialect: 'sqlite',
+      storage: 'C:\\Users\\13170\\Desktop\\mathdb.db',
+      // dialect
+      dialectModule: require("sqlite3")
+    });
     console.log("数据库已连接")
-    this.connect = connect;
-    this.titles = initModels(connect).titles;
+    this.connect = sequelize;
+    this.titles = initModels(sequelize).titles;
   },
   destroyed() {
     // 断开数据库
     console.log("About_destroyed")
-    this.connect.close();
-    console.log("数据库已关闭")
+    // this.connect.close();
+    // console.log("数据库已关闭")
   },
 }
 
