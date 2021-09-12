@@ -2,7 +2,7 @@ module.exports = {
     pluginOptions: {
         electronBuilder: {
             builderOptions: {
-                publish: ['gitee']//此处写入github 就好，不用添加其他内容
+                publish: ['github']//此处写入github 就好，不用添加其他内容
                 // "directories":{
                 //     "output":"./dist_electron"//输出文件路径
                 // },
