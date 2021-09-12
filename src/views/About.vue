@@ -116,7 +116,6 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import { v4 as uuidv4 } from 'uuid'
 import leixingjson from '../tools/fenlei-json'
 import yytitledescription from '../components/yytitledescription.vue'
 import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
