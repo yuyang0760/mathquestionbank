@@ -13,6 +13,7 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.17.2",
+    "electron-updater": "^4.3.9",
     "element-ui": "^2.15.6",
     "fs": "^0.0.1-security",
     "katex": "^0.13.18",
