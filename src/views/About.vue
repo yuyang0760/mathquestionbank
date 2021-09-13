@@ -4,7 +4,7 @@
       <el-aside width="820px">
         <div style="width:800px;" :style="conheight">
           <happy-scroll size="10" resize>
-            <div style="margin-right:28px">
+            <div style="margin-right:28px;margin-bottom:20px">
               <ul>
                 <li v-for="(item,index) in TimuList" :key="item.id">
                   <yytitledescription v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
@@ -116,7 +116,7 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import leixingjson from '../tools/fenlei-json'
+import leixingjson from '/resources/fenlei.json'
 import yytitledescription from '../components/yytitledescription.vue'
 import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
