@@ -390,7 +390,7 @@ export default {
     // })
     const sequelize = new Sequelize({
       dialect: 'sqlite',
-      storage: './extraResources/mathdb.db',
+      storage: './Resources/mathdb.db',
       // dialect
       dialectModule: require("sqlite3")
     });

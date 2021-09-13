@@ -19,10 +19,10 @@ module.exports = {
                     ],
 
                 },
-                // "extraFiles": { // 拷贝dll等静态文件到指定位置
-                //     "from": "./extraResources/",
-                //     "to": "extraResources"
-                // },
+                "extraFiles": { // 拷贝dll等静态文件到指定位置
+                    "from": "./extraResources/",
+                    "to": "extraResources"
+                },
                 "nsis": {
                     "oneClick": false, // 一键安装
                     // "guid": "xxxx", //注册表名字，不推荐修改

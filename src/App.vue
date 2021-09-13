@@ -15,34 +15,24 @@ export default {
   name: 'About',
   data() {
     return {
-      version:version.version
+      version: version.version
     }
   },
   mounted() {
-    console.log("APP_mounted")
 
-    // 连接数据库
-    // const Sequelize = require("sequelize");
-    // const initModels = require("./tools/init-models").initModels;
-    // const sequelize = new Sequelize({
-    //   host: 'localhost',
-    //   username: 'root',
-    //   password: '123456',
-    //   database: 'electron_math_db',
-    //   dialect: 'mysql',
-    //   dialectModule: require('mysql2'), // 重要,不然会出错
-    //   benchmark: true
-    // })
-    // const sequelize = new Sequelize({
-    //   dialect: 'sqlite',
-    //   storage: 'public/mathdb.db',
-    //   dialectModule: require("sqlite3")
-    // });
-    // console.log("数据库已连接")
-    // this.connect = sequelize;
-    // Vue.prototype.$titles = initModels(sequelize).titles;
+    //#region 打开文件后,检查数据库文件是否存在,不存在就copy一份过去
+    console.log("APP_mounted");
+    var fs = require('fs');
+    if (!(fs.existsSync('./Resources'))) {
+      fs.mkdirSync('./Resources');
+    }
+    if (fs.existsSync('./Resources/mathdb.db')) {
+    } else {
+      // 复制一份到Resources
+      fs.copyFileSync('./extraResources/mathdb.db', './Resources/mathdb.db');
+    }
+    //#endregion
   },
-
 }
 </script>
 <style>
