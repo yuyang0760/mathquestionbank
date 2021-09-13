@@ -36,9 +36,9 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="类型:" prop="leixing" class="formitem">
-                  <el-select v-model="formData.leixing" placeholder="请选择类型:">
-                    <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value"
-                      :disabled="item.disabled"></el-option>
+                  <el-select v-model="formData.leixing" placeholder="请选择类型:" @change="leixingChange(formData.leixing)">
+                    <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value">
+                    </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -51,7 +51,7 @@
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
             </el-form-item>
-            <el-form-item label="选项:" class="formitem" v-show="formData.leixing=='选择题'">
+            <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
               <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
               <el-button @click="pasteTimu()">自动粘贴</el-button>
             </el-form-item>
@@ -130,6 +130,7 @@ export default {
   props: [],
   data() {
     return {
+      isShowXuanxiang: true,
       conheight: {           // 高度自适应
         height: ''
       },
@@ -204,6 +205,15 @@ export default {
 
   },
   methods: {
+    leixingChange(leixingvalue) {
+      console.log("leixingchange")
+      if (leixingvalue == '选择题') {
+        this.isShowXuanxiang = true
+      } else {
+        this.isShowXuanxiang = false;
+        this.formData.xuanxiang = ['', '', '', ''];
+      }
+    },
     // 自动粘贴题目按钮
     pasteTimu() {
       var text = clipboard.readText();
@@ -364,7 +374,7 @@ export default {
     this.getHeight()
   },
   mounted() {
-   console.log("About_mounted")
+    console.log("About_mounted")
 
     // 连接数据库
     const Sequelize = require("sequelize");
@@ -386,7 +396,7 @@ export default {
     });
     console.log("数据库已连接")
     this.connect = sequelize;
-    this.titles = initModels(sequelize).titles;    
+    this.titles = initModels(sequelize).titles;
   },
   destroyed() {
     // 断开数据库

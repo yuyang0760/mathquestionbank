@@ -47,7 +47,7 @@
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="''+timu===null?'':timu+'$\\\\$ A. '+xuanxiang[0]+'$\\\\$ B. '+xuanxiang[1]+'$\\\\$ C. '+xuanxiang[2]+'$\\\\$ D. '+xuanxiang[3]"></div>
+          <div v-katex="showTimuStr()"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
@@ -118,6 +118,15 @@ export default {
 
   },
   methods: {
+    showTimuStr(){
+      var timu=this.timu===null?'':this.timu;
+      var xuanxiang0=this.xuanxiang[0]==false?'':'$\\\\$A. '+this.xuanxiang[0];
+      var xuanxiang1=this.xuanxiang[1]==false?'':'$\\\\$B. '+this.xuanxiang[1];
+      var xuanxiang2=this.xuanxiang[2]==false?'':'$\\\\$C. '+this.xuanxiang[2];
+      var xuanxiang3=this.xuanxiang[3]==false?'':'$\\\\$D. '+this.xuanxiang[3];
+
+      return timu+xuanxiang0+xuanxiang1+xuanxiang2+xuanxiang3;
+    },
     miniShowHeaderRight() {
       if (this.isMini) {
         // if (this.id !== null && this.id !== undefined) {
