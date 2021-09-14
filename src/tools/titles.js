@@ -47,6 +47,7 @@ module.exports = function (sequelize, DataTypes) {
     xuanxiang: {
       type: DataTypes.TEXT,
       allowNull: true,
+      defaultValue:"",
       set(value) {
         if (value === null || value === undefined) {
           this.setDataValue('xuanxiang', '');
@@ -66,6 +67,7 @@ module.exports = function (sequelize, DataTypes) {
     biaoqian: {
       type: DataTypes.TEXT,
       allowNull: true,
+      defaultValue:"",
       set(value) {
         if (value === null || value === undefined) {
           this.setDataValue('biaoqian', '');
@@ -81,6 +83,21 @@ module.exports = function (sequelize, DataTypes) {
           return rawValue.split(',');
         }
       }
+    },
+    timupic: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue:""
+    },
+    daan2pic: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue:""
+    },
+    laiyuanpic: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue:""
     },
     fenlei1: {
       type: DataTypes.TEXT,

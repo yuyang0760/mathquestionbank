@@ -51,6 +51,7 @@
             </el-row>
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
+              <el-image :src="timupicPath" v-show="formData.timupic"></el-image>
             </el-form-item>
             <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
               <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
@@ -63,10 +64,12 @@
               <el-form-item label="答案2:" prop="daan2" class="formitem">
                 <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}">
                 </el-input>
+                <el-image :src="daan2picPath" v-show="formData.daan2pic"></el-image>
               </el-form-item>
               <el-form-item label="解析:" prop="jiexi" class="formitem">
                 <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}">
                 </el-input>
+                <el-image :src="jiexipicPath" v-show="formData.jiexipic"></el-image>
               </el-form-item>
             </el-row>
           </el-col>
@@ -140,6 +143,7 @@ import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
+import child_process from 'child_process';
 
 export default {
   name: 'About',
@@ -181,6 +185,9 @@ export default {
         xuanxiang: ['', '', '', ''],
         biaoqian: [],   // 标签
         fenlei: [],        // 分类 和数据库中的fenlei1,fenlei2,fenlei3,fenlei4同步
+        timupic: 'a',
+        daan2pic: '',
+        jiexipic: ''
 
       },
       rules: {
@@ -220,19 +227,39 @@ export default {
     }
   },
   computed: {
+    timupicPath() {
+      if (this.formData.timupic) {
+        return require('/resources/pngs/' + this.formData.timupic + '.png');
+      } else {
+        return '';
+      }
+    },
+    daan2picPath() {
+      if (this.formData.daan2pic) {
+        return require('/resources/pngs/' + this.formData.daan2pic + '.png');
+      } else {
+        return '';
+      }
+    },
+    jiexipicPath() {
+      if (this.formData.jiexipic) {
+        return require('/resources/pngs/' + this.formData.jiexipic + '.png');
+      } else {
+        return '';
+      }
+    }
   },
   watch: {
   },
   methods: {
     // 截图
     jietu() {
-      var cp = require("child_process");
-      var screen_window = cp.execFile('extraResources/PrintScr.exe')
+      var screen_window = child_process.execFile('extraResources/PrintScr.exe')
       screen_window.on('exit', function (code) {
         // 执行成功返回 1，返回 0 没有截图
         if (code) {
           // 保存文件
-          fs.writeFileSync('./resources/pngs/a.png',clipboard.readImage().toPNG());
+          fs.writeFileSync('./resources/pngs/a.png', clipboard.readImage().toPNG());
         }
       })
     },
