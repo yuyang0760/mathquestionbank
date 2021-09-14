@@ -108,6 +108,10 @@
       <el-drawer size="55%" :withHeader="false" :modal="false" :show-close="false" :visible.sync="fenleiSelectIsShow" direction="rtl">
         <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
+        <div style="display:inline;">
+          <el-input style="width:480px;margin-right:20px;margin-top:10px" v-model="input_修改分类" placeholder="请输入分类"></el-input>
+          <el-button @click="bt_保存分类()">保存分类</el-button>
+        </div>
       </el-drawer>
     </el-dialog>
   </div>
@@ -116,11 +120,12 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import leixingjson from '/resources/fenlei.json'
+// import leixingjson from '/resources/fenlei.json'
 import yytitledescription from '../components/yytitledescription.vue'
 import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
+import fs from 'fs';
 export default {
   name: 'About',
   components: {
@@ -130,12 +135,13 @@ export default {
   props: [],
   data() {
     return {
+      input_修改分类: "",
       isShowXuanxiang: true,
       conheight: {           // 高度自适应
         height: ''
       },
       fenleiSelectIsShow: false,
-      fenleiOptions: leixingjson,   // 题目分类json数据,导数->切线 等等
+      fenleiOptions: null,   // 题目分类json数据,导数->切线 等等
       tag: {                        // 标签
         inputVisible: false,
         inputValue: ''
@@ -196,15 +202,84 @@ export default {
 
     }
   },
-
-
   computed: {
-
   },
   watch: {
-
   },
   methods: {
+    bt_保存分类() {
+      // 读取文件
+      var filepath='./resources/fenlei.json';
+      const fenleiJsonFile = fs.readFileSync(filepath);
+      const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
+      console.log("分类", fenleiJsonFileObj);
+      var _fenlei = this.input_修改分类.split('▲');
+      var fenleiIndex0;
+      var fenleiIndex1;
+      var fenleiIndex2;
+      var fenleiIndex3;
+      if (_fenlei[0]) {
+        fenleiIndex0 = _.findKey(fenleiJsonFileObj, { 'value': _fenlei[0] });
+        if (fenleiIndex0 == undefined) {
+          fenleiJsonFileObj.push({ 'value': _fenlei[0], 'label': _fenlei[0] });
+          fenleiIndex0 = fenleiIndex0 == undefined ? fenleiJsonFileObj.length - 1 : fenleiIndex0;
+        }
+        // console.log("fenleiIndex0:", fenleiIndex0);
+        // console.log("分类", fenleiJsonFileObj);
+      }
+      if (_fenlei[1]) {
+        if (fenleiJsonFileObj[fenleiIndex0]['children'] == undefined) {
+          // 如果没有children,就创建一个
+          fenleiJsonFileObj[fenleiIndex0]['children'] = [];
+          fenleiIndex1 = 0;
+          fenleiJsonFileObj[fenleiIndex0]['children'].push({ 'value': _fenlei[1], 'label': _fenlei[1] });
+        } else {
+          fenleiIndex1 = _.findKey(fenleiJsonFileObj[fenleiIndex0]['children'], { 'value': _fenlei[1] });
+          if (fenleiIndex1 == undefined) {
+            fenleiJsonFileObj[fenleiIndex0]['children'].push({ 'value': _fenlei[1], 'label': _fenlei[1] });
+            fenleiIndex1 = fenleiIndex1 == undefined ? fenleiJsonFileObj[fenleiIndex0]['children'].length - 1 : fenleiIndex1;
+          }
+        }
+        // console.log("fenleiIndex1:", fenleiIndex1);
+        // console.log("分类", fenleiJsonFileObj);
+      }
+      if (_fenlei[2]) {
+        if (fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'] == undefined) {
+          // 如果没有children,就创建一个
+          fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'] = [];
+          fenleiIndex2 = 0;
+          fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'].push({ 'value': _fenlei[2], 'label': _fenlei[2] });
+        } else {
+          fenleiIndex2 = _.findKey(fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'], { 'value': _fenlei[2] });
+          if (fenleiIndex2 == undefined) {
+            fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'].push({ 'value': _fenlei[2], 'label': _fenlei[2] });
+            fenleiIndex2 = fenleiIndex2 == undefined ? fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'].length - 1 : fenleiIndex2;
+          }
+        }
+        // console.log("fenleiIndex2:", fenleiIndex2);
+        // console.log("分类", fenleiJsonFileObj);
+      }
+      if (_fenlei[3]) {
+        if (fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'] == undefined) {
+          // 如果没有children,就创建一个
+          fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'] = [];
+          fenleiIndex3 = 0;
+          fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'].push({ 'value': _fenlei[3], 'label': _fenlei[3] });
+        } else {
+          fenleiIndex3 = _.findKey(fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'], { 'value': _fenlei[3] });
+          if (fenleiIndex3 == undefined) {
+            fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'].push({ 'value': _fenlei[3], 'label': _fenlei[3] });
+            fenleiIndex3 = fenleiIndex3 == undefined ? fenleiJsonFileObj[fenleiIndex0]['children'][fenleiIndex1]['children'][fenleiIndex2]['children'].length - 1 : fenleiIndex3;
+          }
+        }
+        // console.log("fenleiIndex3:", fenleiIndex3);
+        // console.log("分类", fenleiJsonFileObj);
+      }
+      // 写入文件
+      fs.writeFileSync(filepath,JSON.stringify(fenleiJsonFileObj,null,2));
+      // console.log('写入成功！')
+    this.fenleiOptions=fenleiJsonFileObj;
+    },
     leixingChange(leixingvalue) {
       console.log("leixingchange")
       if (leixingvalue == '选择题') {
@@ -284,7 +359,9 @@ export default {
       this.isShowNewTimu = true;
     },
     // 分类改变
-    fenleiHandleChange(Value) {
+    fenleiHandleChange(fenlei) {
+      // console.log(fenlei);
+      this.input_修改分类 = fenlei.join('▲');
     },
     onOpen() {
       // console.log("onOpen", this.formData);
@@ -375,6 +452,7 @@ export default {
   },
   mounted() {
     console.log("About_mounted")
+      this.fenleiOptions = require("/resources/fenlei.json");
 
     // 连接数据库
     const Sequelize = require("sequelize");
@@ -469,7 +547,7 @@ el-dialog {
 }
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
-  height: 600px;
+  height: 350px;
 }
 .timuShowlabel {
   width: 60px;
