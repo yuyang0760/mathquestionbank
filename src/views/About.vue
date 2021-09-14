@@ -232,7 +232,7 @@ export default {
         // 执行成功返回 1，返回 0 没有截图
         if (code) {
           // 保存文件
-          fs.writeFileSync('./resources/a.png',clipboard.readImage().toPNG());
+          fs.writeFileSync('./resources/pngs/a.png',clipboard.readImage().toPNG());
         }
       })
     },
