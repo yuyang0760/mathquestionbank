@@ -34,6 +34,10 @@ export default {
       // 复制一份到Resources
       fs.copyFileSync('./extraResources/fenlei.json', './resources/fenlei.json');
     }
+        if (!fs.existsSync('./resources/biaoqian.json')) {
+      // 复制一份到Resources
+      fs.copyFileSync('./extraResources/biaoqian.json', './resources/biaoqian.json');
+    }
     //#endregion
   },
 }

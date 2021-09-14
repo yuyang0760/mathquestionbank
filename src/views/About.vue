@@ -109,8 +109,21 @@
         <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
         <div style="display:inline;">
-          <el-input style="width:480px;margin-right:20px;margin-top:10px" v-model="input_修改分类" placeholder="请输入分类"></el-input>
-          <el-button @click="bt_保存分类()">保存分类</el-button>
+          <el-input style="width:480px;margin:10px" v-model="input_添加分类" placeholder="请输入分类"></el-input>
+          <el-button @click="bt_添加分类()">添加分类</el-button>
+        </div>
+        <!-- <el-divider></el-divider> -->
+        <div>
+
+          <div>快速添加标签:</div>
+
+          <el-button type="primary" round size="medium" @click="快速添加标签(tag.value)" :key="index" v-for="(tag,index) in biaoqianOptions">
+            {{tag.value}}
+          </el-button>
+        </div>
+        <div style="display:inline;">
+          <el-input style="width:480px;margin:10px" v-model="input_添加标签" placeholder="请输入标签"></el-input>
+          <el-button @click="bt_添加标签()">添加标签</el-button>
         </div>
       </el-drawer>
     </el-dialog>
@@ -135,11 +148,13 @@ export default {
   props: [],
   data() {
     return {
-      input_修改分类: "",
+      input_添加标签: "",
+      input_添加分类: "",
       isShowXuanxiang: true,
       conheight: {           // 高度自适应
         height: ''
       },
+      biaoqianOptions: null,
       fenleiSelectIsShow: false,
       fenleiOptions: null,   // 题目分类json数据,导数->切线 等等
       tag: {                        // 标签
@@ -207,13 +222,37 @@ export default {
   watch: {
   },
   methods: {
-    bt_保存分类() {
+    // 在json文件中添加标签
+    bt_添加标签() {
+      var filepath = './resources/biaoqian.json';
+      const fenleiJsonFile = fs.readFileSync(filepath);
+      const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
+
+      var fenleiIndex0 = _.findKey(fenleiJsonFileObj, { 'value': this.input_添加标签 });
+
+      if (fenleiIndex0 == undefined) {
+        // 如果没找到就添加标签
+        fenleiJsonFileObj.push({ 'value': this.input_添加标签 })
+      }
+      // 保存到文件
+      fs.writeFileSync(filepath, JSON.stringify(fenleiJsonFileObj, null, 4));
+      // console.log('写入成功！')
+      this.biaoqianOptions = fenleiJsonFileObj;
+    },
+    快速添加标签(value) {
+      console.log(value);
+      // 不包含,就添加标签
+      if (!(this.formData.biaoqian.includes(value))) {
+        this.formData.biaoqian.push(value);
+      }
+    },
+    bt_添加分类() {
       // 读取文件
-      var filepath='./resources/fenlei.json';
+      var filepath = './resources/fenlei.json';
       const fenleiJsonFile = fs.readFileSync(filepath);
       const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
       console.log("分类", fenleiJsonFileObj);
-      var _fenlei = this.input_修改分类.split('▲');
+      var _fenlei = this.input_添加分类.split('▲');
       var fenleiIndex0;
       var fenleiIndex1;
       var fenleiIndex2;
@@ -276,9 +315,9 @@ export default {
         // console.log("分类", fenleiJsonFileObj);
       }
       // 写入文件
-      fs.writeFileSync(filepath,JSON.stringify(fenleiJsonFileObj,null,2));
+      fs.writeFileSync(filepath, JSON.stringify(fenleiJsonFileObj, null, 2));
       // console.log('写入成功！')
-    this.fenleiOptions=fenleiJsonFileObj;
+      this.fenleiOptions = fenleiJsonFileObj;
     },
     leixingChange(leixingvalue) {
       console.log("leixingchange")
@@ -361,7 +400,7 @@ export default {
     // 分类改变
     fenleiHandleChange(fenlei) {
       // console.log(fenlei);
-      this.input_修改分类 = fenlei.join('▲');
+      this.input_添加分类 = fenlei.join('▲');
     },
     onOpen() {
       // console.log("onOpen", this.formData);
@@ -452,7 +491,9 @@ export default {
   },
   mounted() {
     console.log("About_mounted")
-      this.fenleiOptions = require("/resources/fenlei.json");
+    // 开始就读取分类
+    this.fenleiOptions = require("/resources/fenlei.json");
+    this.biaoqianOptions = require("/resources/biaoqian.json");
 
     // 连接数据库
     const Sequelize = require("sequelize");
@@ -486,6 +527,12 @@ export default {
 
 </script>
 <style>
+.hengxian {
+  width: 1000px;
+  height: 100px;
+  margin: 0 0;
+  border-bottom: 1px;
+}
 .el-rate {
   display: inline-block;
   vertical-align: text-top;
