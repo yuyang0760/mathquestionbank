@@ -23,6 +23,7 @@
           <el-button @click="addTimu()">添加题目</el-button>
           <el-button @click="selectAllTimu()">查询所有题目</el-button>
           <el-button @click="clearAllTimu()">清空所有题目</el-button>
+          <el-button @click="jietu()">截图</el-button>
         </div>
       </el-main>
     </el-container>
@@ -105,7 +106,7 @@
         </el-row>
       </el-form>
       <!-- 弹出的分类页 -->
-      <el-drawer size="55%" :withHeader="false" :modal="false" :show-close="false" :visible.sync="fenleiSelectIsShow" direction="rtl">
+      <el-drawer size="43%" :withHeader="false" :modal="false" :show-close="false" :visible.sync="fenleiSelectIsShow" direction="ltr">
         <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
         <div style="display:inline;">
@@ -139,6 +140,7 @@ import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
+
 export default {
   name: 'About',
   components: {
@@ -222,6 +224,18 @@ export default {
   watch: {
   },
   methods: {
+    // 截图
+    jietu() {
+      var cp = require("child_process");
+      var screen_window = cp.execFile('extraResources/PrintScr.exe')
+      screen_window.on('exit', function (code) {
+        // 执行成功返回 1，返回 0 没有截图
+        if (code) {
+          // 保存文件
+          fs.writeFileSync('./resources/a.png',clipboard.readImage().toPNG());
+        }
+      })
+    },
     // 在json文件中添加标签
     bt_添加标签() {
       var filepath = './resources/biaoqian.json';
