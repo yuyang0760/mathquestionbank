@@ -2,6 +2,12 @@
   <div>
     <el-container>
       <el-aside width="820px">
+               <div>
+          <el-button @click="addTimu()">添加题目</el-button>
+          <el-button @click="selectAllTimu()">查询所有题目</el-button>
+          <el-button @click="clearAllTimu()">清空所有题目</el-button>
+          <!-- <el-button @click="jietu()">截图</el-button> -->
+        </div>
         <div style="width:800px;" :style="conheight">
           <happy-scroll size="10" resize>
             <div style="margin-right:28px;margin-bottom:20px">
@@ -19,12 +25,7 @@
       </el-aside>
       <!-- 右边 -->
       <el-main>
-        <div>
-          <el-button @click="addTimu()">添加题目</el-button>
-          <el-button @click="selectAllTimu()">查询所有题目</el-button>
-          <el-button @click="clearAllTimu()">清空所有题目</el-button>
-          <!-- <el-button @click="jietu()">截图</el-button> -->
-        </div>
+ 
       </el-main>
     </el-container>
 
