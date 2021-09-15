@@ -23,7 +23,7 @@
           <el-button @click="addTimu()">添加题目</el-button>
           <el-button @click="selectAllTimu()">查询所有题目</el-button>
           <el-button @click="clearAllTimu()">清空所有题目</el-button>
-          <el-button @click="jietu()">截图</el-button>
+          <!-- <el-button @click="jietu()">截图</el-button> -->
         </div>
       </el-main>
     </el-container>
@@ -52,10 +52,12 @@
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
               <!-- <el-button @click="jietu()">截图</el-button> -->
+              <el-button @click="pasteTimu()">粘贴题目</el-button>
+
             </el-form-item>
             <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
               <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
-              <el-button @click="pasteTimu()">自动粘贴</el-button>
+              <el-button @click="autopasteTimu()">自动粘贴</el-button>
             </el-form-item>
             <el-row>
               <el-form-item label=" 答案1:" prop="daan1" class="formitem">
@@ -339,8 +341,12 @@ export default {
         this.formData.xuanxiang = ['', '', '', ''];
       }
     },
+    // 粘贴题目
+    pasteTimu(){
+      this.formData.timu = clipboard.readText();
+    },
     // 自动粘贴题目按钮
-    pasteTimu() {
+    autopasteTimu() {
       var text = clipboard.readText();
       text = text.replace(/[\n\r]/g, '★');
       console.log(text);
@@ -421,7 +427,7 @@ export default {
       // this.$refs['elForm'].resetFields()   // 需要注释掉,不然会出错
       this.formData.id = null;
       this.formData.timu = "";
-      this.formData.leixing = '选择题';
+      // this.formData.leixing = '选择题';
       this.formData.daan1 = "";
       this.formData.daan2 = "";
       this.formData.jiexi = "";
