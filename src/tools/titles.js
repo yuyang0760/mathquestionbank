@@ -94,7 +94,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       defaultValue:""
     },
-    laiyuanpic: {
+    jiexipic: {
       type: DataTypes.TEXT,
       allowNull: true,
       defaultValue:""
