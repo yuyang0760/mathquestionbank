@@ -1,13 +1,14 @@
 <template>
   <div>
-    <el-container>
-      <el-aside width="820px">
+    <el-row>
+      <!-- 左边 -->
+      <el-col :span="12">
         <div>
           <el-button size="small" @click="addTimu()">添加题目</el-button>
           <el-button size="small" @click="selectAllTimu()">查询所有题目</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
         </div>
-        <div style="width:800px;" :style="conheight">
+        <div   :style="conheight">
           <happy-scroll size="10" resize>
             <div style="margin-right:28px;margin-bottom:20px">
               <ul>
@@ -21,12 +22,10 @@
             </div>
           </happy-scroll>
         </div>
-      </el-aside>
+      </el-col>
       <!-- 右边 -->
-      <el-main>
-
-      </el-main>
-    </el-container>
+      <el-col :span="12"> </el-col>
+    </el-row>
 
     <el-dialog top="0" :modal="false" :show-close="false" :visible.sync="isShowNewTimu" fullscreen v-bind="$attrs" v-on="$listeners"
       @open="onOpen" @close="onClose">
@@ -58,29 +57,39 @@
 
             </el-form-item>
             <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
-              <el-switch v-model="isShowXuanxiangpic" active-color="#ff4949" inactive-color="#13ce66"> </el-switch>
               <yytitlexuanxiang v-show="!isShowXuanxiangpic" :xuanxiang="formData.xuanxiang"></yytitlexuanxiang>
               <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
                 <div class="shuxiangbuju">
                   <el-button type="success" round size="small" @click="jieTu('xuanxiang1')">选项1</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang1')" v-show="formData.xuanxiang[0]">删除
+                  </el-button>
                   <el-image :src="xuanxiang1filePath" class="image" v-show="formData.xuanxiang[0]"></el-image>
                 </div>
                 <div class="shuxiangbuju">
                   <el-button type="success" round size="small" @click="jieTu('xuanxiang2')">选项2</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang2')" v-show="formData.xuanxiang[1]">删除
+                  </el-button>
                   <el-image :src="xuanxiang2filePath" class="image" v-show="formData.xuanxiang[1]"></el-image>
                 </div>
               </div>
               <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
                 <div class="shuxiangbuju">
                   <el-button type="success" round size="small" @click="jieTu('xuanxiang3')">选项3</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang3')" v-show="formData.xuanxiang[2]">删除
+                  </el-button>
                   <el-image :src="xuanxiang3filePath" class="image" v-show="formData.xuanxiang[2]"></el-image>
                 </div>
                 <div class="shuxiangbuju">
                   <el-button type="success" round size="small" @click="jieTu('xuanxiang4')">选项4</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang4')" v-show="formData.xuanxiang[3]">删除
+                  </el-button>
                   <el-image :src="xuanxiang4filePath" class="image" v-show="formData.xuanxiang[3]"></el-image>
                 </div>
               </div>
-              <el-button size="small" @click="autopasteTimu()" type="primary">自动粘贴题目和选项</el-button>
+              <div class="hengxiangbuju">
+                <el-switch v-model="isShowXuanxiangpic" active-color="#ff4949" inactive-color="#13ce66"> </el-switch>
+                <el-button size="small" @click="autopasteTimu()" type="primary">自动粘贴题目和选项</el-button>
+              </div>
             </el-form-item>
             <el-row>
               <el-form-item label=" 答案1:" prop="daan1" class="formitem">
@@ -326,6 +335,23 @@ export default {
       if (t == 'daan2') {
         fs.unlinkSync(this.daan2picfilePath);
         this.formData.daan2picfilename = "";
+      }
+      if (t == 'xuanxiang1') {
+        console.log(this.xuanxiang1filePath)
+        fs.unlinkSync(this.xuanxiang1filePath);
+        this.formData.xuanxiang.splice(0, 1, "")
+      }
+      if (t == 'xuanxiang2') {
+        fs.unlinkSync(this.xuanxiang2filePath);
+        this.formData.xuanxiang.splice(1, 1, "")
+      }
+      if (t == 'xuanxiang3') {
+        fs.unlinkSync(this.xuanxiang3filePath);
+        this.formData.xuanxiang.splice(2, 1, "")
+      }
+      if (t == 'xuanxiang4') {
+        fs.unlinkSync(this.xuanxiang4filePath);
+        this.formData.xuanxiang.splice(3, 1, "")
       }
 
     },
