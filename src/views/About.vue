@@ -58,7 +58,28 @@
 
             </el-form-item>
             <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
-              <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
+              <el-switch v-model="isShowXuanxiangpic" active-color="#ff4949" inactive-color="#13ce66"> </el-switch>
+              <yytitlexuanxiang v-show="!isShowXuanxiangpic" :xuanxiang="formData.xuanxiang"></yytitlexuanxiang>
+              <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
+                <div class="shuxiangbuju">
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang1')">选项1</el-button>
+                  <el-image :src="xuanxiang1filePath" class="image" v-show="formData.xuanxiang[0]"></el-image>
+                </div>
+                <div class="shuxiangbuju">
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang2')">选项2</el-button>
+                  <el-image :src="xuanxiang2filePath" class="image" v-show="formData.xuanxiang[1]"></el-image>
+                </div>
+              </div>
+              <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
+                <div class="shuxiangbuju">
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang3')">选项3</el-button>
+                  <el-image :src="xuanxiang3filePath" class="image" v-show="formData.xuanxiang[2]"></el-image>
+                </div>
+                <div class="shuxiangbuju">
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang4')">选项4</el-button>
+                  <el-image :src="xuanxiang4filePath" class="image" v-show="formData.xuanxiang[3]"></el-image>
+                </div>
+              </div>
               <el-button size="small" @click="autopasteTimu()" type="primary">自动粘贴题目和选项</el-button>
             </el-form-item>
             <el-row>
@@ -164,10 +185,11 @@ export default {
   props: [],
   data() {
     return {
-      timujietuShortCut:"",
-      input_添加标签: "",
-      input_添加分类: "",
-      isShowXuanxiang: true,
+      isShowXuanxiangpic: false,   // 是否显示选项ABCD的图片
+      timujietuShortCut: "",      // 题目截图快捷键
+      input_添加标签: "",         // 添加标签
+      input_添加分类: "",         // 添加分类
+      isShowXuanxiang: true,      // 当""选择题"时显示选项,填空题和解答题不显示选项
       conheight: {           // 高度自适应
         height: ''
       },
@@ -258,6 +280,34 @@ export default {
       } else {
         return "";
       }
+    },
+    xuanxiang1filePath() {
+      if (this.formData.xuanxiang[0] != '') {
+        return config.pngsPath + "/" + this.formData.xuanxiang[0] + ".png"
+      } else {
+        return "";
+      }
+    },
+    xuanxiang2filePath() {
+      if (this.formData.xuanxiang[1] != '') {
+        return config.pngsPath + "/" + this.formData.xuanxiang[1] + ".png"
+      } else {
+        return "";
+      }
+    },
+    xuanxiang3filePath() {
+      if (this.formData.xuanxiang[2] != '') {
+        return config.pngsPath + "/" + this.formData.xuanxiang[2] + ".png"
+      } else {
+        return "";
+      }
+    },
+    xuanxiang4filePath() {
+      if (this.formData.xuanxiang[3] != '') {
+        return config.pngsPath + "/" + this.formData.xuanxiang[3] + ".png"
+      } else {
+        return "";
+      }
     }
   },
   watch: {
@@ -299,6 +349,19 @@ export default {
           }
           if (t == 'daan2') {
             this.formData.daan2picfilename = fileName;
+          }
+          if (t == 'xuanxiang1') {
+            this.formData.xuanxiang.splice(0, 1, fileName)
+          }
+          if (t == 'xuanxiang2') {
+            this.formData.xuanxiang.splice(1, 1, fileName)
+
+          }
+          if (t == 'xuanxiang3') {
+            this.formData.xuanxiang.splice(2, 1, fileName)
+          }
+          if (t == 'xuanxiang4') {
+            this.formData.xuanxiang.splice(3, 1, fileName)
           }
         }
       })
@@ -579,8 +642,8 @@ export default {
     console.log("About_mounted")
     // 绑定快捷键
     // 回调函数返回 false 以阻止浏览器默认事件行为
-    this.timujietuShortCut=config.timujietuShortCut;
-    key(config.timujietuShortCut,  ()=> { this.jieTu('timu'); return false });
+    this.timujietuShortCut = config.timujietuShortCut;
+    key(config.timujietuShortCut, () => { this.jieTu('timu'); return false });
     // key('ctrl+alt+a',  ()=> { this.jieTu('daan2'); return false });
     // key('ctrl+alt+a',  ()=> { this.jieTu('jiexi'); return false });
 
@@ -622,11 +685,20 @@ export default {
 
 </script>
 <style>
-.hengxian {
-  width: 1000px;
-  height: 100px;
-  margin: 0 0;
-  border-bottom: 1px;
+.hengxiangbuju {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.shuxiangbuju {
+  display: flex;
+  flex-direction: column;
+  width: 49%;
+  margin: 5px;
+}
+.image {
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 .el-rate {
   display: inline-block;
