@@ -11,6 +11,7 @@
 <script>
 import Vue from 'vue';
 import version from "../package.json"
+import config from '/extraResources/config.json'
 export default {
   name: 'About',
   data() {
@@ -20,23 +21,24 @@ export default {
   },
   mounted() {
 
+
     //#region 打开文件后,检查数据库文件是否存在,不存在就copy一份过去
     console.log("APP_mounted");
     var fs = require('fs');
-    if (!(fs.existsSync('./resources'))) {
-      fs.mkdirSync('./resources');
+    if (!(fs.existsSync(config.onedrivePath))) {
+      fs.mkdirSync(config.onedrivePath);
     }
-    if (!fs.existsSync('./resources/mathdb.db')) {
+    if (!fs.existsSync(config.mathdbPath)) {
       // 复制一份到Resources
-      fs.copyFileSync('./extraResources/mathdb.db', './resources/mathdb.db');
+      fs.copyFileSync('./extraResources/mathdb.db', config.mathdbPath);
     }
-    if (!fs.existsSync('./resources/fenlei.json')) {
+    if (!fs.existsSync(config.fenleiPath)) {
       // 复制一份到Resources
-      fs.copyFileSync('./extraResources/fenlei.json', './resources/fenlei.json');
+      fs.copyFileSync('./extraResources/fenlei.json', config.fenleiPath);
     }
-        if (!fs.existsSync('./resources/biaoqian.json')) {
+    if (!fs.existsSync(config.biaoqianPath)) {
       // 复制一份到Resources
-      fs.copyFileSync('./extraResources/biaoqian.json', './resources/biaoqian.json');
+      fs.copyFileSync('./extraResources/biaoqian.json', config.biaoqianPath);
     }
     //#endregion
   },

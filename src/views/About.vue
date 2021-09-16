@@ -138,12 +138,12 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-// import leixingjson from '/resources/fenlei.json'
 import yytitledescription from '../components/yytitledescription.vue'
 import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
+import config from '/extraResources/config.json'
 
 export default {
   name: 'About',
@@ -238,8 +238,7 @@ export default {
     // },
     // 在json文件中添加标签
     bt_添加标签() {
-      var filepath = './resources/biaoqian.json';
-      const fenleiJsonFile = fs.readFileSync(filepath);
+      const fenleiJsonFile = fs.readFileSync(config.biaoqianPath);
       const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
 
       var fenleiIndex0 = _.findKey(fenleiJsonFileObj, { 'value': this.input_添加标签 });
@@ -249,7 +248,7 @@ export default {
         fenleiJsonFileObj.push({ 'value': this.input_添加标签 })
       }
       // 保存到文件
-      fs.writeFileSync(filepath, JSON.stringify(fenleiJsonFileObj, null, 4));
+      fs.writeFileSync(config.biaoqianPath, JSON.stringify(fenleiJsonFileObj, null, 4));
       // console.log('写入成功！')
       this.biaoqianOptions = fenleiJsonFileObj;
     },
@@ -262,7 +261,7 @@ export default {
     },
     bt_添加分类() {
       // 读取文件
-      var filepath = './resources/fenlei.json';
+      var filepath = config.fenleiPath;
       const fenleiJsonFile = fs.readFileSync(filepath);
       const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
       console.log("分类", fenleiJsonFileObj);
@@ -510,8 +509,10 @@ export default {
   mounted() {
     console.log("About_mounted")
     // 开始就读取分类
-    this.fenleiOptions = require("/resources/fenlei.json");
-    this.biaoqianOptions = require("/resources/biaoqian.json");
+          // 读取文件
+       this.fenleiOptions = JSON.parse(fs.readFileSync(config.fenleiPath));
+       this.biaoqianOptions = JSON.parse(fs.readFileSync(config.biaoqianPath));
+
 
     // 连接数据库
     const Sequelize = require("sequelize");
@@ -527,7 +528,7 @@ export default {
     // })
     const sequelize = new Sequelize({
       dialect: 'sqlite',
-      storage: './Resources/mathdb.db',
+      storage: config.mathdbPath,
       // dialect
       dialectModule: require("sqlite3")
     });

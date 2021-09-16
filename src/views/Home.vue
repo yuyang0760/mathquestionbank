@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import config from '/extraResources/config.json'
+
 export default {
   name: "Home",
   components: {
@@ -19,7 +21,7 @@ export default {
       const { Sequelize, Op, Model, DataTypes } = require("sequelize");
       const sequelize = new Sequelize({
         dialect: 'sqlite',
-        storage: 'C:\\Users\\13170\\Desktop\\mathdb.db',
+        storage: config.mathdbPath,
         dialectModule: require("sqlite3")
       });
       var create = require("../tools/init-models").createTable;
