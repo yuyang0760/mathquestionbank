@@ -84,17 +84,17 @@ module.exports = function (sequelize, DataTypes) {
         }
       }
     },
-    timupic: {
+    timupicfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
       defaultValue:""
     },
-    daan2pic: {
+    daan2picfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
       defaultValue:""
     },
-    jiexipic: {
+    jiexipicfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
       defaultValue:""

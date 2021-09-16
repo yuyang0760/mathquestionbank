@@ -2,11 +2,10 @@
   <div>
     <el-container>
       <el-aside width="820px">
-               <div>
-          <el-button @click="addTimu()">添加题目</el-button>
-          <el-button @click="selectAllTimu()">查询所有题目</el-button>
-          <el-button @click="clearAllTimu()">清空所有题目</el-button>
-          <!-- <el-button @click="jietu()">截图</el-button> -->
+        <div>
+          <el-button size="small" @click="addTimu()">添加题目</el-button>
+          <el-button size="small" @click="selectAllTimu()">查询所有题目</el-button>
+          <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
         </div>
         <div style="width:800px;" :style="conheight">
           <happy-scroll size="10" resize>
@@ -25,7 +24,7 @@
       </el-aside>
       <!-- 右边 -->
       <el-main>
- 
+
       </el-main>
     </el-container>
 
@@ -52,13 +51,15 @@
             </el-row>
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
-              <!-- <el-button @click="jietu()">截图</el-button> -->
-              <el-button @click="pasteTimu()">粘贴题目</el-button>
+              <el-button size="small" @click="jieTu('timu')">截图</el-button>
+              <el-button size="small" @click="jieTuDelete('timu')" type="danger" v-show="formData.timupicfilename">删除</el-button>
+              <el-button size="small" @click="pasteTimu()">粘贴</el-button>
+              <el-image :src="timupicfilePath" style="width:100%;height:100%" v-show="formData.timupicfilename"></el-image>
 
             </el-form-item>
             <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
               <yytitlexuanxiang :xuanxiang="this.formData.xuanxiang"></yytitlexuanxiang>
-              <el-button @click="autopasteTimu()">自动粘贴</el-button>
+              <el-button size="small" @click="autopasteTimu()" type="primary">自动粘贴题目和选项</el-button>
             </el-form-item>
             <el-row>
               <el-form-item label=" 答案1:" prop="daan1" class="formitem">
@@ -67,10 +68,17 @@
               <el-form-item label="答案2:" prop="daan2" class="formitem">
                 <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4, maxRows: 4}">
                 </el-input>
+                <el-button size="small" @click="jieTu('daan2')">截图</el-button>
+                <el-button size="small" @click="jieTuDelete('daan2')" type="danger" v-show="formData.daan2picfilename">删除</el-button>
+                <el-image :src="daan2picfilePath" style="width:100%;height:100%" v-show="formData.daan2picfilename"></el-image>
+
               </el-form-item>
               <el-form-item label="解析:" prop="jiexi" class="formitem">
                 <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 4, maxRows: 4}">
                 </el-input>
+                <el-button size="small" @click="jieTu('jiexi')">截图</el-button>
+                <el-button size="small" @click="jieTuDelete('jiexi')" type="danger" v-show="formData.jiexipicfilename">删除</el-button>
+                <el-image :src="jiexipicfilePath" style="width:100%;height:100%" v-show="formData.jiexipicfilename"></el-image>
               </el-form-item>
             </el-row>
           </el-col>
@@ -144,6 +152,7 @@ import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
 import config from '/extraResources/config.json'
+import miment from 'miment'
 
 export default {
   name: 'About',
@@ -185,9 +194,9 @@ export default {
         xuanxiang: ['', '', '', ''],
         biaoqian: [],   // 标签
         fenlei: [],        // 分类 和数据库中的fenlei1,fenlei2,fenlei3,fenlei4同步
-        timupic: '',
-        daan2pic: '',
-        jiexipic: ''
+        timupicfilename: '',
+        daan2picfilename: '',
+        jiexipicfilename: ''
 
       },
       rules: {
@@ -227,15 +236,72 @@ export default {
     }
   },
   computed: {
-
+    timupicfilePath() {
+      if (this.formData.timupicfilename!='') {
+        return config.pngsPath + "/" + this.formData.timupicfilename + ".png"
+      } else {
+        return "";
+      }
+    },
+    jiexipicfilePath() {
+      if (this.formData.jiexipicfilename!='') {
+        return config.pngsPath + "/" + this.formData.jiexipicfilename + ".png"
+      } else {
+        return "";
+      }
+    },
+    daan2picfilePath() {
+      if (this.formData.daan2picfilename!='') {
+        return config.pngsPath + "/" + this.formData.daan2picfilename + ".png"
+      } else {
+        return "";
+      }
+    }
   },
   watch: {
   },
   methods: {
+    // 删除截图
+    jieTuDelete(t) {
+      if (t == 'timu') {
+        fs.unlinkSync(this.timupicfilePath);
+        this.formData.timupicfilename = "";
+      }
+      if (t == 'jiexi') {
+        fs.unlinkSync(this.jiexipicfilePath);
+        this.formData.jiexipicfilename = "";
+      }
+      if (t == 'daan2') {
+        fs.unlinkSync(this.daan2picfilePath);
+        this.formData.daan2picfilename = "";
+      }
+
+    },
     // 截图
-    // jietu() {
-    //       fs.writeFileSync('./resources/pngs/a.png', clipboard.readImage().toPNG());
-    // },
+    jieTu(t) {
+      const cp = require('child_process');
+      var screen_window = cp.execFile('./extraResources/PrintScr.exe');
+      screen_window.on('exit', (code) => {
+        // 执行成功返回 1，返回 0 没有截图
+        if (code) {
+
+          var fileName = t + '_' + miment().format("YYYYMMDDhhmmss");
+          // 剪贴板图片保存起来
+          fs.writeFileSync(config.pngsPath + "/" + fileName + ".png", clipboard.readImage().toPNG());
+          // 显示图片
+          if (t == 'timu') {
+            this.formData.timupicfilename = fileName;
+          }
+          if (t == 'jiexi') {
+            this.formData.jiexipicfilename = fileName;
+          }
+          if (t == 'daan2') {
+            this.formData.daan2picfilename = fileName;
+          }
+        }
+      })
+
+    },
     // 在json文件中添加标签
     bt_添加标签() {
       const fenleiJsonFile = fs.readFileSync(config.biaoqianPath);
@@ -342,7 +408,7 @@ export default {
       }
     },
     // 粘贴题目
-    pasteTimu(){
+    pasteTimu() {
       this.formData.timu = clipboard.readText();
     },
     // 自动粘贴题目按钮
@@ -358,8 +424,9 @@ export default {
         this.formData.xuanxiang = [a[2].replace(/★/g, ''), a[3].replace(/★/g, ''), a[4].replace(/★/g, ''), a[5].replace(/★/g, '')];
       }
     },
+    // 自动高度
     getHeight() {
-      this.conheight.height = window.innerHeight - 30 + 'px';
+      this.conheight.height = window.innerHeight - 60 + 'px';
     },
     //清空所有题目
     clearAllTimu() {
@@ -509,9 +576,9 @@ export default {
   mounted() {
     console.log("About_mounted")
     // 开始就读取分类
-          // 读取文件
-       this.fenleiOptions = JSON.parse(fs.readFileSync(config.fenleiPath));
-       this.biaoqianOptions = JSON.parse(fs.readFileSync(config.biaoqianPath));
+    // 读取文件
+    this.fenleiOptions = JSON.parse(fs.readFileSync(config.fenleiPath));
+    this.biaoqianOptions = JSON.parse(fs.readFileSync(config.biaoqianPath));
 
 
     // 连接数据库
