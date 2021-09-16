@@ -51,7 +51,7 @@
             </el-row>
             <el-form-item label="题目:" prop="timu" class="formitem">
               <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4, maxRows: 5}"></el-input>
-              <el-button size="small" @click="jieTu('timu')">截图</el-button>
+              <el-button size="small" @click="jieTu('timu')">截图 {{timujietuShortCut}}</el-button>
               <el-button size="small" @click="jieTuDelete('timu')" type="danger" v-show="formData.timupicfilename">删除</el-button>
               <el-button size="small" @click="pasteTimu()">粘贴</el-button>
               <el-image :src="timupicfilePath" style="width:100%;height:100%" v-show="formData.timupicfilename"></el-image>
@@ -153,6 +153,7 @@ import { clipboard } from 'electron';
 import fs from 'fs';
 import config from '/extraResources/config.json'
 import miment from 'miment'
+import key from 'keymaster'
 
 export default {
   name: 'About',
@@ -163,6 +164,7 @@ export default {
   props: [],
   data() {
     return {
+      timujietuShortCut:"",
       input_添加标签: "",
       input_添加分类: "",
       isShowXuanxiang: true,
@@ -237,21 +239,21 @@ export default {
   },
   computed: {
     timupicfilePath() {
-      if (this.formData.timupicfilename!='') {
+      if (this.formData.timupicfilename != '') {
         return config.pngsPath + "/" + this.formData.timupicfilename + ".png"
       } else {
         return "";
       }
     },
     jiexipicfilePath() {
-      if (this.formData.jiexipicfilename!='') {
+      if (this.formData.jiexipicfilename != '') {
         return config.pngsPath + "/" + this.formData.jiexipicfilename + ".png"
       } else {
         return "";
       }
     },
     daan2picfilePath() {
-      if (this.formData.daan2picfilename!='') {
+      if (this.formData.daan2picfilename != '') {
         return config.pngsPath + "/" + this.formData.daan2picfilename + ".png"
       } else {
         return "";
@@ -575,6 +577,13 @@ export default {
   },
   mounted() {
     console.log("About_mounted")
+    // 绑定快捷键
+    // 回调函数返回 false 以阻止浏览器默认事件行为
+    this.timujietuShortCut=config.timujietuShortCut;
+    key(config.timujietuShortCut,  ()=> { this.jieTu('timu'); return false });
+    // key('ctrl+alt+a',  ()=> { this.jieTu('daan2'); return false });
+    // key('ctrl+alt+a',  ()=> { this.jieTu('jiexi'); return false });
+
     // 开始就读取分类
     // 读取文件
     this.fenleiOptions = JSON.parse(fs.readFileSync(config.fenleiPath));

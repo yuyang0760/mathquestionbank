@@ -1,6 +1,6 @@
 {
   "name": "mathquestionbank",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -22,6 +22,7 @@
     "element-ui": "^2.15.6",
     "fs": "^0.0.1-security",
     "katex": "^0.13.18",
+    "keymaster": "^1.6.2",
     "lodash": "^4.17.21",
     "miment": "^0.0.9",
     "path": "^0.12.7",
