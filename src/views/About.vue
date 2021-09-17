@@ -8,7 +8,7 @@
           <el-button size="small" @click="selectAllTimu()">查询所有题目</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
         </div>
-        <div   :style="conheight">
+        <div :style="conheight">
           <happy-scroll size="10" resize>
             <div style="margin-right:28px;margin-bottom:20px">
               <ul>
@@ -60,30 +60,34 @@
               <yytitlexuanxiang v-show="!isShowXuanxiangpic" :xuanxiang="formData.xuanxiang"></yytitlexuanxiang>
               <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
                 <div class="shuxiangbuju">
-                  <el-button type="success" round size="small" @click="jieTu('xuanxiang1')">选项1</el-button>
-                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang1')" v-show="formData.xuanxiang[0]">删除
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang1')">A</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang1')"
+                    v-show="isShowXuanxiangimage(formData.xuanxiang[0])">删除
                   </el-button>
-                  <el-image :src="xuanxiang1filePath" class="image" v-show="formData.xuanxiang[0]"></el-image>
+                  <el-image :src="xuanxiang1filePath" class="image" v-show="isShowXuanxiangimage(formData.xuanxiang[0])"></el-image>
                 </div>
                 <div class="shuxiangbuju">
-                  <el-button type="success" round size="small" @click="jieTu('xuanxiang2')">选项2</el-button>
-                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang2')" v-show="formData.xuanxiang[1]">删除
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang2')">B</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang2')"
+                    v-show="isShowXuanxiangimage(formData.xuanxiang[1])">删除
                   </el-button>
-                  <el-image :src="xuanxiang2filePath" class="image" v-show="formData.xuanxiang[1]"></el-image>
+                  <el-image :src="xuanxiang2filePath" class="image" v-show="isShowXuanxiangimage(formData.xuanxiang[1])"></el-image>
                 </div>
               </div>
               <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
                 <div class="shuxiangbuju">
-                  <el-button type="success" round size="small" @click="jieTu('xuanxiang3')">选项3</el-button>
-                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang3')" v-show="formData.xuanxiang[2]">删除
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang3')">C</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang3')"
+                    v-show="isShowXuanxiangimage(formData.xuanxiang[2])">删除
                   </el-button>
-                  <el-image :src="xuanxiang3filePath" class="image" v-show="formData.xuanxiang[2]"></el-image>
+                  <el-image :src="xuanxiang3filePath" class="image" v-show="isShowXuanxiangimage(formData.xuanxiang[2])"></el-image>
                 </div>
                 <div class="shuxiangbuju">
-                  <el-button type="success" round size="small" @click="jieTu('xuanxiang4')">选项4</el-button>
-                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang4')" v-show="formData.xuanxiang[3]">删除
+                  <el-button type="success" round size="small" @click="jieTu('xuanxiang4')">D</el-button>
+                  <el-button type="danger" round size="small" @click="jieTuDelete('xuanxiang4')"
+                    v-show="isShowXuanxiangimage(formData.xuanxiang[3])">删除
                   </el-button>
-                  <el-image :src="xuanxiang4filePath" class="image" v-show="formData.xuanxiang[3]"></el-image>
+                  <el-image :src="xuanxiang4filePath" class="image" v-show="isShowXuanxiangimage(formData.xuanxiang[3])"></el-image>
                 </div>
               </div>
               <div class="hengxiangbuju">
@@ -160,7 +164,7 @@
 
           <div>快速添加标签:</div>
 
-          <el-button type="primary" round size="medium" @click="快速添加标签(tag.value)" :key="index" v-for="(tag,index) in biaoqianOptions">
+          <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index" v-for="(tag,index) in biaoqianOptions">
             {{tag.value}}
           </el-button>
         </div>
@@ -291,28 +295,28 @@ export default {
       }
     },
     xuanxiang1filePath() {
-      if (this.formData.xuanxiang[0] != '') {
+      if (this.formData.xuanxiang[0] != '' && this.formData.xuanxiang[0].startsWith("xuanxiang")) {
         return config.pngsPath + "/" + this.formData.xuanxiang[0] + ".png"
       } else {
         return "";
       }
     },
     xuanxiang2filePath() {
-      if (this.formData.xuanxiang[1] != '') {
+      if (this.formData.xuanxiang[1] != '' && this.formData.xuanxiang[1].startsWith("xuanxiang")) {
         return config.pngsPath + "/" + this.formData.xuanxiang[1] + ".png"
       } else {
         return "";
       }
     },
     xuanxiang3filePath() {
-      if (this.formData.xuanxiang[2] != '') {
+      if (this.formData.xuanxiang[2] != '' && this.formData.xuanxiang[2].startsWith("xuanxiang")) {
         return config.pngsPath + "/" + this.formData.xuanxiang[2] + ".png"
       } else {
         return "";
       }
     },
     xuanxiang4filePath() {
-      if (this.formData.xuanxiang[3] != '') {
+      if (this.formData.xuanxiang[3] != '' && this.formData.xuanxiang[3].startsWith("xuanxiang")) {
         return config.pngsPath + "/" + this.formData.xuanxiang[3] + ".png"
       } else {
         return "";
@@ -322,6 +326,14 @@ export default {
   watch: {
   },
   methods: {
+    // 是否显示选项图片 如果不以选项开头,就不显示选项图片了
+    isShowXuanxiangimage(t) {
+      if (t.startsWith("xuanxiang")) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     // 删除截图
     jieTuDelete(t) {
       if (t == 'timu') {
