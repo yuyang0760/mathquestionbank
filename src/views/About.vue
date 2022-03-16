@@ -47,10 +47,8 @@
             <el-checkbox  label="6"></el-checkbox>
           </el-checkbox-group> -->
           题目:<el-input v-model="chaxunData.timu" placeholder="请输入分类:"></el-input>
-          答案1:<el-input v-model="chaxunData.daan1" placeholder="请输入分类:"></el-input>
-          解析:<el-input v-model="chaxunData.jiexi" placeholder="请输入分类:"></el-input>
-          答案2:<el-input v-model="chaxunData.daan2" placeholder="请输入分类:"></el-input>
           <el-button type="success" @click="chaxunButton()">查询</el-button>
+            <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
         </div>
       </el-col>
     </el-row>
@@ -150,7 +148,7 @@
               <yytitledescription v-bind="formData" :isShowMini="false"></yytitledescription>
 
             </div>
-            <el-form-item label="标签:" prop="biaoqian" class="formitem">
+            <!-- <el-form-item label="标签:" prop="biaoqian" class="formitem">
               <el-tag :key="tag" v-for="tag in formData.biaoqian" closable :disable-transitions="false" @close="handleClose(tag)">
                 {{tag}}
               </el-tag>
@@ -158,7 +156,7 @@
                 @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm">
               </el-input>
               <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="分类:" prop="fenlei" class="formitem">
               <el-breadcrumb separator-class="el-icon-arrow-right">
                 <el-breadcrumb-item v-for="(item,index) in formData.fenlei" :key="index" class="el-breadcrumb-item">{{item}}
@@ -248,6 +246,7 @@ export default {
       bianjiID:1,     // 当前编辑的题目ID,数据库中的ID
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
+      chaXunID:1,
       chaxunData: {
         fenlei: [],
         biaoqian: [],
@@ -371,14 +370,9 @@ export default {
       var titles = await this.titles.findAll({
         where:
         {
-          // // 题目
-          // timu: {
-          //   [Op.or]: [
-          //     { [Op.like]: '%' },
-          //   ]
-          // },
-          // 标签
-          biaoqian:  { [Op.like]: '%基础2000%' },
+          // // 标签
+          // biaoqian:  { [Op.like]: '%基础2000%' },
+          id: this.chaXunID
         },
       });
       // console.log(titles)
@@ -861,7 +855,7 @@ el-dialog {
 }
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
-  height: 350px;
+  height: 250px;
 }
 .timuShowlabel {
   width: 60px;

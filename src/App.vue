@@ -4,6 +4,7 @@
       版本:{{version}}
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
+      <router-link to="/change">Change</router-link>
     </div>
     <router-view />
   </div>
@@ -13,7 +14,7 @@ import Vue from 'vue';
 import version from "../package.json"
 import config from '/extraResources/config.json'
 export default {
-  name: 'About',
+  name: 'App',
   data() {
     return {
       version: version.version
