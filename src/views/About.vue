@@ -24,7 +24,35 @@
         </div>
       </el-col>
       <!-- 右边 -->
-      <el-col :span="12"> </el-col>
+      <el-col :span="12">
+        <div>
+          <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true ,multiple:true}" :options="fenleiOptions"
+            v-model="chaxunData.fenlei" @change="fenleiHandleChange">
+          </el-cascader-panel>
+          <!-- {{chaxunData.fenlei}} -->
+          <el-button @click="chaxunData.fenlei=[]">清空</el-button>
+          {{chaxunData.biaoqian}}
+          <!-- {{biaoqianOptions}} -->
+          <el-checkbox-group v-model="chaxunData.biaoqian">
+            <el-checkbox v-for="(item,index) in biaoqianOptions" :key="index" :label="item.value"></el-checkbox>
+          </el-checkbox-group>
+          <!-- 难度:{{chaxunData.nandu}}  
+          <el-checkbox-group v-model="chaxunData.nandu">
+            <el-checkbox  label="全选"></el-checkbox>
+            <el-checkbox  label="1"></el-checkbox>
+            <el-checkbox  label="2"></el-checkbox>
+            <el-checkbox  label="3"></el-checkbox>
+            <el-checkbox  label="4"></el-checkbox>
+            <el-checkbox  label="5"></el-checkbox>
+            <el-checkbox  label="6"></el-checkbox>
+          </el-checkbox-group> -->
+          题目:<el-input v-model="chaxunData.timu" placeholder="请输入分类:"></el-input>
+          答案1:<el-input v-model="chaxunData.daan1" placeholder="请输入分类:"></el-input>
+          解析:<el-input v-model="chaxunData.jiexi" placeholder="请输入分类:"></el-input>
+          答案2:<el-input v-model="chaxunData.daan2" placeholder="请输入分类:"></el-input>
+          <el-button type="success" @click="chaxunButton()">查询</el-button>
+        </div>
+      </el-col>
     </el-row>
 
     <el-dialog top="0" :modal="false" :show-close="false" :visible.sync="isShowNewTimu" fullscreen v-bind="$attrs" v-on="$listeners"
@@ -206,7 +234,7 @@ export default {
       conheight: {           // 高度自适应
         height: ''
       },
-      biaoqianOptions: null,
+      biaoqianOptions: [],
       fenleiSelectIsShow: false,
       fenleiOptions: null,   // 题目分类json数据,导数->切线 等等
       tag: {                        // 标签
@@ -217,8 +245,18 @@ export default {
       isShowNewTimu: false,         // 是否显示添加题目
       TimuList: [],   // 储存了当前页显示的所有题目
       selectIndex: -1, // 当前正在编辑的TimuList中的index, 以后可以改成题号
+      bianjiID:1,     // 当前编辑的题目ID,数据库中的ID
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
+      chaxunData: {
+        fenlei: [],
+        biaoqian: [],
+        // nandu: [],
+        timu: '',
+        daan1: '',
+        daan2: '',
+        jiexi: ''
+      },
       formData: {
         id: null,
         timu: '',
@@ -326,6 +364,28 @@ export default {
   watch: {
   },
   methods: {
+    // 点击查询按钮
+    async chaxunButton() {
+      const { Op } = require("sequelize");
+      // 查询数据库
+      var titles = await this.titles.findAll({
+        where:
+        {
+          // // 题目
+          // timu: {
+          //   [Op.or]: [
+          //     { [Op.like]: '%' },
+          //   ]
+          // },
+          // 标签
+          biaoqian:  { [Op.like]: '%基础2000%' },
+        },
+      });
+      // console.log(titles)
+      // 显示
+      this.TimuList = titlesCopy(this.formData, titles);
+
+    },
     // 是否显示选项图片 如果不以选项开头,就不显示选项图片了
     isShowXuanxiangimage(t) {
       if (t.startsWith("xuanxiang")) {
@@ -581,6 +641,7 @@ export default {
       });
       // 把index传过去
       this.selectIndex = index;
+      this.bianjiID = id;
       // 打开编辑
       this.isShowNewTimu = true;
     },
@@ -609,6 +670,7 @@ export default {
 
     },
     close() { this.isShowNewTimu = false; this.$emit('update:visible', false) },
+
     // 保存按钮
     handelConfirm() {
       // console.log("刚点击保存按钮", this.formData);
