@@ -1,20 +1,36 @@
 <template>
   <div id="app">
-    <div id="nav">
-      版本:{{version}}
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/change">Change</router-link>
+
+    <div id="mytitle">
+      <div id="nav">
+        <router-link class="nodrag" to="/">Home</router-link>
+        <router-link class="nodrag" to="/about">About</router-link>
+        <router-link class="nodrag" to="/change">Change</router-link>
+      
+        版本:{{version}}
+      </div> 
+
+      <TitleButton type="min" />
+      <TitleButton type="max" />
+      <TitleButton type="close" />
+
     </div>
-    <router-view />
+    <transition name="fade">
+  <router-view ></router-view>
+</transition>
+
   </div>
 </template>
 <script>
+import TitleButton from './components/TitleButton.vue'
 import Vue from 'vue';
 import version from "../package.json"
 import config from '/extraResources/config.json'
 export default {
   name: 'App',
+  components: {
+    TitleButton
+  },
   data() {
     return {
       version: version.version
@@ -46,4 +62,26 @@ export default {
 }
 </script>
 <style>
+html,
+body {
+  padding: 0px;
+  margin: 0px;
+  border: 0px;
+  width: 100%;
+  height: 100%;
+}
+#mytitle {
+  width: 100%;
+  height: 32px;
+  background-color: rgb(255, 255, 255);
+  -webkit-app-region: drag;
+  margin-bottom: 5px;
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+.nodrag {
+  -webkit-app-region: no-drag;
+}
 </style>
