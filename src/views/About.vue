@@ -48,7 +48,7 @@
           </el-checkbox-group> -->
           题目:<el-input v-model="chaxunData.timu" placeholder="请输入分类:"></el-input>
           <el-button type="success" @click="chaxunButton()">查询</el-button>
-            <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
+          <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
         </div>
       </el-col>
     </el-row>
@@ -82,7 +82,7 @@
               <el-image :src="timupicfilePath" style="width:100%;height:100%" v-show="formData.timupicfilename"></el-image>
 
             </el-form-item>
-            <el-form-item label="选项:" class="formitem" v-show="isShowXuanxiang">
+            <el-form-item label="选项:" class="formitem" v-show="formData.leixing=='选择题'">
               <yytitlexuanxiang v-show="!isShowXuanxiangpic" :xuanxiang="formData.xuanxiang"></yytitlexuanxiang>
               <div v-show="isShowXuanxiangpic" class="hengxiangbuju">
                 <div class="shuxiangbuju">
@@ -190,8 +190,9 @@
 
           <div>快速添加标签:</div>
 
-          <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index" v-for="(tag,index) in biaoqianOptions">
-            {{tag.value}}
+          <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index" 
+                     v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
+              {{tag['value']}}
           </el-button>
         </div>
         <div style="display:inline;">
@@ -228,7 +229,8 @@ export default {
       timujietuShortCut: "",      // 题目截图快捷键
       input_添加标签: "",         // 添加标签
       input_添加分类: "",         // 添加分类
-      isShowXuanxiang: true,      // 当""选择题"时显示选项,填空题和解答题不显示选项
+         select_当前选中的分类: [],     // 当前选中的分类
+      // isShowXuanxiang: true,      // 当""选择题"时显示选项,填空题和解答题不显示选项
       conheight: {           // 高度自适应
         height: ''
       },
@@ -243,10 +245,10 @@ export default {
       isShowNewTimu: false,         // 是否显示添加题目
       TimuList: [],   // 储存了当前页显示的所有题目
       selectIndex: -1, // 当前正在编辑的TimuList中的index, 以后可以改成题号
-      bianjiID:1,     // 当前编辑的题目ID,数据库中的ID
+      bianjiID: 1,     // 当前编辑的题目ID,数据库中的ID
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
-      chaXunID:1,
+      chaXunID: 1,
       chaxunData: {
         fenlei: [],
         biaoqian: [],
@@ -312,49 +314,49 @@ export default {
   computed: {
     timupicfilePath() {
       if (this.formData.timupicfilename != '') {
-        return config.pngsPath + "/" + this.formData.timupicfilename + ".png"
+        return config.imagesPath + "/" + this.formData.timupicfilename + ".jpg"
       } else {
         return "";
       }
     },
     jiexipicfilePath() {
       if (this.formData.jiexipicfilename != '') {
-        return config.pngsPath + "/" + this.formData.jiexipicfilename + ".png"
+        return config.imagesPath + "/" + this.formData.jiexipicfilename + ".jpg"
       } else {
         return "";
       }
     },
     daan2picfilePath() {
       if (this.formData.daan2picfilename != '') {
-        return config.pngsPath + "/" + this.formData.daan2picfilename + ".png"
+        return config.imagesPath + "/" + this.formData.daan2picfilename + ".jpg"
       } else {
         return "";
       }
     },
     xuanxiang1filePath() {
       if (this.formData.xuanxiang[0] != '' && this.formData.xuanxiang[0].startsWith("xuanxiang")) {
-        return config.pngsPath + "/" + this.formData.xuanxiang[0] + ".png"
+        return config.imagesPath + "/" + this.formData.xuanxiang[0] + ".jpg"
       } else {
         return "";
       }
     },
     xuanxiang2filePath() {
       if (this.formData.xuanxiang[1] != '' && this.formData.xuanxiang[1].startsWith("xuanxiang")) {
-        return config.pngsPath + "/" + this.formData.xuanxiang[1] + ".png"
+        return config.imagesPath + "/" + this.formData.xuanxiang[1] + ".jpg"
       } else {
         return "";
       }
     },
     xuanxiang3filePath() {
       if (this.formData.xuanxiang[2] != '' && this.formData.xuanxiang[2].startsWith("xuanxiang")) {
-        return config.pngsPath + "/" + this.formData.xuanxiang[2] + ".png"
+        return config.imagesPath + "/" + this.formData.xuanxiang[2] + ".jpg"
       } else {
         return "";
       }
     },
     xuanxiang4filePath() {
       if (this.formData.xuanxiang[3] != '' && this.formData.xuanxiang[3].startsWith("xuanxiang")) {
-        return config.pngsPath + "/" + this.formData.xuanxiang[3] + ".png"
+        return config.imagesPath + "/" + this.formData.xuanxiang[3] + ".jpg"
       } else {
         return "";
       }
@@ -431,7 +433,7 @@ export default {
 
           var fileName = t + '_' + miment().format("YYYYMMDDhhmmss");
           // 剪贴板图片保存起来
-          fs.writeFileSync(config.pngsPath + "/" + fileName + ".png", clipboard.readImage().toPNG());
+          fs.writeFileSync(config.imagesPath + "/" + fileName + ".jpg", clipboard.readImage().toPNG());
           // 显示图片
           if (t == 'timu') {
             this.formData.timupicfilename = fileName;
@@ -461,19 +463,25 @@ export default {
     },
     // 在json文件中添加标签
     bt_添加标签() {
-      const fenleiJsonFile = fs.readFileSync(config.biaoqianPath);
-      const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
+      // console.log("你点击了添加标签,start");
+      const biaoqianJsonFile = fs.readFileSync(config.biaoqianPath);
+      const biaoqianJsonFileObj = JSON.parse(biaoqianJsonFile);
 
-      var fenleiIndex0 = _.findKey(fenleiJsonFileObj, { 'value': this.input_添加标签 });
+      // 如果在主分类中没找到,就提示一下
+      if (biaoqianJsonFileObj[this.select_当前选中的分类[0]] == undefined) {
+        console.log("标签文件中没有【", this.select_当前选中的分类[0], "】分类");
+        return;
+      }
+      var biaoqianIndex0 = _.findKey(biaoqianJsonFileObj[this.select_当前选中的分类[0]], { 'value': this.input_添加标签 });
 
-      if (fenleiIndex0 == undefined) {
+      if (biaoqianIndex0 == undefined) {
         // 如果没找到就添加标签
-        fenleiJsonFileObj.push({ 'value': this.input_添加标签 })
+        biaoqianJsonFileObj[this.select_当前选中的分类[0]].push({ 'value': this.input_添加标签 })
       }
       // 保存到文件
-      fs.writeFileSync(config.biaoqianPath, JSON.stringify(fenleiJsonFileObj, null, 4));
+      fs.writeFileSync(config.biaoqianPath, JSON.stringify(biaoqianJsonFileObj, null, 4));
       // console.log('写入成功！')
-      this.biaoqianOptions = fenleiJsonFileObj;
+      this.biaoqianOptions = biaoqianJsonFileObj;
     },
     快速添加标签(value) {
       console.log(value);
@@ -483,12 +491,16 @@ export default {
       }
     },
     bt_添加分类() {
+           if (this.input_添加分类.trim() == '') {
+        console.log("不能为空")
+        return;
+      }
       // 读取文件
       var filepath = config.fenleiPath;
       const fenleiJsonFile = fs.readFileSync(filepath);
       const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
       console.log("分类", fenleiJsonFileObj);
-      var _fenlei = this.input_添加分类.split('▲');
+      var _fenlei = this.input_添加分类.trim().split('▲');
       var fenleiIndex0;
       var fenleiIndex1;
       var fenleiIndex2;
@@ -554,13 +566,24 @@ export default {
       fs.writeFileSync(filepath, JSON.stringify(fenleiJsonFileObj, null, 2));
       // console.log('写入成功！')
       this.fenleiOptions = fenleiJsonFileObj;
+
+      // 在标签文件中添加相应分类
+      const biaoqianJsonFile = fs.readFileSync(config.biaoqianPath);
+      const biaoqianJsonFileObj = JSON.parse(biaoqianJsonFile);
+      // 如果没有,就添加
+      if (biaoqianJsonFileObj[this.select_当前选中的分类[0]] == undefined) {
+        // 添加
+        biaoqianJsonFileObj[_fenlei[0]] = []
+        // 保存到文件
+        fs.writeFileSync(config.biaoqianPath, JSON.stringify(biaoqianJsonFileObj, null, 4));
+        // console.log('写入成功！')
+        this.biaoqianOptions = biaoqianJsonFileObj;
+      }
+
     },
     leixingChange(leixingvalue) {
       console.log("leixingchange")
-      if (leixingvalue == '选择题') {
-        this.isShowXuanxiang = true
-      } else {
-        this.isShowXuanxiang = false;
+      if (leixingvalue != '选择题') {
         this.formData.xuanxiang = ['', '', '', ''];
       }
     },
@@ -643,6 +666,7 @@ export default {
     fenleiHandleChange(fenlei) {
       // console.log(fenlei);
       this.input_添加分类 = fenlei.join('▲');
+       this.select_当前选中的分类 = fenlei;
     },
     onOpen() {
       // console.log("onOpen", this.formData);

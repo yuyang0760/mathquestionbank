@@ -4,7 +4,7 @@
       <el-col :span="12">
         <el-button @click="chaXunTimu(chaXunID)">查询题目</el-button>
         <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
-
+        <!-- {{this.biaoqianOptions}} -->
         <el-button @click="saveTitle()">保存</el-button>
         <yytitledescription_change v-bind="formData" :isShowMini="true"></yytitledescription_change>
 
@@ -23,15 +23,15 @@
         </div>
         <div>
 
-        <div style="display:inline;">
-          <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加标签" placeholder="请输入标签"></el-input>
-          <el-button @click="bt_添加标签()">添加标签</el-button>
-        </div>
+          <div style="display:inline;">
+            <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加标签" placeholder="请输入标签"></el-input>
+            <el-button @click="bt_添加标签()">添加标签</el-button>
+          </div>
           <!-- <div>快速添加标签:</div> -->
           <div style="margin:0px 0px 0px 20px;">
             <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
-              v-for="(tag,index) in biaoqianOptions">
-              {{tag.value}}
+              v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
+              {{tag['value']}}
             </el-button>
           </div>
         </div>
@@ -70,6 +70,7 @@ export default {
       titles: null,  // 题目类 ,数据库查询用
       input_添加标签: "",         // 添加标签
       input_添加分类: "",         // 添加分类
+      select_当前选中的分类: [],     // 当前选中的分类
       biaoqianOptions: [],
       fenleiSelectIsShow: false,
       fenleiOptions: null,   // 题目分类json数据,导数->切线 等等
@@ -129,26 +130,32 @@ export default {
           id: chaXunID
         }
       });
-      console.log(titles, 123)
+      // console.log(titles, "titles")
       if (titles.length > 0) {
         this.formData = titlesCopy(this.formData, titles)[0];
         // this.formData=titles;
-        console.log(this.formData, 456)
+        console.log(this.formData, "this.formData")
         this.chaXunID = chaXunID;
       }
     },
     // 分类改变
     fenleiHandleChange(fenlei) {
-      // console.log(fenlei);
+      console.log("你点击了分类:", fenlei);
       this.input_添加分类 = fenlei.join('▲');
+      this.select_当前选中的分类 = fenlei;
+      // 读取当前分类下的标签
     },
     bt_添加分类() {
       // 读取文件
+      if (this.input_添加分类.trim() == '') {
+        console.log("不能为空")
+        return;
+      }
       var filepath = config.fenleiPath;
       const fenleiJsonFile = fs.readFileSync(filepath);
       const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
       console.log("分类", fenleiJsonFileObj);
-      var _fenlei = this.input_添加分类.split('▲');
+      var _fenlei = this.input_添加分类.trim().split('▲');
       var fenleiIndex0;
       var fenleiIndex1;
       var fenleiIndex2;
@@ -214,22 +221,41 @@ export default {
       fs.writeFileSync(filepath, JSON.stringify(fenleiJsonFileObj, null, 2));
       // console.log('写入成功！')
       this.fenleiOptions = fenleiJsonFileObj;
+
+      // 在标签文件中添加相应分类
+      const biaoqianJsonFile = fs.readFileSync(config.biaoqianPath);
+      const biaoqianJsonFileObj = JSON.parse(biaoqianJsonFile);
+      // 如果没有,就添加
+      if (biaoqianJsonFileObj[this.select_当前选中的分类[0]] == undefined) {
+        // 添加
+        biaoqianJsonFileObj[_fenlei[0]] = []
+        // 保存到文件
+        fs.writeFileSync(config.biaoqianPath, JSON.stringify(biaoqianJsonFileObj, null, 4));
+        // console.log('写入成功！')
+        this.biaoqianOptions = biaoqianJsonFileObj;
+      }
     },
     // 在json文件中添加标签
     bt_添加标签() {
-      const fenleiJsonFile = fs.readFileSync(config.biaoqianPath);
-      const fenleiJsonFileObj = JSON.parse(fenleiJsonFile);
+      // console.log("你点击了添加标签,start");
+      const biaoqianJsonFile = fs.readFileSync(config.biaoqianPath);
+      const biaoqianJsonFileObj = JSON.parse(biaoqianJsonFile);
 
-      var fenleiIndex0 = _.findKey(fenleiJsonFileObj, { 'value': this.input_添加标签 });
+      // 如果在主分类中没找到,就提示一下
+      if (biaoqianJsonFileObj[this.select_当前选中的分类[0]] == undefined) {
+        console.log("标签文件中没有【", this.select_当前选中的分类[0], "】分类");
+        return;
+      }
+      var biaoqianIndex0 = _.findKey(biaoqianJsonFileObj[this.select_当前选中的分类[0]], { 'value': this.input_添加标签 });
 
-      if (fenleiIndex0 == undefined) {
+      if (biaoqianIndex0 == undefined) {
         // 如果没找到就添加标签
-        fenleiJsonFileObj.push({ 'value': this.input_添加标签 })
+        biaoqianJsonFileObj[this.select_当前选中的分类[0]].push({ 'value': this.input_添加标签 })
       }
       // 保存到文件
-      fs.writeFileSync(config.biaoqianPath, JSON.stringify(fenleiJsonFileObj, null, 4));
+      fs.writeFileSync(config.biaoqianPath, JSON.stringify(biaoqianJsonFileObj, null, 4));
       // console.log('写入成功！')
-      this.biaoqianOptions = fenleiJsonFileObj;
+      this.biaoqianOptions = biaoqianJsonFileObj;
     },
     快速添加标签(value) {
       console.log(value);
