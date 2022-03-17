@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="yy-descriptions-table">
+    <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">分类:</th>
         <td colspan="4" class="yy-descriptions-td">
@@ -10,6 +10,7 @@
           </el-breadcrumb>
         </td>
         <td colspan="5" class="yy-descriptions-td" style="text-align: right">
+
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
           <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
             size="mini"></el-button>
@@ -21,18 +22,22 @@
         <th colspan="1" class="yy-descriptions-th">来源:</th>
         <td colspan="1" class="yy-descriptions-td">{{laiyuan}}</td>
         <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="1" class="yy-descriptions-td">
+        <td colspan="1" class="yy-descriptions-td-biaoqian">
+          <!-- <div style="display:inline;" v-for="(item,index) in biaoqian" :key="index">
+            {{item}}
+          </div> -->
           <el-breadcrumb separator="">
             <el-breadcrumb-item v-for="(item,index) in biaoqian" :key="index">{{item}}
             </el-breadcrumb-item>
           </el-breadcrumb>
         </td>
         <th colspan="1" class="yy-descriptions-th">答案:</th>
-        <td colspan="1" class="yy-descriptions-td">
+        <td colspan="1" class="yy-descriptions-td-daan1">
+          <div style="text-align:right">ID:{{id}} {{'★'.repeat(nandu)}}</div>
           <div v-katex="daan1===null?'':daan1"></div>
         </td>
       </tr>
-      <tr class="yy-descriptions-row">
+      <!-- <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">ID:</th>
         <td colspan="1" class="yy-descriptions-td" style="width:120px">{{id}}</td>
         <th colspan="1" class="yy-descriptions-th">题号:</th>
@@ -40,7 +45,7 @@
         <th colspan="1" class="yy-descriptions-th">难度:</th>
         <td colspan="1" class="yy-descriptions-td">{{'★'.repeat(nandu)}}</td>
 
-      </tr>
+      </tr> -->
       <tr class="yy-descriptions-row">
       </tr>
       <tr class="yy-descriptions-row">
@@ -117,14 +122,14 @@ export default {
 
   },
   methods: {
-    showTimuStr(){
-      var timu=this.timu===null?'':this.timu;
-      var xuanxiang0=this.xuanxiang[0]==false?'':'$\\\\$A. '+this.xuanxiang[0];
-      var xuanxiang1=this.xuanxiang[1]==false?'':'$\\\\$B. '+this.xuanxiang[1];
-      var xuanxiang2=this.xuanxiang[2]==false?'':'$\\\\$C. '+this.xuanxiang[2];
-      var xuanxiang3=this.xuanxiang[3]==false?'':'$\\\\$D. '+this.xuanxiang[3];
+    showTimuStr() {
+      var timu = this.timu === null ? '' : this.timu;
+      var xuanxiang0 = this.xuanxiang[0] == false ? '' : '$\\\\$A. ' + this.xuanxiang[0];
+      var xuanxiang1 = this.xuanxiang[1] == false ? '' : '$\\\\$B. ' + this.xuanxiang[1];
+      var xuanxiang2 = this.xuanxiang[2] == false ? '' : '$\\\\$C. ' + this.xuanxiang[2];
+      var xuanxiang3 = this.xuanxiang[3] == false ? '' : '$\\\\$D. ' + this.xuanxiang[3];
 
-      return timu+xuanxiang0+xuanxiang1+xuanxiang2+xuanxiang3;
+      return timu + xuanxiang0 + xuanxiang1 + xuanxiang2 + xuanxiang3;
     },
     miniShowHeaderRight() {
       if (this.isMini) {
@@ -201,6 +206,12 @@ export default {
   cursor: text;
 
   /*******************************/
+}
+.yy-descriptions-td-daan1 {
+  width: 150px;
+}
+.yy-descriptions-td-biaoqian {
+  width: 237px;
 }
 </style>
 

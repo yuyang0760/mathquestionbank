@@ -2,20 +2,24 @@
   <div>
     <el-row>
       <el-col :span="12">
-        <el-button @click="chaXunTimu(chaXunID)">查询题目</el-button>
-        <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
-        <!-- {{this.biaoqianOptions}} -->
-        <el-button @click="saveTitle()">保存</el-button>
-        <yytitledescription_change v-bind="formData" :isShowMini="true"></yytitledescription_change>
+
+        <yytitledescription_change v-bind="formData" :isShowMini="true">
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
+        </yytitledescription_change>
 
         <el-image :src="timupicfilePath_computed" fit="fill"></el-image>
         <!-- {{timupicfilePath_computed}} -->
       </el-col>
       <el-col :span="12">
 
+        <el-button @click="chaXunTimu(chaXunID)">查询题目</el-button>
+        <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
+        <!-- {{this.biaoqianOptions}} -->
+        <el-button @click="saveTitle()">保存</el-button>
         <div style="display:inline;">
           来源: <el-input v-model="formData.laiyuan" placeholder="请输入来源:" style="width:40%;" class="elitem"></el-input>
           <el-rate v-model="formData.nandu" show-text :max="6"></el-rate>
+
         </div>
         <div style="display:inline;">
           <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加分类" placeholder="请输入分类"></el-input>
@@ -26,6 +30,7 @@
           <div style="display:inline;">
             <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加标签" placeholder="请输入标签"></el-input>
             <el-button @click="bt_添加标签()">添加标签</el-button>
+            <el-button @click="clearBiaoQian()">重置标签</el-button>
           </div>
           <!-- <div>快速添加标签:</div> -->
           <div style="margin:0px 0px 0px 20px;">
@@ -39,9 +44,20 @@
           <el-button type="success" @click="saveTitleandNextTitle()">保存并下一题</el-button>
           <el-button @click="chaXunTimu(chaXunID+1)">下一题</el-button>
           <el-button @click="chaXunTimu(chaXunID-1)">上一题</el-button>
+          <el-select v-model="formData.leixing" placeholder="请选择类型:">
+            <el-option v-for="(item, index) in leixingOptions" :key="index" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+          <div v-show="isShowBianji">
+            <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
+            <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>
+            <el-input v-model="formData.daan1" type="text" placeholder="请输入答案1:" :autosize="{minRows: 1 }"></el-input>
+            <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
+          </div>
         </div>
         <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
+
         <!-- </el-drawer> -->
       </el-col>
     </el-row>
@@ -68,6 +84,7 @@ export default {
     return {
       chaXunID: 1,
       titles: null,  // 题目类 ,数据库查询用
+      isShowBianji: false,   // 是否显示编辑题目
       input_添加标签: "",         // 添加标签
       input_添加分类: "",         // 添加分类
       select_当前选中的分类: [],     // 当前选中的分类
@@ -78,6 +95,16 @@ export default {
         inputVisible: false,
         inputValue: ''
       },
+      leixingOptions: [{
+        "label": "选择题",
+        "value": "选择题"
+      }, {
+        "label": "填空题",
+        "value": "填空题"
+      }, {
+        "label": "解答题",
+        "value": "解答题"
+      }],
       formData: {
         id: null,
         timu: '',
@@ -105,6 +132,13 @@ export default {
     }
   },
   methods: {
+    // 重填标签
+    clearBiaoQian() {
+      // 修改id=xxx的数据库的值
+      // console.log("我要修改了", this.formData.daan1);
+      this.formData.biaoqian = [];
+
+    },
     // 保存并下一题
     saveTitleandNextTitle() {
       this.saveTitle();
@@ -136,6 +170,7 @@ export default {
         // this.formData=titles;
         console.log(this.formData, "this.formData")
         this.chaXunID = chaXunID;
+        this.input_添加分类 = this.formData.fenlei.join('▲');
       }
     },
     // 分类改变
@@ -382,6 +417,14 @@ el-dialog {
 }
 .timuShowlabel {
   width: 60px;
+}
+.yy-descriptions-td[data-v-448ffd2b] {
+  font-size: 15px;
+  text-align: left;
+  line-height: 1.8;
+  font-weight: normal;
+  color: #000000;
+  letter-spacing: 1.5px;
 }
 ul,
 li {
