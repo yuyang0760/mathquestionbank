@@ -1,6 +1,6 @@
 {
   "name": "mathquestionbank",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -27,7 +27,6 @@
     "miment": "^0.0.9",
     "path": "^0.12.7",
     "pg-hstore": "^2.3.4",
-    "sass-loader": "^12.6.0",
     "sequelize": "^6.6.5",
     "sqlite3": "^5.0.2",
     "vue": "^2.6.11",
