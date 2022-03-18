@@ -7,6 +7,7 @@
           <el-button size="small" @click="addTimu()">添加题目</el-button>
           <el-button size="small" @click="selectAllTimu()">查询所有题目</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
+          共{{TimuList.length}}个题
         </div>
         <div :style="conheight">
           <happy-scroll size="10" resize>
@@ -47,8 +48,15 @@
             <el-checkbox  label="6"></el-checkbox>
           </el-checkbox-group> -->
           题目:<el-input v-model="chaxunData.timu" placeholder="请输入分类:"></el-input>
-          <el-button type="success" @click="chaxunButton()">查询</el-button>
-          <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
+          <div>
+            <el-button type="success" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
+            <el-input-number v-model="chaxun_ByID_word" :min="1" label="题库ID"></el-input-number>
+          </div>
+          <div style="display:inline;">
+            <el-button type="success" @click="chaxunButton_Bytimu(chaxun_Bytimu_word)">查询题目</el-button>
+            <el-input style="width:200px" v-model="chaxun_Bytimu_word"  placeholder="请输入题目关键词:"></el-input>
+          </div>
+
         </div>
       </el-col>
     </el-row>
@@ -190,9 +198,9 @@
 
           <div>快速添加标签:</div>
 
-          <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index" 
-                     v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
-              {{tag['value']}}
+          <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
+            v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
+            {{tag['value']}}
           </el-button>
         </div>
         <div style="display:inline;">
@@ -229,7 +237,7 @@ export default {
       timujietuShortCut: "",      // 题目截图快捷键
       input_添加标签: "",         // 添加标签
       input_添加分类: "",         // 添加分类
-         select_当前选中的分类: [],     // 当前选中的分类
+      select_当前选中的分类: [],     // 当前选中的分类
       // isShowXuanxiang: true,      // 当""选择题"时显示选项,填空题和解答题不显示选项
       conheight: {           // 高度自适应
         height: ''
@@ -248,7 +256,8 @@ export default {
       bianjiID: 1,     // 当前编辑的题目ID,数据库中的ID
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
-      chaXunID: 1,
+      chaxun_ByID_word: 1,    // 以ID查询
+      chaxun_Bytimu_word:'',  // 以题目关键词查询
       chaxunData: {
         fenlei: [],
         biaoqian: [],
@@ -365,8 +374,8 @@ export default {
   watch: {
   },
   methods: {
-    // 点击查询按钮
-    async chaxunButton() {
+    // 按照ID查询
+    async chaxunButton_ByID(chaxun_ByID_word) {
       const { Op } = require("sequelize");
       // 查询数据库
       var titles = await this.titles.findAll({
@@ -374,7 +383,26 @@ export default {
         {
           // // 标签
           // biaoqian:  { [Op.like]: '%基础2000%' },
-          id: this.chaXunID
+          id: chaxun_ByID_word
+        },
+      });
+      // console.log(titles)
+      // 显示
+      this.TimuList = titlesCopy(this.formData, titles);
+
+    },
+        // 点击题目关键词查询
+    async chaxunButton_Bytimu(chaxun_Bytimu_word) {
+      if(chaxun_Bytimu_word==''){
+        return;
+      }
+      const { Op } = require("sequelize");
+      // 查询数据库
+      var titles = await this.titles.findAll({
+        where:
+        {
+          // 题目
+          timu:  { [Op.like]: '%'+chaxun_Bytimu_word+'%' },
         },
       });
       // console.log(titles)
@@ -491,7 +519,7 @@ export default {
       }
     },
     bt_添加分类() {
-           if (this.input_添加分类.trim() == '') {
+      if (this.input_添加分类.trim() == '') {
         console.log("不能为空")
         return;
       }
@@ -666,7 +694,7 @@ export default {
     fenleiHandleChange(fenlei) {
       // console.log(fenlei);
       this.input_添加分类 = fenlei.join('▲');
-       this.select_当前选中的分类 = fenlei;
+      this.select_当前选中的分类 = fenlei;
     },
     onOpen() {
       // console.log("onOpen", this.formData);
@@ -787,7 +815,8 @@ export default {
       dialect: 'sqlite',
       storage: config.mathdbPath,
       // dialect
-      dialectModule: require("sqlite3")
+      dialectModule: require("sqlite3"),
+      // timezone: '+08:00' //  sqlite不支持,慢几小时就加几小时，快则减
     });
     console.log("数据库已连接")
     this.connect = sequelize;

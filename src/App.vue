@@ -8,6 +8,7 @@
         <router-link class="nodrag" to="/change">Change</router-link>
       
         版本:{{version}}
+        <iframe width="300" height="30" frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&a=getcode&id=34&py=dongfeng&icon=1"></iframe>
       </div> 
 
       <TitleButton type="min" />
@@ -15,9 +16,7 @@
       <TitleButton type="close" />
 
     </div>
-    <transition name="fade">
   <router-view ></router-view>
-</transition>
 
   </div>
 </template>

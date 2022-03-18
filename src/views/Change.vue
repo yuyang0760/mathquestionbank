@@ -55,7 +55,7 @@
             <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
           </div>
         </div>
-        <el-cascader-panel class="el-cascader-panel" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
+        <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
 
         <!-- </el-drawer> -->
@@ -322,7 +322,8 @@ export default {
       dialect: 'sqlite',
       storage: config.mathdbPath,
       // dialect
-      dialectModule: require("sqlite3")
+      dialectModule: require("sqlite3"),
+      // timezone: '+08:00' // sqlite不支持...慢几小时就加几小时，快则减
     });
     console.log("数据库已连接")
     this.connect = sequelize;
