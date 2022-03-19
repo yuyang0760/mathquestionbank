@@ -907,7 +907,7 @@ el-dialog {
   cursor: text;
 }
 .el-breadcrumb-item1 {
-  color: #ff5640;
+  color: #a1655d;
 }
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {

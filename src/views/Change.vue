@@ -6,9 +6,6 @@
         <yytitledescription_change v-bind="formData" :isShowMini="true">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
         </yytitledescription_change>
-
-        <el-image :src="timupicfilePath_computed" fit="fill"></el-image>
-        <!-- {{timupicfilePath_computed}} -->
       </el-col>
       <el-col :span="12">
 
@@ -17,7 +14,6 @@
         <!-- {{this.biaoqianOptions}} -->
         <el-button @click="saveTitle()">保存</el-button>
         <div style="display:inline;">
-          来源: <el-input v-model="formData.laiyuan" placeholder="请输入来源:" style="width:40%;" class="elitem"></el-input>
           <el-rate v-model="formData.nandu" show-text :max="6"></el-rate>
 
         </div>
@@ -49,6 +45,7 @@
             </el-option>
           </el-select>
           <div v-show="isShowBianji">
+            <el-input v-model="formData.laiyuan" placeholder="请输入来源:" ></el-input>
             <el-input v-model="formData.beizhu" type="textarea" placeholder="请输入备注:" :autosize="{minRows: 1}"></el-input>
             <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
             <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>

@@ -19,10 +19,8 @@
       </tr>
       <tr class="yy-descriptions-row">
 
-        <th colspan="1" class="yy-descriptions-th">来源:</th>
-        <td colspan="1" class="yy-descriptions-td">{{laiyuan}}</td>
         <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="1" class="yy-descriptions-td-biaoqian">
+        <td colspan="3" class="yy-descriptions-td-biaoqian">
           <!-- <div style="display:inline;" v-for="(item,index) in biaoqian" :key="index">
             {{item}}
           </div> -->
@@ -52,14 +50,21 @@
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="5" class="yy-descriptions-td">
           <div v-katex="showTimuStr()"></div>
+          <el-image :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')" @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
-        <tr class="yy-descriptions-row" v-show="beizhu">
+      <tr class="yy-descriptions-row" v-show="beizhu">
         <th colspan="1" class="yy-descriptions-th">备注:</th>
         <td colspan="5" class="yy-descriptions-td">
           <div>{{beizhu}}</div>
         </td>
+
       </tr>
+      <tr class="yy-descriptions-row" v-show="laiyuan">
+        <th class="yy-descriptions-th">来源:</th>
+        <td class="yy-descriptions-td">{{laiyuan}}</td>
+      </tr>
+
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="5" class="yy-descriptions-td">
@@ -77,6 +82,7 @@
 </template>
 
 <script>
+import config from '../../extraResources/config.json'
 export default {
   name: "yytitledescription_change",
   //接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
@@ -99,7 +105,7 @@ export default {
       type: Array
     },
     beizhu: {       // 备注
-      type: String  
+      type: String
     },
     daan1: {
       type: String,
@@ -122,15 +128,39 @@ export default {
     fenlei: {
       type: Array,
     },
-
+    daan2picfilename: {
+      type: String,
+    },
+    timupicfilename: {
+      type: String,
+    },
+    jiexipicfilename: {
+      type: String,
+    },
   },
   data() {
     return {
-      isMini: true
+      isMini: true,
+      imageshow:true
     }
 
   },
+  computed: {
+    // 当前
+    timupicfilePath_computed() {
+      // `this` 指向 vm 实例
+      return config.imagesPath + '/' + this.timupicfilename + '.jpg';
+    }
+  },
   methods: {
+    
+    imageLoad(v){
+      if(v=='success'){
+        this.imageshow=true;
+      }else{
+        this.imageshow=false;
+      }
+    },
     showTimuStr() {
       var timu = this.timu === null ? '' : this.timu;
       var xuanxiang0 = this.xuanxiang[0] == false ? '' : '$\\\\$A. ' + this.xuanxiang[0];
@@ -217,7 +247,7 @@ export default {
   /*******************************/
 }
 .yy-descriptions-td-daan1 {
-  width: 150px;
+  width: 200px;
 }
 .yy-descriptions-td-biaoqian {
   width: 237px;
