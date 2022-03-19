@@ -44,6 +44,11 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true,
       defaultValue:""
     },
+    beizhu: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue:""
+    },
     xuanxiang: {
       type: DataTypes.TEXT,
       allowNull: true,

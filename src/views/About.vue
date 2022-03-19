@@ -54,7 +54,7 @@
           </div>
           <div style="display:inline;">
             <el-button type="success" @click="chaxunButton_Bytimu(chaxun_Bytimu_word)">查询题目</el-button>
-            <el-input style="width:200px" v-model="chaxun_Bytimu_word"  placeholder="请输入题目关键词:"></el-input>
+            <el-input style="width:200px" v-model="chaxun_Bytimu_word" placeholder="请输入题目关键词:"></el-input>
           </div>
 
         </div>
@@ -170,11 +170,13 @@
                 <el-breadcrumb-item v-for="(item,index) in formData.fenlei" :key="index" class="el-breadcrumb-item">{{item}}
                 </el-breadcrumb-item>
               </el-breadcrumb>
+            </el-form-item>
+            <el-button @click="fenleiSelectIsShow = true" type="primary" style="margin-left: 16px;">
+              分类
+            </el-button>
 
-              <el-button @click="fenleiSelectIsShow = true" type="primary" style="margin-left: 16px;">
-                分类
-              </el-button>
-
+            <el-form-item label="备注:" prop="beizhu" class="formitem">
+              <el-input v-model="formData.beizhu" placeholder="请输入备注:" style="width:40%;" class="elitem"></el-input>
             </el-form-item>
             <el-form-item label="来源:" prop="laiyuan" class="formitem">
               <el-input v-model="formData.laiyuan" placeholder="请输入来源:" style="width:40%;" class="elitem"></el-input>
@@ -257,7 +259,7 @@ export default {
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
       chaxun_ByID_word: 1,    // 以ID查询
-      chaxun_Bytimu_word:'',  // 以题目关键词查询
+      chaxun_Bytimu_word: '',  // 以题目关键词查询
       chaxunData: {
         fenlei: [],
         biaoqian: [],
@@ -274,6 +276,7 @@ export default {
         daan1: '',
         daan2: '',
         jiexi: '',
+        beizhu: '',  // 备注
         nandu: 2,
         laiyuan: '',
         xuanxiang: ['', '', '', ''],
@@ -391,9 +394,9 @@ export default {
       this.TimuList = titlesCopy(this.formData, titles);
 
     },
-        // 点击题目关键词查询
+    // 点击题目关键词查询
     async chaxunButton_Bytimu(chaxun_Bytimu_word) {
-      if(chaxun_Bytimu_word==''){
+      if (chaxun_Bytimu_word == '') {
         return;
       }
       const { Op } = require("sequelize");
@@ -402,7 +405,7 @@ export default {
         where:
         {
           // 题目
-          timu:  { [Op.like]: '%'+chaxun_Bytimu_word+'%' },
+          timu: { [Op.like]: '%' + chaxun_Bytimu_word + '%' },
         },
       });
       // console.log(titles)

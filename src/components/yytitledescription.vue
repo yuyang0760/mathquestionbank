@@ -50,6 +50,12 @@
           <div v-katex="showTimuStr()"></div>
         </td>
       </tr>
+      <tr class="yy-descriptions-row" v-show="beizhu">
+        <th colspan="1" class="yy-descriptions-th">备注:</th>
+        <td colspan="5" class="yy-descriptions-td">
+          <div>{{beizhu}}</div>
+        </td>
+      </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="5" class="yy-descriptions-td">
@@ -88,6 +94,9 @@ export default {
     xuanxiang: {
       type: Array
     },
+    beizhu: {
+      type: String,
+    },
     daan1: {
       type: String,
     },
@@ -118,14 +127,14 @@ export default {
 
   },
   methods: {
-    showTimuStr(){
-      var timu=this.timu===null?'':this.timu;
-      var xuanxiang0=this.xuanxiang[0]==false?'':'$\\\\$A. '+this.xuanxiang[0];
-      var xuanxiang1=this.xuanxiang[1]==false?'':'$\\\\$B. '+this.xuanxiang[1];
-      var xuanxiang2=this.xuanxiang[2]==false?'':'$\\\\$C. '+this.xuanxiang[2];
-      var xuanxiang3=this.xuanxiang[3]==false?'':'$\\\\$D. '+this.xuanxiang[3];
+    showTimuStr() {
+      var timu = this.timu === null ? '' : this.timu;
+      var xuanxiang0 = this.xuanxiang[0] == false ? '' : '$\\\\$A. ' + this.xuanxiang[0];
+      var xuanxiang1 = this.xuanxiang[1] == false ? '' : '$\\\\$B. ' + this.xuanxiang[1];
+      var xuanxiang2 = this.xuanxiang[2] == false ? '' : '$\\\\$C. ' + this.xuanxiang[2];
+      var xuanxiang3 = this.xuanxiang[3] == false ? '' : '$\\\\$D. ' + this.xuanxiang[3];
 
-      return timu+xuanxiang0+xuanxiang1+xuanxiang2+xuanxiang3;
+      return timu + xuanxiang0 + xuanxiang1 + xuanxiang2 + xuanxiang3;
     },
     miniShowHeaderRight() {
       if (this.isMini) {
@@ -197,7 +206,7 @@ export default {
   padding: 5px;
   /* 自己修改的 */
   /* width: 27%; */
-  font-weight: bold;
+  font-weight: normal;
   color: #409eff;
   cursor: text;
 

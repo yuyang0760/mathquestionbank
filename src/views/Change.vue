@@ -22,19 +22,19 @@
 
         </div>
         <div style="display:inline;">
-          <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加分类" placeholder="请输入分类"></el-input>
+          <el-input style="width:300px;margin:2px 2px 2px 20px;" v-model="input_添加分类" placeholder="请输入分类"></el-input>
           <el-button @click="bt_添加分类()">添加分类</el-button>
         </div>
         <div>
 
           <div style="display:inline;">
-            <el-input style="width:480px;margin:2px 2px 2px 20px;" v-model="input_添加标签" placeholder="请输入标签"></el-input>
+            <el-input style="width:300px;margin:2px 2px 2px 20px;" v-model="input_添加标签" placeholder="请输入标签"></el-input>
             <el-button @click="bt_添加标签()">添加标签</el-button>
             <el-button @click="clearBiaoQian()">重置标签</el-button>
           </div>
           <!-- <div>快速添加标签:</div> -->
-          <div style="margin:0px 0px 0px 20px;">
-            <el-button type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
+          <div style="margin:0px 0px 0px 10px;">
+            <el-button  style="margin:1px 0px 1px 2px;" type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
               v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
               {{tag['value']}}
             </el-button>
@@ -49,6 +49,7 @@
             </el-option>
           </el-select>
           <div v-show="isShowBianji">
+            <el-input v-model="formData.beizhu" type="textarea" placeholder="请输入备注:" :autosize="{minRows: 1}"></el-input>
             <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
             <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>
             <el-input v-model="formData.daan1" type="text" placeholder="请输入答案1:" :autosize="{minRows: 1 }"></el-input>
@@ -112,6 +113,7 @@ export default {
         daan1: '',
         daan2: '',
         jiexi: '',
+        beizhu:'',
         nandu: 3,
         laiyuan: '',
         xuanxiang: ['', '', '', ''],
@@ -171,6 +173,11 @@ export default {
         console.log(this.formData, "this.formData")
         this.chaXunID = chaXunID;
         this.input_添加分类 = this.formData.fenlei.join('▲');
+        if(this.select_当前选中的分类.length==0)
+        {
+          // 更新当前选中的分类可以更新显示的标签
+          this.select_当前选中的分类 = this.formData.fenlei;
+        }
       }
     },
     // 分类改变
@@ -291,6 +298,7 @@ export default {
       fs.writeFileSync(config.biaoqianPath, JSON.stringify(biaoqianJsonFileObj, null, 4));
       // console.log('写入成功！')
       this.biaoqianOptions = biaoqianJsonFileObj;
+      this.input_添加标签 = "";
     },
     快速添加标签(value) {
       console.log(value);

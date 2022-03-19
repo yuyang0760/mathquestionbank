@@ -54,6 +54,12 @@
           <div v-katex="showTimuStr()"></div>
         </td>
       </tr>
+        <tr class="yy-descriptions-row" v-show="beizhu">
+        <th colspan="1" class="yy-descriptions-th">备注:</th>
+        <td colspan="5" class="yy-descriptions-td">
+          <div>{{beizhu}}</div>
+        </td>
+      </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="5" class="yy-descriptions-td">
@@ -91,6 +97,9 @@ export default {
     },
     xuanxiang: {
       type: Array
+    },
+    beizhu: {       // 备注
+      type: String  
     },
     daan1: {
       type: String,
@@ -201,7 +210,7 @@ export default {
   padding: 5px;
   /* 自己修改的 */
   /* width: 27%; */
-  font-weight: bold;
+  font-weight: normal;
   color: #409eff;
   cursor: text;
 
