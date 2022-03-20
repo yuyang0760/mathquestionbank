@@ -9,32 +9,28 @@
             </el-breadcrumb-item>
           </el-breadcrumb>
         </td>
-        <td colspan="5" class="yy-descriptions-td" style="text-align: right">
-
-          <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
-          <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
-            size="mini"></el-button>
-          <slot></slot>
-        </td>
-      </tr>
-      <tr class="yy-descriptions-row">
-
         <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="3" class="yy-descriptions-td-biaoqian">
+        <td colspan="4" class="yy-descriptions-td-biaoqian">
           <!-- <div style="display:inline;" v-for="(item,index) in biaoqian" :key="index">
             {{item}}
           </div> -->
+
           <el-breadcrumb separator="">
             <el-breadcrumb-item v-for="(item,index) in biaoqian" :key="index">{{item}}
             </el-breadcrumb-item>
           </el-breadcrumb>
         </td>
-        <th colspan="1" class="yy-descriptions-th">答案:</th>
-        <td colspan="1" class="yy-descriptions-td-daan1">
-          <div style="text-align:right">ID:{{id}} {{'★'.repeat(nandu)}}</div>
-          <div v-katex="daan1===null?'':daan1"></div>
+        <td colspan="3" class="yy-descriptions-td" style="text-align: right">
+
+          ID:{{id}} {{'★'.repeat(nandu)}} 
+          <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
+          <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
+            size="mini"></el-button>
+            <!-- <span  @click="miniShow()">切换</span> -->
+          <slot></slot>
         </td>
       </tr>
+
       <!-- <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">ID:</th>
         <td colspan="1" class="yy-descriptions-td" style="width:120px">{{id}}</td>
@@ -48,32 +44,39 @@
       </tr>
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div v-katex="showTimuStr()"></div>
-          <el-image :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')" @load="imageLoad('success')" v-show="imageshow"></el-image>
+          <el-image style="width:30%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')"
+            @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
-      <tr class="yy-descriptions-row" v-show="beizhu">
+      <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">备注:</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div>{{beizhu}}</div>
         </td>
 
       </tr>
-      <tr class="yy-descriptions-row" v-show="laiyuan">
-        <th class="yy-descriptions-th">来源:</th>
-        <td class="yy-descriptions-td">{{laiyuan}}</td>
+      <tr class="yy-descriptions-row" v-show="!isMini">
+        <th colspan="1" class="yy-descriptions-th">来源:</th>
+        <td colspan="12" class="yy-descriptions-td">{{laiyuan}}</td>
       </tr>
+      <tr class="yy-descriptions-row" v-show="!isMini">
 
+        <th colspan="1" class="yy-descriptions-th">答案:</th>
+        <td colspan="12" class="yy-descriptions-td-daan1">
+          <div v-katex="daan1===null?'':daan1"></div>
+        </td>
+      </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div v-katex="daan2===null?'':daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">解析</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div v-katex="jiexi===null?'':jiexi"></div>
         </td>
       </tr>
@@ -84,7 +87,7 @@
 <script>
 import config from '../../extraResources/config.json'
 export default {
-  name: "yytitledescription_change",
+  name: "yytitledescriptionSearch",
   //接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
   props: {
     isShowMini: {       // 是否迷你显示
@@ -141,7 +144,7 @@ export default {
   data() {
     return {
       isMini: true,
-      imageshow:true
+      imageshow: true
     }
 
   },
@@ -153,12 +156,12 @@ export default {
     }
   },
   methods: {
-    
-    imageLoad(v){
-      if(v=='success'){
-        this.imageshow=true;
-      }else{
-        this.imageshow=false;
+
+    imageLoad(v) {
+      if (v == 'success') {
+        this.imageshow = true;
+      } else {
+        this.imageshow = false;
       }
     },
     showTimuStr() {

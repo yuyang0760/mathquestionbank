@@ -50,7 +50,7 @@
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="5" class="yy-descriptions-td">
           <div v-katex="showTimuStr()"></div>
-          <el-image :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')" @load="imageLoad('success')" v-show="imageshow"></el-image>
+          <el-image style="width:30%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')" @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="beizhu">
@@ -84,7 +84,7 @@
 <script>
 import config from '../../extraResources/config.json'
 export default {
-  name: "yytitledescription_change",
+  name: "yytitledescription",
   //接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
   props: {
     isShowMini: {       // 是否迷你显示

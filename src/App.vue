@@ -5,10 +5,10 @@
       <div id="nav">
         <router-link class="nodrag" to="/">Home</router-link>
         <router-link class="nodrag" to="/about">About</router-link>
-        <router-link class="nodrag" to="/change">Change</router-link>
+        <router-link class="nodrag" to="/change">整理题目</router-link>
+        <router-link class="nodrag" to="/search">查询</router-link>
       
         版本:{{version}}
-        <iframe width="300" height="30" frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&a=getcode&id=34&py=dongfeng&icon=1"></iframe>
       </div> 
 
       <TitleButton type="min" />
