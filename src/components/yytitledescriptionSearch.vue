@@ -3,7 +3,7 @@
     <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">分类:</th>
-        <td colspan="4" class="yy-descriptions-td">
+        <td colspan="4" class="yy-descriptions-td fenleiclass">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item v-for="(item,index) in fenlei" :key="index">{{item}}
             </el-breadcrumb-item>
@@ -45,7 +45,7 @@
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="12" class="yy-descriptions-td">
-          <div v-katex="showTimuStr()"></div>
+          <div v-katex="showTimuStr()" class="timu"></div>
           <el-image style="width:30%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')"
             @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
@@ -193,6 +193,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .yy-descriptions-table {
   line-height: 1.15;
   word-break: break-all;
@@ -254,6 +255,12 @@ export default {
 }
 .yy-descriptions-td-biaoqian {
   width: 237px;
+}
+.timu{
+  color: black;
+}
+.fenleiclass{
+    color: #409eff;
 }
 </style>
 

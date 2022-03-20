@@ -5,11 +5,13 @@
 
         <yytitledescription v-bind="formData" :isShowMini="true">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(chaXunID)"></el-button>
+
         </yytitledescription>
       </el-col>
       <el-col :span="12">
 
-        <el-button @click="chaXunTimu(chaXunID)">查询题目</el-button>
+        <el-button @click="chaXunTimu(chaXunID)">查询题目ID</el-button>
         <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
         <!-- {{this.biaoqianOptions}} -->
         <el-button @click="saveTitle()">保存</el-button>
@@ -30,7 +32,7 @@
           </div>
           <!-- <div>快速添加标签:</div> -->
           <div style="margin:0px 0px 0px 10px;">
-            <el-button  style="margin:1px 0px 1px 2px;" type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
+            <el-button style="margin:1px 0px 1px 2px;" type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
               v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
               {{tag['value']}}
             </el-button>
@@ -45,7 +47,7 @@
             </el-option>
           </el-select>
           <div v-show="isShowBianji">
-            <el-input v-model="formData.laiyuan" placeholder="请输入来源:" ></el-input>
+            <el-input v-model="formData.laiyuan" placeholder="请输入来源:"></el-input>
             <el-input v-model="formData.beizhu" type="textarea" placeholder="请输入备注:" :autosize="{minRows: 1}"></el-input>
             <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
             <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>
@@ -53,7 +55,8 @@
             <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
           </div>
         </div>
-        <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions" v-model="formData.fenlei" @change="fenleiHandleChange">
+        <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
+          v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel>
 
         <!-- </el-drawer> -->
@@ -109,7 +112,7 @@ export default {
         daan1: '',
         daan2: '',
         jiexi: '',
-        beizhu:'',
+        beizhu: '',
         nandu: 3,
         laiyuan: '',
         xuanxiang: ['', '', '', ''],
@@ -130,12 +133,33 @@ export default {
     }
   },
   methods: {
+    // 删除题目 id是数据库id,index是显示数组的index
+    deleteTimu() {
+
+      this.$confirm(`确定删除这道题吗 ?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+
+          // 删除数据库
+          console.log(`删除id${this.chaXunID}的题目`);
+          await this.titles.destroy({
+            where: {
+              id: this.chaXunID
+            }
+          });
+          // 删除数组 TimuList
+          this.TimuList.splice(0, 1);
+        })
+        .catch(() => { })
+    },
     // 重填标签
     clearBiaoQian() {
       // 修改id=xxx的数据库的值
       // console.log("我要修改了", this.formData.daan1);
       this.formData.biaoqian = [];
-
     },
     // 保存并下一题
     saveTitleandNextTitle() {
@@ -169,8 +193,7 @@ export default {
         console.log(this.formData, "this.formData")
         this.chaXunID = chaXunID;
         this.input_添加分类 = this.formData.fenlei.join('▲');
-        if(this.select_当前选中的分类.length==0)
-        {
+        if (this.select_当前选中的分类.length == 0) {
           // 更新当前选中的分类可以更新显示的标签
           this.select_当前选中的分类 = this.formData.fenlei;
         }
@@ -372,21 +395,7 @@ el-dialog {
 .elitem {
   margin-right: 10px;
 }
-/* .elform {
-  flex-direction: row; row | row-reverse | column | column-reverse;
-  flex-wrap: wrap; nowrap | wrap | wrap-reverse;
-} */
 
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
 .input-new-tag {
   width: 90px;
   margin-left: 10px;
@@ -398,23 +407,9 @@ el-dialog {
 .el-dialog__header {
   padding: 0px 0px 0px;
 }
-.el-breadcrumb__inner {
-  font-weight: bold;
-  color: #409eff;
-}
+
 .el-dialog__body {
   padding: 10px;
-}
-.el-breadcrumb__item:last-child .el-breadcrumb__inner,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner a,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
-  font-weight: bold;
-  color: #409eff;
-  cursor: text;
-}
-.el-breadcrumb-item1 {
-  color: #ff5640;
 }
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
@@ -422,14 +417,6 @@ el-dialog {
 }
 .timuShowlabel {
   width: 60px;
-}
-.yy-descriptions-td[data-v-448ffd2b] {
-  font-size: 15px;
-  text-align: left;
-  line-height: 1.8;
-  font-weight: normal;
-  color: #000000;
-  letter-spacing: 1.5px;
 }
 ul,
 li {

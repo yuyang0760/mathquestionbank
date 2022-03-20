@@ -27,27 +27,6 @@
       <!-- 右边 -->
       <el-col :span="12">
         <div>
-          <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true ,multiple:true}" :options="fenleiOptions"
-            v-model="chaxunData.fenlei" @change="fenleiHandleChange">
-          </el-cascader-panel>
-          <!-- {{chaxunData.fenlei}} -->
-          <el-button @click="chaxunData.fenlei=[]">清空</el-button>
-          {{chaxunData.biaoqian}}
-          <!-- {{biaoqianOptions}} -->
-          <el-checkbox-group v-model="chaxunData.biaoqian">
-            <el-checkbox v-for="(item,index) in biaoqianOptions" :key="index" :label="item.value"></el-checkbox>
-          </el-checkbox-group>
-          <!-- 难度:{{chaxunData.nandu}}  
-          <el-checkbox-group v-model="chaxunData.nandu">
-            <el-checkbox  label="全选"></el-checkbox>
-            <el-checkbox  label="1"></el-checkbox>
-            <el-checkbox  label="2"></el-checkbox>
-            <el-checkbox  label="3"></el-checkbox>
-            <el-checkbox  label="4"></el-checkbox>
-            <el-checkbox  label="5"></el-checkbox>
-            <el-checkbox  label="6"></el-checkbox>
-          </el-checkbox-group> -->
-          题目:<el-input v-model="chaxunData.timu" placeholder="请输入分类:"></el-input>
           <div>
             <el-button type="success" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
             <el-input-number v-model="chaxun_ByID_word" :min="1" label="题库ID"></el-input-number>
