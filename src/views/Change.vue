@@ -11,13 +11,12 @@
       </el-col>
       <el-col :span="12">
 
-        <el-button @click="chaXunTimu(chaXunID)">查询题目ID</el-button>
-        <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
-        <!-- {{this.biaoqianOptions}} -->
-        <el-button @click="saveTitle()">保存</el-button>
-        <div style="display:inline;">
-          <el-rate v-model="formData.nandu" show-text :max="6"></el-rate>
-
+        <div>
+          <el-button @click="chaXunTimu(chaXunID)">查询题目ID</el-button>
+          <el-input-number v-model="chaXunID" :min="1" label="题库ID"></el-input-number>
+          <!-- {{this.biaoqianOptions}} -->
+          <el-button @click="saveTitle()">保存</el-button>
+            <el-rate v-model="formData.nandu" show-text :max="6"  style="display:inline;"></el-rate>
         </div>
         <div style="display:inline;">
           <el-input style="width:300px;margin:2px 2px 2px 20px;" v-model="input_添加分类" placeholder="请输入分类"></el-input>
@@ -365,7 +364,6 @@ export default {
 };
 </script>
 <style scoped>
-
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
   height: 200px;

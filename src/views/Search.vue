@@ -2,24 +2,24 @@
   <div>
 
     <el-container style="border: 1px solid #eee;">
-      <el-aside width="800px">
+      <el-aside width="55%">
         <div :style="{height:window_innerheight+'px'}">
           <happy-scroll size="12" resize>
             <div>
               <div v-for="(item,index) in TimuCurrentPageList" :key="item.id" style="margin:0px 30px 0px 0px">
-                <yytitledescriptionSearch v-bind="item" :tihao="index" :isShowMini="true">
+                <yytitledescription v-bind="item" :tihao="index" :isShowMini="true">
                   <!-- <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button> -->
-                </yytitledescriptionSearch>
+                </yytitledescription>
               </div>
             </div>
           </happy-scroll>
         </div>
       </el-aside>
 
-      <el-container>
+      <el-container width="40%">
         <div>
           <div>
-            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :page-sizes="[1, 5, 10, 20,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
@@ -50,6 +50,9 @@
                 <el-input style="width:400px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
                   <template slot="prepend">题目:</template>
                 </el-input>
+                高度:
+                <el-input-number style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
+                </el-input-number>
               </div>
             </div>
             <div>
@@ -81,7 +84,7 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import yytitledescriptionSearch from '../components/yytitledescriptionSearch.vue'
+import yytitledescription from '../components/yytitledescription.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -93,7 +96,7 @@ const { Op } = require("sequelize");
 export default {
   name: 'Search',
   components: {
-    yytitledescriptionSearch,
+    yytitledescription,
   },
   props: [],
   data() {
@@ -386,6 +389,5 @@ export default {
 
 </script>
 <style scoped>
-
 </style>
 

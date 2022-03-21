@@ -877,17 +877,6 @@ el-dialog {
 .el-dialog__body {
   padding: 10px;
 }
-.el-breadcrumb__item:last-child .el-breadcrumb__inner,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner a,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner a:hover,
-.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
-  font-weight: bold;
-  color: #409eff;
-  cursor: text;
-}
-.el-breadcrumb-item1 {
-  color: #a1655d;
-}
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
   height: 250px;

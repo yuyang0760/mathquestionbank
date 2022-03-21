@@ -2,39 +2,25 @@
   <div>
     <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
-        <th colspan="1" class="yy-descriptions-th">分类:</th>
-        <td colspan="4" class="yy-descriptions-td">
-          <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="(item,index) in fenlei" :key="index">{{item}}
-            </el-breadcrumb-item>
-          </el-breadcrumb>
+        <th colspan="1" class="yy-descriptions-th">{{tihao+1}}:</th>
+        <td colspan="4" class="yy-descriptions-td fenleiclass">
+            {{fenlei.join(' ➣ ')}}
         </td>
-        <td colspan="5" class="yy-descriptions-td" style="text-align: right">
+        <th colspan="1" class="yy-descriptions-th">标签:</th>
+        <td colspan="4" class="yy-descriptions-td-biaoqian">
+            {{biaoqian.join('&emsp;&emsp;')}}
+        </td>
+        <td colspan="3" class="yy-descriptions-td" style="text-align: right">
 
+          ID:{{id}} {{'★'.repeat(nandu)}}
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
           <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
             size="mini"></el-button>
+          <!-- <span  @click="miniShow()">切换</span> -->
           <slot></slot>
         </td>
       </tr>
-      <tr class="yy-descriptions-row">
 
-        <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="3" class="yy-descriptions-td-biaoqian">
-          <!-- <div style="display:inline;" v-for="(item,index) in biaoqian" :key="index">
-            {{item}}
-          </div> -->
-          <el-breadcrumb separator="">
-            <el-breadcrumb-item v-for="(item,index) in biaoqian" :key="index">{{item}}
-            </el-breadcrumb-item>
-          </el-breadcrumb>
-        </td>
-        <th colspan="1" class="yy-descriptions-th">答案:</th>
-        <td colspan="1" class="yy-descriptions-td-daan1">
-          <div style="text-align:right">ID:{{id}} {{'★'.repeat(nandu)}}</div>
-          <div v-katex="daan1===null?'':daan1"></div>
-        </td>
-      </tr>
       <!-- <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">ID:</th>
         <td colspan="1" class="yy-descriptions-td" style="width:120px">{{id}}</td>
@@ -48,33 +34,41 @@
       </tr>
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">题目:</th>
-        <td colspan="5" class="yy-descriptions-td">
-          <div v-katex="showTimuStr()"></div>
-          <el-image style="width:30%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')" @load="imageLoad('success')" v-show="imageshow"></el-image>
+        <td colspan="12" class="yy-descriptions-td">
+          <div v-katex="showTimuStr()" class="timu"></div>
+          <el-image style="width:35%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')"
+            @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
-      <tr class="yy-descriptions-row" v-show="beizhu">
-        <th colspan="1" class="yy-descriptions-th">备注:</th>
-        <td colspan="5" class="yy-descriptions-td">
-          <div>{{beizhu}}</div>
-        </td>
-
-      </tr>
-      <tr class="yy-descriptions-row" v-show="laiyuan">
-        <th class="yy-descriptions-th">来源:</th>
-        <td class="yy-descriptions-td">{{laiyuan}}</td>
-      </tr>
-
+   
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div v-katex="daan2===null?'':daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">解析</th>
-        <td colspan="5" class="yy-descriptions-td">
+        <td colspan="12" class="yy-descriptions-td">
           <div v-katex="jiexi===null?'':jiexi"></div>
+        </td>
+      </tr>
+         <tr class="yy-descriptions-row" v-show="!isMini">
+        <th colspan="1" class="yy-descriptions-th">备注:</th>
+        <td colspan="12" class="yy-descriptions-td">
+          <div>{{beizhu}}</div>
+        </td>
+
+      </tr>
+      <tr class="yy-descriptions-row" v-show="!isMini">
+        <th colspan="1" class="yy-descriptions-th">来源:</th>
+        <td colspan="12" class="yy-descriptions-td">{{laiyuan}}</td>
+      </tr>
+      <tr class="yy-descriptions-row" v-show="!isMini">
+
+        <th colspan="1" class="yy-descriptions-th">答案:</th>
+        <td colspan="12" class="yy-descriptions-td-daan1">
+          <div v-katex="daan1===null?'':daan1"></div>
         </td>
       </tr>
     </table>
@@ -141,7 +135,7 @@ export default {
   data() {
     return {
       isMini: true,
-      imageshow:true
+      imageshow: true
     }
 
   },
@@ -153,12 +147,12 @@ export default {
     }
   },
   methods: {
-    
-    imageLoad(v){
-      if(v=='success'){
-        this.imageshow=true;
-      }else{
-        this.imageshow=false;
+
+    imageLoad(v) {
+      if (v == 'success') {
+        this.imageshow = true;
+      } else {
+        this.imageshow = false;
       }
     },
     showTimuStr() {
@@ -211,7 +205,7 @@ export default {
 }
 .yy-descriptions-th {
   /* 自己修改的 */
-  width: 70px;
+  width: 55px;
   /*******************************/
   word-break: break-all;
   font-size: 14px;
@@ -251,6 +245,11 @@ export default {
 }
 .yy-descriptions-td-biaoqian {
   width: 237px;
+  color: #409eff;
+}
+.timu {
+  color: hsl(0, 0%, 0%);
+  font-weight: normal;
 }
 </style>
 

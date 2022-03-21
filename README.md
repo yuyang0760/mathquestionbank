@@ -2,6 +2,7 @@
 
 ## todo
 * 查询页面是否有编辑按钮,编辑功能是否可以整理出模块
+* 查询页面的高度我用的800px,可能只在我这个电脑上可以,固定值,不太合理,以后改
 
 ## 工具,没有用到,很可惜,以后修改代码可能会用到
 * https://www.sequelize.com.cn/other-topics/resources Sequelize的一些资源
