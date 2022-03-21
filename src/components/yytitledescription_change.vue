@@ -78,7 +78,7 @@
 <script>
 import config from '../../extraResources/config.json'
 export default {
-  name: "yytitledescription_search",
+  name: "yytitledescription_change",
   //接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
   props: {
     isShowMini: {       // 是否迷你显示
@@ -236,6 +236,7 @@ export default {
   cursor: text;
   color: black;
    letter-spacing: 0.5px;
+   font-size: 15px;
 
   /*******************************/
 }
@@ -254,7 +255,7 @@ export default {
 }
 /* 答案2 */
 .daan2{
-  color: rgb(221, 70, 11);
+  color: rgb(0, 0, 0);
 }
 </style>
 

@@ -254,7 +254,7 @@ export default {
 }
 /* 答案2 */
 .daan2{
-  color: rgb(221, 70, 11);
+  color: rgb(0, 0, 0);
 }
 </style>
 

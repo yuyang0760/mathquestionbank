@@ -3,11 +3,11 @@
     <el-row>
       <el-col :span="12">
 
-        <yytitledescription v-bind="formData" :isShowMini="true">
+        <yytitledescription_change v-bind="formData" :isShowMini="true">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(chaXunID)"></el-button>
 
-        </yytitledescription>
+        </yytitledescription_change>
       </el-col>
       <el-col :span="12">
 
@@ -68,7 +68,7 @@
 <script>
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import yytitledescription from '../components/yytitledescription.vue'
+import yytitledescription_change from '../components/yytitledescription_change.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -77,7 +77,7 @@ import miment from 'miment'
 export default {
   name: "Change",
   components: {
-    yytitledescription,
+    yytitledescription_change,
   },
   data() {
     return {

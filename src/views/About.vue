@@ -14,10 +14,10 @@
             <div style="margin-right:28px;margin-bottom:20px">
               <ul>
                 <li v-for="(item,index) in TimuList" :key="item.id">
-                  <yytitledescription v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
+                  <yytitledescription_search v-bind="item" :tihao="index" :isShowMini="true" style="margin:5px 5px">
                     <el-button type="primary" icon="el-icon-edit" size="mini" @click="bianji(item.id,index)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button>
-                  </yytitledescription>
+                  </yytitledescription_search>
                 </li>
               </ul>
             </div>
@@ -132,7 +132,7 @@
           <el-col :span="14">
             <!-- 题目 -->
             <div style="margin:20px 20px">
-              <yytitledescription v-bind="formData" :isShowMini="false"></yytitledescription>
+              <yytitledescription_search v-bind="formData" :isShowMini="false"></yytitledescription_search>
 
             </div>
             <!-- <el-form-item label="标签:" prop="biaoqian" class="formitem">
@@ -196,7 +196,7 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import yytitledescription from '../components/yytitledescription.vue'
+import yytitledescription_search from '../components/yytitledescription_search.vue'
 import yytitlexuanxiang from '../components/yytitlexuanxiang.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
@@ -208,7 +208,7 @@ import key from 'keymaster'
 export default {
   name: 'About',
   components: {
-    yytitledescription,
+    yytitledescription_search,
     yytitlexuanxiang
   },
   props: [],

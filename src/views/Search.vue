@@ -7,9 +7,9 @@
           <happy-scroll size="12" resize>
             <div>
               <div v-for="(item,index) in TimuCurrentPageList" :key="item.id" style="margin:0px 30px 0px 0px">
-                <yytitledescription v-bind="item" :tihao="index" :isShowMini="true">
+                <yytitledescription_search v-bind="item" :tihao="index" :isShowMini="true">
                   <!-- <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button> -->
-                </yytitledescription>
+                </yytitledescription_search>
               </div>
             </div>
           </happy-scroll>
@@ -84,7 +84,7 @@
 
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
-import yytitledescription from '../components/yytitledescription.vue'
+import yytitledescription_search from '../components/yytitledescription_search.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -96,7 +96,7 @@ const { Op } = require("sequelize");
 export default {
   name: 'Search',
   components: {
-    yytitledescription,
+    yytitledescription_search,
   },
   props: [],
   data() {
