@@ -2,7 +2,7 @@
   <div>
     <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
-        <th colspan="1" class="yy-descriptions-th">分类:</th>
+        <th colspan="1" class="yy-descriptions-th">{{tihao+1}}:</th>
         <td colspan="4" class="yy-descriptions-td fenleiclass">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item v-for="(item,index) in fenlei" :key="index">{{item}}
@@ -22,11 +22,11 @@
         </td>
         <td colspan="3" class="yy-descriptions-td" style="text-align: right">
 
-          ID:{{id}} {{'★'.repeat(nandu)}} 
+          ID:{{id}} {{'★'.repeat(nandu)}}
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
           <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
             size="mini"></el-button>
-            <!-- <span  @click="miniShow()">切换</span> -->
+          <!-- <span  @click="miniShow()">切换</span> -->
           <slot></slot>
         </td>
       </tr>
@@ -46,7 +46,7 @@
         <th colspan="1" class="yy-descriptions-th">题目:</th>
         <td colspan="12" class="yy-descriptions-td">
           <div v-katex="showTimuStr()" class="timu"></div>
-          <el-image style="width:30%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')"
+          <el-image style="width:35%;" :src="timupicfilePath_computed" fit="fill" @error="imageLoad('error')"
             @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
@@ -193,7 +193,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .yy-descriptions-table {
   line-height: 1.15;
   word-break: break-all;
@@ -256,11 +255,11 @@ export default {
 .yy-descriptions-td-biaoqian {
   width: 237px;
 }
-.timu{
+.timu {
   color: black;
 }
-.fenleiclass{
-    color: #409eff;
+.fenleiclass {
+  color: #409eff;
 }
 </style>
 

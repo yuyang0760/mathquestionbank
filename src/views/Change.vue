@@ -364,66 +364,13 @@ export default {
   },
 };
 </script>
-<style>
-.hengxiangbuju {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-.shuxiangbuju {
-  display: flex;
-  flex-direction: column;
-  width: 49%;
-  margin: 5px;
-}
-.image {
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-}
-.el-rate {
-  display: inline-block;
-  vertical-align: text-top;
-}
+<style scoped>
 
-.formitem {
-  width: 100%;
-}
-el-dialog {
-  width: 800px;
-  height: 600px;
-}
-.elitem {
-  margin-right: 10px;
-}
-
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
-.el-cascader-menu__wrap {
-  height: 300px;
-}
-.el-dialog__header {
-  padding: 0px 0px 0px;
-}
-
-.el-dialog__body {
-  padding: 10px;
-}
 /* 选择分类的高度 */
 .el-cascader-menu__wrap {
   height: 200px;
 }
-.timuShowlabel {
-  width: 60px;
-}
-ul,
-li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+
 /* .timuShowcontent {
 } */
 </style>

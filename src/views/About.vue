@@ -813,7 +813,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .hengxiangbuju {
   display: flex;
   flex-direction: row;

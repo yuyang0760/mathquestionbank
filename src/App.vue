@@ -71,7 +71,7 @@ body {
 }
 #mytitle {
   width: 100%;
-  height: 32px;
+  height: 30px;
   background-color: rgb(255, 255, 255);
   -webkit-app-region: drag;
   margin-bottom: 5px;

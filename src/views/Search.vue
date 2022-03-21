@@ -19,7 +19,7 @@
       <el-container>
         <div>
           <div>
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+            <el-pagination  @size-change="handleSizeChange" @current-change="handleCurrentChange"
               :page-sizes="[1, 5, 10, 20,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
@@ -64,6 +64,7 @@
 
           </div>
           <el-button type="success" size="small" @click="chaxunButton(1)">查询</el-button>
+          <el-button type="success" size="small" @click="chaxunButton(currentPage+1)">下一页</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
           <el-button size="small" @click="chaxunData.fenlei=[]">清空分类</el-button>
           <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
@@ -384,14 +385,7 @@ export default {
 }
 
 </script>
-<style>
-ul,
-li {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-/* .timuShowcontent {
-} */
+<style scoped>
+
 </style>
 
