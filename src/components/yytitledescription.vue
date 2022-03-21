@@ -4,11 +4,11 @@
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">{{tihao+1}}:</th>
         <td colspan="4" class="yy-descriptions-td fenleiclass">
-            {{fenlei.join(' ➣ ')}}
+          {{fenlei.join(' ➣ ')}}
         </td>
         <th colspan="1" class="yy-descriptions-th">标签:</th>
         <td colspan="4" class="yy-descriptions-td-biaoqian">
-            {{biaoqian.join('&emsp;&emsp;')}}
+          {{biaoqian.join('&emsp;&emsp;')}}
         </td>
         <td colspan="3" class="yy-descriptions-td" style="text-align: right">
 
@@ -40,20 +40,20 @@
             @load="imageLoad('success')" v-show="imageshow"></el-image>
         </td>
       </tr>
-   
+
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="12" class="yy-descriptions-td">
-          <div v-katex="daan2===null?'':daan2"></div>
+          <div v-katex="daan2===null?'':daan2"  class="daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">解析</th>
         <td colspan="12" class="yy-descriptions-td">
-          <div v-katex="jiexi===null?'':jiexi"></div>
+          <div v-katex="jiexi===null?'':jiexi"   class="daan2"></div>
         </td>
       </tr>
-         <tr class="yy-descriptions-row" v-show="!isMini">
+      <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">备注:</th>
         <td colspan="12" class="yy-descriptions-td">
           <div>{{beizhu}}</div>
@@ -208,7 +208,6 @@ export default {
   width: 55px;
   /*******************************/
   word-break: break-all;
-  font-size: 14px;
   border-collapse: collapse;
   color: #909399;
   background: #fafafa;
@@ -223,33 +222,39 @@ export default {
 }
 .yy-descriptions-td {
   word-break: break-all;
-  font-size: 14px;
   /* color: #606266; */
   border-collapse: collapse;
   box-sizing: border-box;
   text-align: left;
   /* font-weight: 400; */
-  line-height: 1.5;
   border: 1px solid #ebeef5;
   padding: 5px;
   /* 自己修改的 */
   /* width: 27%; */
+  line-height: 2;
   font-weight: normal;
-  color: #409eff;
   cursor: text;
+  color: black;
+   letter-spacing: 0.5px;
 
   /*******************************/
 }
+/* 答案1 */
 .yy-descriptions-td-daan1 {
   width: 200px;
 }
+/* 标签 */
 .yy-descriptions-td-biaoqian {
   width: 237px;
   color: #409eff;
 }
+/* 题目 */
 .timu {
   color: hsl(0, 0%, 0%);
-  font-weight: normal;
+}
+/* 答案2 */
+.daan2{
+  color: rgb(221, 70, 11);
 }
 </style>
 
