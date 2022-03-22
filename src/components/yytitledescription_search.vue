@@ -3,14 +3,14 @@
     <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
         <th colspan="1" class="yy-descriptions-th">{{tihao+1}}:</th>
-        <td colspan="4" class="yy-descriptions-td fenleiclass">
+        <td colspan="5" class="yy-descriptions-td fenleiclass">
           {{fenlei.join(' ➣ ')}}
         </td>
         <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="4" class="yy-descriptions-td-biaoqian">
-          {{biaoqian.join('&emsp;&emsp;')}}
+        <td  class="yy-descriptions-td-biaoqian" style="width:300px">
+          {{biaoqian.join('&emsp;')}}
         </td>
-        <td colspan="3" class="yy-descriptions-td" style="text-align: right">
+        <td class="yy-descriptions-td" style="text-align: right;width:140px">
 
           ID:{{id}} {{'★'.repeat(nandu)}}
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->

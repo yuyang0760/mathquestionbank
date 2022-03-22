@@ -20,7 +20,7 @@
         <div>
           <div>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :page-sizes="[1, 5, 10, 20,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
+              :page-sizes="[1, 5, 50,100,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
 
@@ -73,7 +73,7 @@
           <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
           <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
           </el-input-number>
-
+          <daochu :timulist="TimuCurrentPageList" @daochustr="daochuTimuStr"></daochu>
         </div>
       </el-container>
     </el-container>
@@ -85,6 +85,7 @@
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import yytitledescription_search from '../components/yytitledescription_search.vue'
+import daochu from '../components/daochu.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -97,6 +98,7 @@ export default {
   name: 'Search',
   components: {
     yytitledescription_search,
+    daochu,
   },
   props: [],
   data() {
@@ -211,6 +213,11 @@ export default {
   watch: {
   },
   methods: {
+    daochuTimuStr(str){
+      // console.log("触发了导出:",str);
+      fs.writeFileSync('导出的latex题目字符串.txt',str);
+      console.log(`导出了:${this.TimuCurrentPageList.length}个题目`);
+    },
     // 关闭标签
     handleClose(tag) {
       let index = this.chaxunData.biaoqian.indexOf(tag);
