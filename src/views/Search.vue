@@ -31,7 +31,7 @@
           <div style="margin:0px 0px 0px 0px;border: 2px solid #eee;">
             <el-switch v-model="biaoqian_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
             </el-switch>
-            <el-button style="margin-left:10px" type="primary" round size="small" @click="chaxunData.biaoqian=[]">
+            <el-button style="margin-left:10px" type="danger" round size="mini" @click="chaxunData.biaoqian=[]">
               清空标签
             </el-button>
             {{chaxunData.biaoqian}}
@@ -47,7 +47,7 @@
               <div style="display:inline;">
                 <el-switch v-model="timu_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
                 </el-switch>
-                <el-input style="width:400px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
+                <el-input style="width:350px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
                   <template slot="prepend">题目:</template>
                 </el-input>
                 高度:
@@ -59,21 +59,25 @@
               <div style="display:inline;">
                 <el-switch v-model="daan2_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
                 </el-switch>
-                <el-input style="width:400px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
+                <el-input style="width:350px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
                   <template slot="prepend">答案:</template>
                 </el-input>
               </div>
             </div>
 
           </div>
-          <el-button type="success" size="small" @click="chaxunButton(1)">查询</el-button>
-          <el-button type="success" size="small" @click="chaxunButton(currentPage+1)">下一页</el-button>
+          <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
+          <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)">下一页</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
           <el-button size="small" @click="chaxunData.fenlei=[]">清空分类</el-button>
           <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
           <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
           </el-input-number>
-          <daochu :timulist="TimuCurrentPageList" @daochustr="daochuTimuStr"></daochu>
+          <!-- <daochu :timulist="TimuDaoChuList" @daochustr="daochuTimuStr"></daochu> -->
+          <div style="margin-top:5px">
+            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
+            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
+          </div>
         </div>
       </el-container>
     </el-container>
@@ -85,7 +89,6 @@
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import yytitledescription_search from '../components/yytitledescription_search.vue'
-import daochu from '../components/daochu.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -98,7 +101,6 @@ export default {
   name: 'Search',
   components: {
     yytitledescription_search,
-    daochu,
   },
   props: [],
   data() {
@@ -110,9 +112,10 @@ export default {
       currentPage: 1,      // 分页中的当前页
       pagesize: 5,         // 每页多少个题    
       select_当前选中的分类: [],     // 当前选中的分类
-      window_innerheight: 785,    // 初始innerheight
+      window_innerheight: 795,    // 初始innerheight
       biaoqianOptions: [],    // 一开始读取的标签文件中所有标签放在这里
       fenleiOptions: null,   // 一开始读取的题目分类json数据,导数->切线 等等
+      TimuDaoChuList: [],   // 储存需要导出的题目
       TimuCurrentPageList: [],   // 储存了当前页显示的所有题目
       titles: null,  // 题目类 ,数据库查询用
       connect: null,  // 数据库连接,销毁用
@@ -213,11 +216,7 @@ export default {
   watch: {
   },
   methods: {
-    daochuTimuStr(str){
-      // console.log("触发了导出:",str);
-      fs.writeFileSync('导出的latex题目字符串.txt',str);
-      console.log(`导出了:${this.TimuCurrentPageList.length}个题目`);
-    },
+
     // 关闭标签
     handleClose(tag) {
       let index = this.chaxunData.biaoqian.indexOf(tag);
@@ -249,7 +248,7 @@ export default {
 
     },
     // 点击题目关键词查询
-    async chaxunButton(val) {
+    async chaxunButton(val, isdaochu) {
       console.log("你点击了查询按钮");
       this.currentPage = val;
       // 拼接标签
@@ -309,17 +308,73 @@ export default {
       if (pinjie_daan2.length > 0) {
         pinjie_zuihou.push({ [this.daan2_switch ? Op.and : Op.or]: pinjie_daan2 });
       }
+      let offset1 = 0;
+      let limit1 = 1000000;
+      if (isdaochu) {
+        // 如果是导出所有
+        if (isdaochu == 'all') {
+          offset1 = 0;
+          limit1 = 1000000;
+        }
+        if (isdaochu == 'currentPage') {
+          offset1 = (this.currentPage - 1) * this.pagesize;
+          limit1 = this.pagesize;
+        }
+
+      }
+      else {
+        // 如果不是导出所有
+        offset1 = (this.currentPage - 1) * this.pagesize;
+        limit1 = this.pagesize;
+      }
       const { count, rows } = await this.titles.findAndCountAll({
         where: {
           [Op.and]: pinjie_zuihou
         },
-        offset: (this.currentPage - 1) * this.pagesize,
-        limit: this.pagesize
+        offset: offset1,
+        limit: limit1
       });
       this.TimuALlCount = count;
-      this.TimuCurrentPageList = titlesCopy(this.formData, rows);
+      // 如果不导出就放到 TimuCurrentPageList 显示出来
+      if (!isdaochu) {
+        this.TimuCurrentPageList = titlesCopy(this.formData, rows);
+      }
+      else {
+        // 如果导出就放到 TimuDaoChuList 用于导出   前面查出来啥,这里就导出啥,rows代表查出来的数据
+        this.TimuDaoChuList = titlesCopy(this.formData, rows);
+        this.daochutimu(this.TimuDaoChuList);
+      }
     },
+    // 导出题目
+    daochutimu(timulist) {
+      // console.log(timulist,'timulist');
+      let outstr = '';
+      // 导出过程,再优化
+      for (let index = 0; index < timulist.length; index++) {
+        const timu = timulist[index];
 
+        let timuStr = '';
+        let daan2Str = '';
+        let jiexiStr = '';
+        if (timu.timu) {
+          timuStr = '\r\n' + timu.timu.replace(/\$\\\\\$/g, '\r\n\r\n') + '\r\n';
+        }
+        // if (timu.daan2) {
+        //   daan2Str = '\r\n' + '\\tcbline' + '\r\n\r\n' + timu.daan2.replace(/\$\\\\\$/g, '\r\n\r\n') + '\r\n';
+        // }
+        // if (timu.jiexi) {
+        //   jiexiStr = '\r\n' + '\\tcbline' + '\r\n\r\n' + timu.jiexi.replace(/\$\\\\\$/g, '\r\n\r\n') + '\r\n';
+        // }
+        let qian = '\r\n' + '\\begin{timu1}{}' + '\r\n';
+        let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
+        let linshistr = qian + timuStr + daan2Str + jiexiStr + hou;
+        outstr += linshistr;
+        outstr=outstr.replace(/ {2,}/g,' ').replace(/^ /gm,'').replace(/\r\n\r\n\r\n/g,'\r\n\r\n');
+        // 存到文件
+        fs.writeFileSync('导出的latex题目字符串.txt', outstr);
+        console.log(`导出了${timulist.length}个题目`);
+      }
+    },
     //清空所有题目
     clearAllTimu() {
       this.TimuCurrentPageList = [];
@@ -332,7 +387,7 @@ export default {
     },
     handleCurrentChange(val) {
       console.log(`当前第${val}页`);
-      this.chaxunButton(val);
+      this.chaxunButton(val, false);
 
     },
     fenleiHandleChange(fenlei) {
