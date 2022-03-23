@@ -20,7 +20,7 @@
         <div>
           <div>
             <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :page-sizes="[1, 5, 50,100,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
+              :page-sizes="[1,3,4, 5, 50,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
 
@@ -67,16 +67,16 @@
 
           </div>
           <div style="margin:2px 0px">
-          <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
-          <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
-            :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
-          <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
-          <el-button size="small" @click="chaxunData.fenlei=[]">清空分类</el-button>
-          <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
-          <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
-          </el-input-number>
+            <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
+            <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
+              :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
+            <el-button size="small" type="danger" @click="clearAllTimu()">清空所有题目</el-button>
+            <el-button size="small" type="danger" @click="chaxunData.fenlei=[]">清空分类</el-button>
+            <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
+            <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
+            </el-input-number>
           </div>
-          
+
           <div style="margin:2px 2px 2px 2px" v-show="TimuDaoChuList.length!=0">试题篮:
             <!-- <span :key="index" v-for="(item,index) in TimuDaoChuList"> {{item.id}}</span> -->
             <el-button style="margin:0px 2px 0px 2px" type="success" size="small" @click="removeDaoChuList(item)" :key="index"
@@ -88,6 +88,7 @@
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
+            <el-button size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
           </div>
         </div>
@@ -106,6 +107,7 @@ import { clipboard } from 'electron';
 import fs from 'fs';
 import config from '/extraResources/config.json'
 import miment from 'miment'
+import { time } from 'console'
 const { remote } = require('electron')
 const { Op } = require("sequelize");
 
@@ -122,7 +124,7 @@ export default {
       timu_switch: false, // 查询题目时,标签或,且
       TimuALlCount: 0,     // 总共的题目个数
       currentPage: 1,      // 分页中的当前页
-      pagesize: 5,         // 每页多少个题    
+      pagesize: 3,         // 每页多少个题    
       select_当前选中的分类: [],     // 当前选中的分类
       window_innerheight: 795,    // 初始innerheight
       biaoqianOptions: [],    // 一开始读取的标签文件中所有标签放在这里
@@ -228,6 +230,11 @@ export default {
   watch: {
   },
   methods: {
+    // 添加本页试题到试题栏
+    addCurrentPageTimuToShitilan() {
+      // _.unionBy取两个数组的并集,相当于去除重复元素,以id为标准.
+      this.TimuDaoChuList = _.unionBy(this.TimuDaoChuList,this.TimuCurrentPageList,'id');
+    },
     // 移除导出列表中的某一项
     removeDaoChuList(timuItem) {
       let itemPos = this.TimuDaoChuList.indexOf(timuItem);
@@ -280,6 +287,12 @@ export default {
       if (isdaochu == 'shitilan') {
         this.daochutimu(this.TimuDaoChuList);
         // this.TimuDaoChuList = [];   // 导出后,清空,避免混乱
+        let daochulog = [];
+        for (let index = 0; index < this.TimuDaoChuList.length; index++) {
+          const element = this.TimuDaoChuList[index];
+          daochulog.push(element.id);
+        }
+        fs.appendFileSync('导出题目log.txt', '【' + miment().format() + '】' + '\t导出的题目ID:\t' + daochulog + '\r\n');
         return;
       }
       // 如果不是导出试题篮,则查询数据库
