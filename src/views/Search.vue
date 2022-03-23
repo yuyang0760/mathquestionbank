@@ -2,13 +2,13 @@
   <div>
 
     <el-container style="border: 1px solid #eee;">
-      <el-aside width="55%">
+      <el-aside width="53%">
         <div :style="{height:window_innerheight+'px'}">
           <happy-scroll size="12" resize>
             <div>
               <div v-for="(item,index) in TimuCurrentPageList" :key="item.id" style="margin:0px 30px 0px 0px">
                 <yytitledescription_search v-bind="item" :tihao="index" :isShowMini="true">
-                  <!-- <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(item.id,index)"></el-button> -->
+                  <el-button type="danger" icon="el-icon-star-off" size="mini" @click="addDaoChuTimuID(item)"></el-button>
                 </yytitledescription_search>
               </div>
             </div>
@@ -66,17 +66,29 @@
             </div>
 
           </div>
+          <div style="margin:2px 0px">
           <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
-          <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)">下一页</el-button>
+          <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
+            :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
           <el-button size="small" @click="clearAllTimu()">清空所有题目</el-button>
           <el-button size="small" @click="chaxunData.fenlei=[]">清空分类</el-button>
           <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
           <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
           </el-input-number>
-          <!-- <daochu :timulist="TimuDaoChuList" @daochustr="daochuTimuStr"></daochu> -->
+          </div>
+          
+          <div style="margin:2px 2px 2px 2px" v-show="TimuDaoChuList.length!=0">试题篮:
+            <!-- <span :key="index" v-for="(item,index) in TimuDaoChuList"> {{item.id}}</span> -->
+            <el-button style="margin:0px 2px 0px 2px" type="success" size="small" @click="removeDaoChuList(item)" :key="index"
+              v-for="(item,index) in TimuDaoChuList">
+              {{item.id}}</el-button>
+          </div>
+
           <div style="margin-top:5px">
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
+            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
+            <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
           </div>
         </div>
       </el-container>
@@ -216,7 +228,21 @@ export default {
   watch: {
   },
   methods: {
-
+    // 移除导出列表中的某一项
+    removeDaoChuList(timuItem) {
+      let itemPos = this.TimuDaoChuList.indexOf(timuItem);
+      if (itemPos > -1) {
+        this.TimuDaoChuList.splice(itemPos, 1);
+      }
+    },
+    // 添加导出题目到TimuDaoChuList,timuItem代表每一个题目
+    addDaoChuTimuID(timuItem) {
+      // 看看是否有重复的
+      if (this.TimuDaoChuList.indexOf(timuItem) > -1) {
+        return;
+      }
+      this.TimuDaoChuList.push(timuItem);
+    },
     // 关闭标签
     handleClose(tag) {
       let index = this.chaxunData.biaoqian.indexOf(tag);
@@ -247,9 +273,16 @@ export default {
       this.TimuCurrentPageList = titlesCopy(this.formData, rows);
 
     },
-    // 点击题目关键词查询
+    // 点击题目关键词查询   val是要查询的页
     async chaxunButton(val, isdaochu) {
       console.log("你点击了查询按钮");
+      // 如果是导出试题篮,则不用查询,直接导出,导出后直接返回
+      if (isdaochu == 'shitilan') {
+        this.daochutimu(this.TimuDaoChuList);
+        // this.TimuDaoChuList = [];   // 导出后,清空,避免混乱
+        return;
+      }
+      // 如果不是导出试题篮,则查询数据库
       this.currentPage = val;
       // 拼接标签
       let pinjie_biaoqian = [];
@@ -315,7 +348,7 @@ export default {
         if (isdaochu == 'all') {
           offset1 = 0;
           limit1 = 1000000;
-        }
+        }// 如果是导出此页题目
         if (isdaochu == 'currentPage') {
           offset1 = (this.currentPage - 1) * this.pagesize;
           limit1 = this.pagesize;
@@ -343,6 +376,7 @@ export default {
         // 如果导出就放到 TimuDaoChuList 用于导出   前面查出来啥,这里就导出啥,rows代表查出来的数据
         this.TimuDaoChuList = titlesCopy(this.formData, rows);
         this.daochutimu(this.TimuDaoChuList);
+        this.TimuDaoChuList = [];   // 导出后,清空,避免混乱
       }
     },
     // 导出题目
@@ -369,7 +403,7 @@ export default {
         let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
         let linshistr = qian + timuStr + daan2Str + jiexiStr + hou;
         outstr += linshistr;
-        outstr=outstr.replace(/ {2,}/g,' ').replace(/^ /gm,'').replace(/\r\n\r\n\r\n/g,'\r\n\r\n');
+        outstr = outstr.replace(/ {2,}/g, ' ').replace(/^ /gm, '').replace(/\r\n\r\n\r\n/g, '\r\n\r\n');
         // 存到文件
         fs.writeFileSync('导出的latex题目字符串.txt', outstr);
         console.log(`导出了${timulist.length}个题目`);

@@ -2,17 +2,16 @@
   <div>
     <table width="100%" class="yy-descriptions-table">
       <tr class="yy-descriptions-row">
-        <th colspan="1" class="yy-descriptions-th">{{tihao+1}}:</th>
-        <td colspan="4" class="yy-descriptions-td fenleiclass">
-          {{fenlei.join(' ➣ ')}}
+        <th   class="yy-descriptions-th"> {{id}}</th>
+        <td class="yy-descriptions-td yy-descriptions-td-fenlei">
+          {{fenlei.join('➣')}}
         </td>
-        <th colspan="1" class="yy-descriptions-th">标签:</th>
-        <td colspan="4" class="yy-descriptions-td-biaoqian">
-          {{biaoqian.join('&emsp;&emsp;')}}
+        <th class="yy-descriptions-th">标签:</th>
+        <td class="yy-descriptions-td yy-descriptions-td-biaoqian">
+          {{biaoqian.join('&emsp;')}}
         </td>
-        <td colspan="3" class="yy-descriptions-td" style="text-align: right">
-
-          ID:{{id}} {{'★'.repeat(nandu)}}
+        <td class="yy-descriptions-td" style="text-align: right;width:170px">
+          {{'★'.repeat(nandu)}}
           <!-- <slot  v-bind:id="id" v-bind:tihao="tihao"></slot> -->
           <el-button @click="miniShow()" type="success" :icon="!isMini?'el-icon-remove-outline':'el-icon-circle-plus-outline'"
             size="mini"></el-button>
@@ -20,16 +19,6 @@
           <slot></slot>
         </td>
       </tr>
-
-      <!-- <tr class="yy-descriptions-row">
-        <th colspan="1" class="yy-descriptions-th">ID:</th>
-        <td colspan="1" class="yy-descriptions-td" style="width:120px">{{id}}</td>
-        <th colspan="1" class="yy-descriptions-th">题号:</th>
-        <td colspan="1" class="yy-descriptions-td" style="width:120px">{{tihao+1?'第'+(tihao+1)+'题':null}}</td>
-        <th colspan="1" class="yy-descriptions-th">难度:</th>
-        <td colspan="1" class="yy-descriptions-td">{{'★'.repeat(nandu)}}</td>
-
-      </tr> -->
       <tr class="yy-descriptions-row">
       </tr>
       <tr class="yy-descriptions-row">
@@ -44,13 +33,13 @@
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">答案:</th>
         <td colspan="12" class="yy-descriptions-td">
-          <div v-katex="daan2===null?'':daan2"  class="daan2"></div>
+          <div v-katex="daan2===null?'':daan2" class="daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
         <th colspan="1" class="yy-descriptions-th">解析</th>
         <td colspan="12" class="yy-descriptions-td">
-          <div v-katex="jiexi===null?'':jiexi"   class="daan2"></div>
+          <div v-katex="jiexi===null?'':jiexi" class="daan2"></div>
         </td>
       </tr>
       <tr class="yy-descriptions-row" v-show="!isMini">
@@ -233,10 +222,10 @@ export default {
   /* width: 27%; */
   line-height: 2;
   font-weight: normal;
+  font-size: 15px;
   cursor: text;
   color: black;
-   letter-spacing: 0.5px;
-   font-size: 15px;
+  letter-spacing: 0.5px;
 
   /*******************************/
 }
@@ -246,15 +235,18 @@ export default {
 }
 /* 标签 */
 .yy-descriptions-td-biaoqian {
-  width: 237px;
+  width: 280px;
   color: #409eff;
+}
+.yy-descriptions-td-fenlei{
+  color: #ca5959;
 }
 /* 题目 */
 .timu {
   color: hsl(0, 0%, 0%);
 }
 /* 答案2 */
-.daan2{
+.daan2 {
   color: rgb(0, 0, 0);
 }
 </style>

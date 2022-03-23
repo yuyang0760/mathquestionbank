@@ -5,7 +5,8 @@
 
         <yytitledescription_change v-bind="formData" :isShowMini="true">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(chaXunID)"></el-button>
+          <!-- 一般不删除题目,都是修改 -->
+          <!-- <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteTimu(chaXunID)"></el-button> -->
 
         </yytitledescription_change>
       </el-col>
