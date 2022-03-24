@@ -7,16 +7,16 @@
         <router-link class="nodrag" to="/about">About</router-link>
         <router-link class="nodrag" to="/change">整理题目</router-link>
         <router-link class="nodrag" to="/search">查询</router-link>
-      
+
         版本:{{version}}
-      </div> 
+      </div>
 
       <TitleButton type="min" />
       <TitleButton type="max" />
       <TitleButton type="close" />
 
     </div>
-  <router-view ></router-view>
+    <router-view></router-view>
 
   </div>
 </template>
@@ -43,6 +43,10 @@ export default {
     var fs = require('fs');
     if (!(fs.existsSync(config.onedrivePath))) {
       fs.mkdirSync(config.onedrivePath);
+    }
+    if (!fs.existsSync(config.daochurulesPath)) {
+      // 复制一份到Resources
+      fs.copyFileSync('./extraResources/daochurules.json', config.daochurulesPath);
     }
     if (!fs.existsSync(config.mathdbPath)) {
       // 复制一份到Resources
