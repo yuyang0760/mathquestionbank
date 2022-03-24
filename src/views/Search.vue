@@ -104,9 +104,9 @@
               </div>
             </transition-group>
           </draggable>
-          <el-button type="danger" size="small" @click="daochuruleSave()">保存导出规则</el-button>
+          <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
           <el-input v-model="ruleSaveName" size="small" style="width:150px" placeholder="请输入"></el-input>
-          <el-button type="danger" size="small" @click="daochuruleRead()">读取导出规则</el-button>
+          <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
           <el-select v-model="currentRule" placeholder="请选择">
             <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="item">
             </el-option>
@@ -141,6 +141,7 @@ export default {
   props: [],
   data() {
     return {
+
       biaoqian_switch: false, // 查询题目时,标签或,且
       daan2_switch: false, // 查询题目时,标签或,且
       timu_switch: false, // 查询题目时,标签或,且
@@ -238,6 +239,7 @@ export default {
       }
     },
     xuanxiang1filePath() {
+
       if (this.formData.xuanxiang[0] != '' && this.formData.xuanxiang[0].startsWith("xuanxiang")) {
         return config.imagesPath + "/" + this.formData.xuanxiang[0] + ".jpg"
       } else {
@@ -269,6 +271,10 @@ export default {
   watch: {
   },
   methods: {
+    // 查询中 被标记的标签
+    chaxun_biaoqian_checkedlist(checkedlist) {
+      this.chaxunData.biaoqian = checkedlist;
+    },
     // 读取导出规则
     daochuruleRead() {
       console.log('你点击了读取导出规则按钮');
