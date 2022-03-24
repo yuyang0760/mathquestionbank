@@ -111,7 +111,6 @@
             <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="item">
             </el-option>
           </el-select>
-          {{daochurule}}
         </div>
       </el-container>
     </el-container>
