@@ -500,9 +500,9 @@ export default {
           }
         }
 
-        let qian = '\r\n' + '\\begin{timu1}{}' + '\r\n';
-        let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
-        let laststr = qian + outstr + hou;
+        // let qian = '\r\n' + '\\begin{timu1}{}' + '\r\n';
+        // let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
+        let laststr = outstr;
         laststr = laststr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
         // 存到文件
         fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, laststr);
