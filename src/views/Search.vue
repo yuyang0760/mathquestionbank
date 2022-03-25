@@ -107,10 +107,11 @@
           <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
           <el-input v-model="ruleSaveName" size="small" style="width:150px" placeholder="请输入"></el-input>
           <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
-          <el-select v-model="currentRule" placeholder="请选择">
-            <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="item">
+          <el-select v-model="currentSelectRuleName" placeholder="请选择">
+            <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="index">
             </el-option>
           </el-select>
+          <el-button type="primary" size="small" @click="daochuruleClear()">清空规则</el-button>
         </div>
       </el-container>
     </el-container>
@@ -150,7 +151,7 @@ export default {
       pagesize: 3,         // 每页多少个题    
       select_当前选中的分类: [],     // 当前选中的分类
       window_innerheight: 795,    // 初始innerheight
-      currentRule: '',         // 当前规则的名字
+      currentSelectRuleName: '',         // 当前选中的规则的名字
       daochurulesOptions: [],    // 导出规则的文件存到这里
       biaoqianOptions: [],    // 一开始读取的标签文件中所有标签放在这里
       fenleiOptions: null,   // 一开始读取的题目分类json数据,导数->切线 等等
@@ -275,23 +276,29 @@ export default {
     chaxun_biaoqian_checkedlist(checkedlist) {
       this.chaxunData.biaoqian = checkedlist;
     },
+    // 清空导出规则
+    daochuruleClear() {
+      this.daochurule = [           // 导出规则
+        { id: 1, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
+        { id: 2, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
+        { id: 3, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
+        { id: 4, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
+        { id: 5, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
+        { id: 6, name: '解析', value: 'jiexi', isout: true, qian: '', hou: '', placeholderqian: '请输入解析前缀', placeholderhou: '请输入解析后缀' },
+        { id: 7, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
+      ];
+      this.currentSelectRuleName = "";
+    },
     // 读取导出规则
     daochuruleRead() {
-      console.log('你点击了读取导出规则按钮');
-      if (!(this.currentRule)) {
+      if (!(this.currentSelectRuleName)) {
         console.log("当前规则为空,初始化规则");
-        this.daochurule = [           // 导出规则
-          { id: 1, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
-          { id: 2, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
-          { id: 3, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
-          { id: 4, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
-          { id: 5, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
-          { id: 6, name: '解析', value: 'jiexi', isout: true, qian: '', hou: '', placeholderqian: '请输入解析前缀', placeholderhou: '请输入解析后缀' },
-          { id: 7, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
-        ];
+        // 清空导出规则
+        this.daochuruleClear();
       } else {
         // 设置当前规则
-        this.daochurule = this.currentRule;
+        this.daochurule = _.cloneDeep(this.daochurulesOptions[this.currentSelectRuleName]);
+        console.log(`读取 ${this.currentSelectRuleName}`);
       }
     },
     // 保存导出规则
@@ -306,8 +313,9 @@ export default {
       this.$set(this.daochurulesOptions, this.ruleSaveName, this.daochurule)
       // 重新写入文件
       fs.writeFileSync(config.daochurulesPath, JSON.stringify(this.daochurulesOptions, null, 2));
-      this.ruleSaveName = '';
+      this.currentSelectRuleName = this.ruleSaveName;
       console.log('保存了' + this.ruleSaveName);
+      this.ruleSaveName = '';
     },
     // 添加本页试题到试题栏
     addCurrentPageTimuToShitilan() {
@@ -366,13 +374,7 @@ export default {
       if (isdaochu == 'shitilan') {
         this.daochutimu(this.TimuDaoChuList);
         // this.TimuDaoChuList = [];   // 导出后,清空,避免混乱
-        let daochulog = [];
-        for (let index = 0; index < this.TimuDaoChuList.length; index++) {
-          const element = this.TimuDaoChuList[index];
-          daochulog.push(element.id);
-        }
-        fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
-        return;
+
       }
       // 如果不是导出试题篮,则查询数据库
       this.currentPage = val;
@@ -468,6 +470,7 @@ export default {
         // 如果导出就放到 TimuDaoChuList 用于导出   前面查出来啥,这里就导出啥,rows代表查出来的数据
         this.TimuDaoChuList = titlesCopy(this.formData, rows);
         this.daochutimu(this.TimuDaoChuList);
+        // 储存到log
         this.TimuDaoChuList = [];   // 导出后,清空,避免混乱
       }
     },
@@ -507,6 +510,14 @@ export default {
         // 存到文件
         fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, laststr);
         console.log(`导出了${timulist.length}个题目`);
+        //  存入log文件
+        let daochulog = [];
+        for (let index = 0; index < this.TimuDaoChuList.length; index++) {
+          const element = this.TimuDaoChuList[index];
+          daochulog.push(element.id);
+        }
+        fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
+        return;
         this.TimuDaoChuList = [];
       }
     },
