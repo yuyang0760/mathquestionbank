@@ -44,6 +44,9 @@ export default {
     if (!(fs.existsSync(config.onedrivePath))) {
       fs.mkdirSync(config.onedrivePath);
     }
+    if (!(fs.existsSync(config.onedrivePath + '/导出'))) {
+      fs.mkdirSync(config.onedrivePath + '/导出');
+    }
     if (!fs.existsSync(config.daochurulesPath)) {
       // 复制一份到Resources
       fs.copyFileSync('./extraResources/daochurules.json', config.daochurulesPath);

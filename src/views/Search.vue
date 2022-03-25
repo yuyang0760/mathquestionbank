@@ -371,7 +371,7 @@ export default {
           const element = this.TimuDaoChuList[index];
           daochulog.push(element.id);
         }
-        fs.appendFileSync('导出题目log.txt', '【' + miment().format() + '】' + '\t导出的题目ID:\t' + daochulog + '\r\n');
+        fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
         return;
       }
       // 如果不是导出试题篮,则查询数据库
@@ -505,8 +505,9 @@ export default {
         let laststr = qian + outstr + hou;
         laststr = laststr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
         // 存到文件
-        fs.writeFileSync('导出的latex题目字符串.tex', laststr);
+        fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, laststr);
         console.log(`导出了${timulist.length}个题目`);
+        this.TimuDaoChuList = [];
       }
     },
     //清空所有题目
