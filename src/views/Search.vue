@@ -47,11 +47,11 @@
               <div style="display:inline;">
                 <el-switch v-model="timu_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
                 </el-switch>
-                <el-input style="width:350px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
+                <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
                   <template slot="prepend">题目:</template>
                 </el-input>
                 高度:
-                <el-input-number style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
+                <el-input-number  style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
                 </el-input-number>
               </div>
             </div>
@@ -59,7 +59,7 @@
               <div style="display:inline;">
                 <el-switch v-model="daan2_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
                 </el-switch>
-                <el-input style="width:350px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
+                <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
                   <template slot="prepend">答案:</template>
                 </el-input>
               </div>
@@ -87,8 +87,8 @@
           <div style="margin-top:5px">
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
+            <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
-            <el-button size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
           </div>
 
@@ -107,7 +107,7 @@
           <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
           <el-input v-model="ruleSaveName" size="small" style="width:150px" placeholder="请输入"></el-input>
           <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
-          <el-select v-model="currentSelectRuleName" placeholder="请选择">
+          <el-select size="small" v-model="currentSelectRuleName" placeholder="请选择">
             <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="index">
             </el-option>
           </el-select>
@@ -142,7 +142,6 @@ export default {
   props: [],
   data() {
     return {
-
       biaoqian_switch: false, // 查询题目时,标签或,且
       daan2_switch: false, // 查询题目时,标签或,且
       timu_switch: false, // 查询题目时,标签或,且
@@ -476,16 +475,16 @@ export default {
     },
     // 导出题目
     daochutimu(timulist) {
-      // console.log(timulist,'timulist');
+      // 遍历
       let outstr = '';
       // 导出过程 遍历题目
       for (let index = 0; index < timulist.length; index++) {
         // 得到导出list中的每一个题目
         const timu = timulist[index];
         // 遍历导出规则
-        for (let index1 = 0; index1 < this.daochurule.length; index1++) {
-          // 获取每一条导出规则 id,分类,题目,答案,等等
-          const daochuruleElement = this.daochurule[index1];
+        _.forOwn(this.daochurule, function (daochuruleElement, key) {
+          // console.log(key,"key");
+          // console.log(daochuruleElement,"daochuruleElement");
           // 如果此条规则可以被导出
           if (daochuruleElement.isout) {
             // 就组织字符串,准备导出
@@ -494,32 +493,34 @@ export default {
               outstr += daochuruleElement.qian
                 + timu[daochuruleElement.value].join('>')
                 + daochuruleElement.hou;
-            }
-            if (daochuruleElement.value == 'timu' || daochuruleElement.value == 'daan2' || daochuruleElement.value == 'jiexi') {
+            } else if (daochuruleElement.value == 'timu' || daochuruleElement.value == 'daan2' || daochuruleElement.value == 'jiexi') {
               outstr += '\r\n\r\n' + daochuruleElement.qian + '\r\n\r\n'
                 + timu[daochuruleElement.value] + '\r\n\r\n'
                 + daochuruleElement.hou + '\r\n\r\n';
+            } else {
+              outstr += daochuruleElement.qian + ' '
+                + timu[daochuruleElement.value] + ' '
+                + daochuruleElement.hou + ' ';
             }
           }
-        }
+        });
 
         // let qian = '\r\n' + '\\begin{timu1}{}' + '\r\n';
         // let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
-        let laststr = outstr;
-        laststr = laststr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
-        // 存到文件
-        fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, laststr);
-        console.log(`导出了${timulist.length}个题目`);
-        //  存入log文件
-        let daochulog = [];
-        for (let index = 0; index < this.TimuDaoChuList.length; index++) {
-          const element = this.TimuDaoChuList[index];
-          daochulog.push(element.id);
-        }
-        fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
-        return;
-        this.TimuDaoChuList = [];
+        outstr = outstr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
+
       }
+      // 存到文件
+      fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, outstr);
+      console.log(`导出了${timulist.length}个题目`);
+      //  存入log文件
+      let daochulog = [];
+      for (let index = 0; index < this.TimuDaoChuList.length; index++) {
+        const element = this.TimuDaoChuList[index];
+        daochulog.push(element.id);
+      }
+      fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
+      this.TimuDaoChuList = [];
     },
     //清空所有题目
     clearAllTimu() {
@@ -547,13 +548,6 @@ export default {
 
   created() {
     console.log("About_created");
-    // let len
-    // remote.getCurrentWindow().on('resize', (a) => {
-    //   // 获取window窗口的高度，减去需要计算的内容以外的高度，得出内容实际高度
-    //   len = Math.floor((window.innerHeight) - 40)
-    //   this.window_innerheight = len
-    //   // console.log(len);
-    // })
   },
   mounted() {
     console.log("About_mounted")

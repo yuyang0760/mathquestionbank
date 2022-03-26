@@ -37,7 +37,7 @@ module.exports = {
                     "installerHeaderIcon": "./dist_electron/icons/icon.ico", // 安装时头部图标
                     "createDesktopShortcut": true, // 创建桌面图标
                     "createStartMenuShortcut": false, // 创建开始菜单图标
-                    "shortcutName": "Latex题库0.0.16" // 图标名称
+                    "shortcutName": "Latex题库0.0.17" // 图标名称
                 }
 
             }
