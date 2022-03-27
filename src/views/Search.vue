@@ -90,7 +90,6 @@
             <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
-            <el-button type="primary" size="small" @click="OpendaochuFolder()">打开导出文件夹</el-button>
 
           </div>
 
@@ -273,11 +272,7 @@ export default {
   watch: {
   },
   methods: {
-    // 打开导出文件夹
-    OpendaochuFolder() {
-        shell.showItemInFolder(config.onedrivePath.replace(/\//g, '\\')+'\\导出\\导出题目log.txt');
-      // shell.showItemInFolder(config.onedrivePath)
-    },
+
     // 查询中 被标记的标签
     chaxun_biaoqian_checkedlist(checkedlist) {
       this.chaxunData.biaoqian = checkedlist;
@@ -518,7 +513,8 @@ export default {
 
       }
       // 存到文件
-      fs.writeFileSync(config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`, outstr);
+      let daochufilePath=config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`;
+      fs.writeFileSync(daochufilePath, outstr);
       console.log(`导出了${timulist.length}个题目`);
       //  存入log文件
       let daochulog = [];
@@ -528,6 +524,8 @@ export default {
       }
       fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
       this.TimuDaoChuList = [];
+      // 打开导出文件夹,并选中文件
+      shell.showItemInFolder(daochufilePath.replace(/\//g, '\\'));
     },
     //清空所有题目
     clearAllTimu() {
