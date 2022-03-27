@@ -51,7 +51,7 @@
                   <template slot="prepend">题目:</template>
                 </el-input>
                 高度:
-                <el-input-number  style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
+                <el-input-number style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
                 </el-input-number>
               </div>
             </div>
@@ -90,6 +90,8 @@
             <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
+            <el-button type="primary" size="small" @click="OpendaochuFolder()">打开导出文件夹</el-button>
+
           </div>
 
           <draggable v-model="daochurule" @start="drag=true" @end="drag=false" v-bind="{animation: 200}">
@@ -130,7 +132,7 @@ import fs from 'fs';
 import config from '/extraResources/config.json'
 import miment from 'miment'
 import { time } from 'console'
-const { remote } = require('electron')
+const { remote, shell } = require('electron')
 const { Op } = require("sequelize");
 
 export default {
@@ -271,6 +273,11 @@ export default {
   watch: {
   },
   methods: {
+    // 打开导出文件夹
+    OpendaochuFolder() {
+        shell.showItemInFolder(config.onedrivePath.replace(/\//g, '\\')+'\\导出\\导出题目log.txt');
+      // shell.showItemInFolder(config.onedrivePath)
+    },
     // 查询中 被标记的标签
     chaxun_biaoqian_checkedlist(checkedlist) {
       this.chaxunData.biaoqian = checkedlist;
