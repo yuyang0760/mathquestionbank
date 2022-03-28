@@ -524,8 +524,11 @@ export default {
       }
       fs.appendFileSync(config.onedrivePath + '/导出/导出题目log.txt', '【' + miment().format() + '】' + `\t${this.TimuDaoChuList.length}个题目,导出的题目ID:\t` + daochulog + '\r\n');
       this.TimuDaoChuList = [];
+      // 复制到剪贴板
+      clipboard.writeText(outstr);
       // 打开导出文件夹,并选中文件
       shell.showItemInFolder(daochufilePath.replace(/\//g, '\\'));
+      
     },
     //清空所有题目
     clearAllTimu() {
