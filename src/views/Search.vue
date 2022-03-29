@@ -90,6 +90,8 @@
             <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
+            <br>
+            <div class="tip">换行用:$\\$</div>
 
           </div>
 
@@ -496,8 +498,8 @@ export default {
                 + timu[daochuruleElement.value].join('>')
                 + daochuruleElement.hou;
             } else if (daochuruleElement.value == 'timu' || daochuruleElement.value == 'daan2' || daochuruleElement.value == 'jiexi') {
-              outstr += '\r\n\r\n' + daochuruleElement.qian + '\r\n\r\n'
-                + timu[daochuruleElement.value] + '\r\n\r\n'
+              outstr += '\r\n\r\n' + daochuruleElement.qian 
+                + timu[daochuruleElement.value] 
                 + daochuruleElement.hou + '\r\n\r\n';
             } else {
               outstr += daochuruleElement.qian + ' '
@@ -598,5 +600,12 @@ export default {
 
 </script>
 <style scoped>
+.tip {
+    padding: 4px 8px;
+    background-color: #ecf8ff;
+    border-radius: 4px;
+    border-left: 5px solid #50bfff;
+    margin: 5px 0;
+}
 </style>
 

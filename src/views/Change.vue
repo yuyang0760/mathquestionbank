@@ -49,10 +49,10 @@
           <div v-show="isShowBianji">
             <el-input v-model="formData.laiyuan" placeholder="请输入来源:"></el-input>
             <el-input v-model="formData.beizhu" type="textarea" placeholder="请输入备注:" :autosize="{minRows: 1}"></el-input>
-            <el-input v-model="formdataComputeTimu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
-            <el-input v-model="formdataComputeDaan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>
+            <el-input v-model="formData.timu" type="textarea" placeholder="请输入题目:" :autosize="{minRows: 4 }"></el-input>
+            <el-input v-model="formData.daan2" type="textarea" placeholder="请输入答案2:" :autosize="{minRows: 4 }"></el-input>
             <el-input v-model="formData.daan1" type="text" placeholder="请输入答案1:" :autosize="{minRows: 1 }"></el-input>
-            <el-input v-model="formdataComputeJiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
+            <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
           </div>
         </div>
         <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
@@ -126,36 +126,6 @@ export default {
     }
   },
   computed: {
-    formdataComputeTimu:{
-      get() {
-        // 获得的时候需要加换行
-        return this.formData.timu.replace(/\$\\\\\$/g,"\$\\\\\$\n");
-      },
-      set(value) {   
-        // 设置的时候需要去掉换行
-        this.formData.timu = value.replace(/\n/g,"");
-      }
-    },
-    formdataComputeDaan2:{
-      get() {
-        // 获得的时候需要加换行
-        return this.formData.daan2.replace(/\$\\\\\$/g,"\$\\\\\$\n");
-      },
-      set(value) {   
-        // 设置的时候需要去掉换行
-        this.formData.daan2 = value.replace(/\n/g,"");
-      }
-    },
-       formdataComputeJiexi:{
-      get() {
-        // 获得的时候需要加换行
-        return this.formData.jiexi.replace(/\$\\\\\$/g,"\$\\\\\$\n");
-      },
-      set(value) {   
-        // 设置的时候需要去掉换行
-        this.formData.jiexi = value.replace(/\n/g,"");
-      }
-    },
     // 当前
     timupicfilePath_computed() {
       // `this` 指向 vm 实例
