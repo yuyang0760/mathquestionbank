@@ -1,1 +1,84 @@
-{}
+{
+  "普通导出": [
+    {
+      "id": 1,
+      "name": "整体",
+      "value": "整体",
+      "isout": true,
+      "qian": "\\item $\\\\$",
+      "hou": "\\newpage",
+      "placeholderqian": "请输入整体前缀",
+      "placeholderhou": "请输入整体后缀"
+    },
+    {
+      "id": 2,
+      "name": "ID",
+      "value": "id",
+      "isout": false,
+      "qian": "",
+      "hou": "",
+      "placeholderqian": "请输入ID前缀",
+      "placeholderhou": "请输入ID后缀"
+    },
+    {
+      "id": 3,
+      "name": "分类",
+      "value": "fenlei",
+      "isout": false,
+      "qian": "",
+      "hou": "",
+      "placeholderqian": "请输入分类前缀",
+      "placeholderhou": "请输入分类后缀"
+    },
+    {
+      "id": 4,
+      "name": "标签",
+      "value": "biaoqian",
+      "isout": false,
+      "qian": "",
+      "hou": "",
+      "placeholderqian": "请输入标签前缀",
+      "placeholderhou": "请输入标签后缀"
+    },
+    {
+      "id": 5,
+      "name": "题目",
+      "value": "timu",
+      "isout": true,
+      "qian": "{\\color{timucolor}",
+      "hou": "}$\\\\$",
+      "placeholderqian": "请输入题目前缀",
+      "placeholderhou": "请输入题目后缀"
+    },
+    {
+      "id": 7,
+      "name": "解析",
+      "value": "jiexi",
+      "isout": true,
+      "qian": "{\\color{jiexititlecolor}【解析】:} {\\color{jiexicolor}",
+      "hou": "}$\\\\$",
+      "placeholderqian": "请输入解析前缀",
+      "placeholderhou": "请输入解析后缀"
+    },
+    {
+      "id": 6,
+      "name": "答案",
+      "value": "daan2",
+      "isout": true,
+      "qian": "{\\color{daan2titlecolor}【答案】:} {\\color{daan2color}",
+      "hou": "}$\\\\$",
+      "placeholderqian": "请输入答案前缀",
+      "placeholderhou": "请输入答案后缀"
+    },
+    {
+      "id": 8,
+      "name": "备注",
+      "value": "beizhu",
+      "isout": false,
+      "qian": "",
+      "hou": "",
+      "placeholderqian": "请输入备注前缀",
+      "placeholderhou": "请输入备注后缀"
+    }
+  ]
+}
