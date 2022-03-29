@@ -8,15 +8,13 @@
         <router-link class="nodrag" to="/change">整理题目</router-link>
         <router-link class="nodrag" to="/search">查询</router-link>
 
-        版本:{{version}}
       </div>
-
-      <TitleButton type="min" />
-      <TitleButton type="max" />
-      <TitleButton type="close" />
-
+      <div class="titleName">版本:{{version}} </div>
+      <TitleButton class="nodrag TitleButtons" />
     </div>
+    <!-- <el-collapse-transition> -->
     <router-view></router-view>
+    <!-- </el-collapse-transition> -->
 
   </div>
 </template>
@@ -77,17 +75,29 @@ body {
   height: 100%;
 }
 #mytitle {
+  display: flex;
   width: 100%;
   height: 30px;
+  align-items: center; /* 上下居中*/
+  justify-content: center; /* 左右居中*/
   background-color: rgb(255, 255, 255);
   -webkit-app-region: drag;
-  margin-bottom: 5px;
+  /* position:fixed;  */
+  /* z-index:1000; */
+  /* top:0;  */
+  /* left:0;  */
 }
-
+#nav {
+  display: flex;
+}
 .drag {
   -webkit-app-region: drag;
 }
 .nodrag {
   -webkit-app-region: no-drag;
+}
+ 
+.TitleButtons {
+  margin-left: auto;
 }
 </style>

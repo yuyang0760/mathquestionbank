@@ -1,34 +1,24 @@
 <template>
-  <div class="titlebtn" :style="style" @click="click" />
+  <div style="display: flex;  width: 138px; height:30px">
+    <div class="titlebtn el-icon-minus" @click="click('min')"></div>
+    <div class="titlebtn el-icon-plus" @click="click('max')"></div>
+    <div class="titlebtn el-icon-close" @click="click('close')"></div>
+  </div>
 </template>
 
 <script>
 import { ipcRenderer } from 'electron'
-const style = {
-  min: {
-    backgroundColor: 'green',
-    right: '65px'
-  },
-  max: {
-    backgroundColor: 'yellow',
-    right: '40px'
-  },
-  close: {
-    backgroundColor: 'red',
-    right: '15px'
-  }
-};
+
 export default {
   name: 'TitleButton',
-  props: ['type'],
+  props: [],
   computed: {
-    style: function () {
-      return style[this.type];
-    }
   },
   methods: {
-    click: function () {
-      ipcRenderer.send(this.type);
+    click(typeStr) {
+      // min max close
+      // console.log(`你点击了${typeStr}`)
+      ipcRenderer.send(typeStr);
     }
   }
 }
@@ -36,14 +26,15 @@ export default {
     
 <style scoped>
 .titlebtn {
-  position: absolute;
-  top: 10px;
-  width: 15px;
-  height: 15px;
-  -webkit-app-region: no-drag;
-  border-radius: 50%;
+  display: flex;
+  width: 46px;
+  height: 100%;
+  align-items: center; /* 上下居中*/
+  justify-content: center; /* 左右居中*/
+  background-color: rgb(255, 255, 255);
 }
 .titlebtn:hover {
-  border: 1px solid rgba(248, 242, 242, 0.6);
+  background-color: rgb(208, 199, 216);
+  cursor: default;
 }
 </style>

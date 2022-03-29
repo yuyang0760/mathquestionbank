@@ -35,8 +35,12 @@
               清空标签
             </el-button>
             {{chaxunData.biaoqian}}
+            <!-- <el-checkbox-group v-model="chaxunData.biaoqian" size="mini" >
+              <el-checkbox-button   v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]" :label="tag.value" :key="index">{{title}}
+              </el-checkbox-button>
+            </el-checkbox-group> -->
             <div>
-              <el-button style="margin:1px 0px 1px 2px;" type="primary" round size="small" @click="快速添加标签(tag.value)" :key="index"
+              <el-button style="margin:1px 0px 0px 1px;" type="primary" round size="mini" @click="快速添加标签(tag.value)" :key="index"
                 v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
                 {{tag['value']}}
               </el-button>
@@ -90,7 +94,6 @@
             <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
-            <br>
             <div class="tip">换行用:$\\$</div>
 
           </div>
@@ -102,13 +105,13 @@
                 </el-switch>
                 <span style="width:60px;display:inline-block;"> {{index+1}}. {{element.name}}:</span>
 
-                <el-input v-model="element.qian" size="small" style="width:250px" :placeholder="element.placeholderqian"></el-input>
-                <el-input v-model="element.hou" size="small" style="width:250px" :placeholder="element.placeholderhou"></el-input>
+                <el-input v-model="element.qian" size="small" style="width:290px" :placeholder="element.placeholderqian"></el-input>
+                <el-input v-model="element.hou" size="small" style="width:290px" :placeholder="element.placeholderhou"></el-input>
               </div>
             </transition-group>
           </draggable>
           <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
-          <el-input v-model="ruleSaveName" size="small" style="width:150px" placeholder="请输入"></el-input>
+          <el-input v-model="ruleSaveName" size="small" style="width:200px" placeholder="请输入"></el-input>
           <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
           <el-select size="small" v-model="currentSelectRuleName" placeholder="请选择">
             <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="index">
@@ -165,13 +168,14 @@ export default {
       chaxun_Bytimu_word: '',  // 以题目关键词查询
       ruleSaveName: '',
       daochurule: [           // 导出规则
-        { id: 1, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
-        { id: 2, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
-        { id: 3, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
-        { id: 4, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
-        { id: 5, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
+        { id: 1, name: '整体', value: '整体', isout: true, qian: '', hou: '', placeholderqian: '请输入整体前缀', placeholderhou: '请输入整体后缀' },
+        { id: 2, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
+        { id: 3, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
+        { id: 4, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
+        { id: 5, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
         { id: 6, name: '解析', value: 'jiexi', isout: true, qian: '', hou: '', placeholderqian: '请输入解析前缀', placeholderhou: '请输入解析后缀' },
-        { id: 7, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
+        { id: 7, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
+        { id: 8, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
       ],
       chaxunData: {         // 查询数据
         fenlei: [],
@@ -282,13 +286,14 @@ export default {
     // 清空导出规则
     daochuruleClear() {
       this.daochurule = [           // 导出规则
-        { id: 1, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
-        { id: 2, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
-        { id: 3, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
-        { id: 4, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
-        { id: 5, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
+        { id: 1, name: '整体', value: '整体', isout: true, qian: '', hou: '', placeholderqian: '请输入整体前缀', placeholderhou: '请输入整体后缀' },
+        { id: 2, name: 'ID', value: 'id', isout: true, qian: '', hou: '', placeholderqian: '请输入ID前缀', placeholderhou: '请输入ID后缀' },
+        { id: 3, name: '分类', value: 'fenlei', isout: true, qian: '', hou: '', placeholderqian: '请输入分类前缀', placeholderhou: '请输入分类后缀' },
+        { id: 4, name: '标签', value: 'biaoqian', isout: true, qian: '', hou: '', placeholderqian: '请输入标签前缀', placeholderhou: '请输入标签后缀' },
+        { id: 5, name: '题目', value: 'timu', isout: true, qian: '', hou: '', placeholderqian: '请输入题目前缀', placeholderhou: '请输入题目后缀' },
         { id: 6, name: '解析', value: 'jiexi', isout: true, qian: '', hou: '', placeholderqian: '请输入解析前缀', placeholderhou: '请输入解析后缀' },
-        { id: 7, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
+        { id: 7, name: '答案', value: 'daan2', isout: true, qian: '', hou: '', placeholderqian: '请输入答案前缀', placeholderhou: '请输入答案后缀' },
+        { id: 8, name: '备注', value: 'beizhu', isout: false, qian: '', hou: '', placeholderqian: '请输入备注前缀', placeholderhou: '请输入备注后缀' },
       ];
       this.currentSelectRuleName = "";
     },
@@ -307,11 +312,11 @@ export default {
     // 保存导出规则
     daochuruleSave() {
       if (this.ruleSaveName.trim() == '') { console.log('不能为空!'); return; };
-      // 名字不能重复
-      if (_.has(this.daochurulesOptions, this.ruleSaveName)) {
-        console.log('存在重复的名字');
-        return;
-      };
+      // 名字不能重复,注释掉,名字重复就覆盖
+      // if (_.has(this.daochurulesOptions, this.ruleSaveName)) {
+      //   console.log('存在重复的名字');
+      //   return;
+      // };
       // 添加名称,给对象动态添加属性,要这样添加才行
       this.$set(this.daochurulesOptions, this.ruleSaveName, this.daochurule)
       // 重新写入文件
@@ -485,37 +490,50 @@ export default {
       for (let index = 0; index < timulist.length; index++) {
         // 得到导出list中的每一个题目
         const timu = timulist[index];
+        let everyTimuOutStr = '';   // 每个题
+        let lin整体前 = '';
+        let lin整体后 = '';
         // 遍历导出规则
         _.forOwn(this.daochurule, function (daochuruleElement, key) {
           // console.log(key,"key");
           // console.log(daochuruleElement,"daochuruleElement");
           // 如果此条规则可以被导出
           if (daochuruleElement.isout) {
-            // 就组织字符串,准备导出
-            // 如果是[分类]规则,需要特殊处理一下
-            if (daochuruleElement.value == 'fenlei') {
-              outstr += daochuruleElement.qian
-                + timu[daochuruleElement.value].join('>')
-                + daochuruleElement.hou;
-            } else if (daochuruleElement.value == 'timu' || daochuruleElement.value == 'daan2' || daochuruleElement.value == 'jiexi') {
-              outstr += '\r\n\r\n' + daochuruleElement.qian 
-                + timu[daochuruleElement.value] 
-                + daochuruleElement.hou + '\r\n\r\n';
+            // 如果是题目整体如何处理
+            if (daochuruleElement.value == '整体') {
+              // 临时储存题目
+              lin整体前 = daochuruleElement.qian;
+              lin整体后 = daochuruleElement.hou;
             } else {
-              outstr += daochuruleElement.qian + ' '
-                + timu[daochuruleElement.value] + ' '
-                + daochuruleElement.hou + ' ';
+              // 这里如果不为空,就添加;如果为空,即使打开开关页不添加了
+              if (timu[daochuruleElement.value] != '') {
+                // 就组织字符串,准备导出
+                // 如果是[分类]规则,需要特殊处理一下
+                if (daochuruleElement.value == 'fenlei') {
+                  everyTimuOutStr += daochuruleElement.qian
+                    + timu[daochuruleElement.value].join('>')
+                    + daochuruleElement.hou;
+                } else if (daochuruleElement.value == 'timu' || daochuruleElement.value == 'daan2' || daochuruleElement.value == 'jiexi') {
+                  everyTimuOutStr += '\r\n\r\n' + daochuruleElement.qian
+                    + timu[daochuruleElement.value]
+                    + daochuruleElement.hou + '\r\n\r\n';
+                } else {
+                  everyTimuOutStr += daochuruleElement.qian + ' '
+                    + timu[daochuruleElement.value] + ' '
+                    + daochuruleElement.hou + ' ';
+                }
+              }
             }
           }
         });
-
-        // let qian = '\r\n' + '\\begin{timu1}{}' + '\r\n';
-        // let hou = '\\end{timu1}' + '\r\n\r\n' + '\\newpage' + '\r\n';
-        outstr = outstr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
-
+        everyTimuOutStr = lin整体前 + everyTimuOutStr + lin整体后;
+        outstr += everyTimuOutStr + '\r\n\r\n';
+        lin整体前 = '';
+        lin整体后 = '';
       }
+      outstr = outstr.replace(/\$\\\\\$/g, '\r\n\r\n').replace(/ {2,}/g, ' ').replace(/^ {1,}/gm, '').replace(/(\r|\n){3,}/g, '\r\n\r\n');
       // 存到文件
-      let daochufilePath=config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`;
+      let daochufilePath = config.onedrivePath + `/导出/${miment().format('YYYY-MM-DD_hh-mm-ss')}_${timulist.length}个题目.tex`;
       fs.writeFileSync(daochufilePath, outstr);
       console.log(`导出了${timulist.length}个题目`);
       //  存入log文件
@@ -530,7 +548,7 @@ export default {
       clipboard.writeText(outstr);
       // 打开导出文件夹,并选中文件
       shell.showItemInFolder(daochufilePath.replace(/\//g, '\\'));
-      
+
     },
     //清空所有题目
     clearAllTimu() {
@@ -601,11 +619,14 @@ export default {
 </script>
 <style scoped>
 .tip {
-    padding: 4px 8px;
-    background-color: #ecf8ff;
-    border-radius: 4px;
-    border-left: 5px solid #50bfff;
-    margin: 5px 0;
+  padding: 4px 8px;
+  background-color: #ecf8ff;
+  border-radius: 4px;
+  border-left: 5px solid #50bfff;
+  margin: 5px 0;
+}
+.el-cascader-panel {
+  height: 150px;
 }
 </style>
 
