@@ -12,47 +12,104 @@ module.exports = function (sequelize, DataTypes) {
     timu: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: "",
+      // set是往数据库添加内容
+      set(value) {
+        if (value === null || value === undefined) {
+          this.setDataValue('timu', '');
+        } else {
+          // 去掉 /n
+          this.setDataValue('timu', value.replace(/\n/g, ''));
+        }
+      },
+      // get是从数据库获取内容
+      get() {
+        const rawValue = this.getDataValue('timu');
+        // 从数据库获取内容,加上'/n'
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+          return ''
+        } else {
+          return rawValue.replace(/\$\\\\\$/g, '$\\\\$ \n').replace(/ {2,}/g, ' ')
+        }
+      }
     },
     leixing: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:"选择题"
+      defaultValue: "选择题"
     },
     daan1: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     daan2: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: "",
+      // set是往数据库添加内容
+      set(value) {
+        if (value === null || value === undefined) {
+          this.setDataValue('daan2', '');
+        } else {
+          // 去掉 /n
+          this.setDataValue('daan2', value.replace(/\n/g, ''));
+        }
+      },
+      // get是从数据库获取内容
+      get() {
+        const rawValue = this.getDataValue('daan2');
+        // 从数据库获取内容,加上'/n'
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+          return ''
+        } else {
+          return rawValue.replace(/\$\\\\\$/g, '$\\\\$ \n').replace(/ {2,}/g, ' ')
+        }
+      }
     },
     jiexi: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: "",
+      // set是往数据库添加内容
+      set(value) {
+        if (value === null || value === undefined) {
+          this.setDataValue('jiexi', '');
+        } else {
+          // 去掉 /n
+          this.setDataValue('jiexi', value.replace(/\n/g, ''));
+        }
+      },
+      // get是从数据库获取内容
+      get() {
+        const rawValue = this.getDataValue('jiexi');
+        // 从数据库获取内容,加上'/n'
+        if (rawValue === null || rawValue === undefined || rawValue === '') {
+          return ''
+        } else {
+          return rawValue.replace(/\$\\\\\$/g, '$\\\\$ \n').replace(/ {2,}/g, ' ')
+        }
+      }
     },
     nandu: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue:2
+      defaultValue: 2
     },
     laiyuan: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     beizhu: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     xuanxiang: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:"",
+      defaultValue: "",
       set(value) {
         if (value === null || value === undefined) {
           this.setDataValue('xuanxiang', '');
@@ -72,7 +129,7 @@ module.exports = function (sequelize, DataTypes) {
     biaoqian: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:"",
+      defaultValue: "",
       set(value) {
         if (value === null || value === undefined) {
           this.setDataValue('biaoqian', '');
@@ -92,37 +149,37 @@ module.exports = function (sequelize, DataTypes) {
     timupicfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     daan2picfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     jiexipicfilename: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     fenlei1: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     fenlei2: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     fenlei3: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     fenlei4: {
       type: DataTypes.TEXT,
       allowNull: true,
-      defaultValue:""
+      defaultValue: ""
     },
     fenlei: {
       type: DataTypes.VIRTUAL,      // 自己创造出来的属性,类型用这个
