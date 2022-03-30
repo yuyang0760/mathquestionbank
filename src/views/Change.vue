@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="12">
+      <el-col :span="13">
 
         <yytitledescription_change v-bind="formData" :isShowMini="true">
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="isShowBianji=!isShowBianji"></el-button>
@@ -10,7 +10,7 @@
 
         </yytitledescription_change>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="11">
 
         <div>
           <el-button @click="chaXunTimu(chaXunID)">查询题目ID</el-button>
@@ -75,6 +75,8 @@ import { clipboard } from 'electron';
 import fs from 'fs';
 import config from '/extraResources/config.json'
 import miment from 'miment'
+const { Op } = require("sequelize");
+
 export default {
   name: "Change",
   components: {
@@ -183,15 +185,16 @@ export default {
       // 根据ID查询题目
       var titles = await this.titles.findAll({
         where: {
-          id: chaXunID
-        }
+          id: { [Op.gte]: chaXunID }
+        },
+        limit: 1
       });
       // console.log(titles, "titles")
       if (titles.length > 0) {
         this.formData = titlesCopy(this.formData, titles)[0];
         // this.formData=titles;
         console.log(this.formData, "this.formData")
-        this.chaXunID = chaXunID;
+        this.chaXunID = this.formData.id;
         this.input_添加分类 = this.formData.fenlei.join('▲');
         if (this.select_当前选中的分类.length == 0) {
           // 更新当前选中的分类可以更新显示的标签
