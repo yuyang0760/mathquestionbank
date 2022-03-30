@@ -298,6 +298,8 @@ export default {
         // console.log('写入成功！')
         this.biaoqianOptions = biaoqianJsonFileObj;
       }
+      // 清除分类
+      this.input_添加分类="";
     },
     // 在json文件中添加标签
     bt_添加标签() {
