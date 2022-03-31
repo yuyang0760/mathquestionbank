@@ -22,6 +22,9 @@
         <div style="display:inline;">
           <el-input style="width:300px;margin:2px 2px 2px 20px;" v-model="input_添加分类" placeholder="请输入分类"></el-input>
           <el-button @click="bt_添加分类()">添加分类</el-button>
+          <!-- <el-tooltip    content="把题目中的图片地址存到数据库图片字段中" hide-after='2500' placement="top-start"> -->
+          <el-button @click="bt_添加题目图片()">添加题目中的图片</el-button>
+          <!-- </el-tooltip> -->
         </div>
         <div>
 
@@ -209,6 +212,18 @@ export default {
       this.select_当前选中的分类 = fenlei;
       // 读取当前分类下的标签
     },
+    // 分析题目中的图片,并添加到数据库
+    bt_添加题目图片() {
+      // 如果题目中存在图片,就提取出来
+      if (this.formData.timu.includes('includegraphics')) {
+        var pattern = /(?<=includegraphics{).*?(?=})/;
+        const lintimupic = pattern.exec(this.formData.timu);
+        // 添加到数据库
+        this.formData.timupicfilename = lintimupic[0];
+        console.log(this.formData.timupicfilename)
+        this.saveTitle();
+      };
+    },
     bt_添加分类() {
       // 读取文件
       if (this.input_添加分类.trim() == '') {
@@ -299,7 +314,7 @@ export default {
         this.biaoqianOptions = biaoqianJsonFileObj;
       }
       // 清除分类
-      this.input_添加分类="";
+      this.input_添加分类 = "";
     },
     // 在json文件中添加标签
     bt_添加标签() {
