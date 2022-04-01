@@ -1,11 +1,13 @@
 var DataTypes = require("sequelize").DataTypes;
 var _titles = require("./titles");
-
+var _fenleitable = require("./fenleitable");
 function initModels(sequelize) {
   var titles = _titles(sequelize, DataTypes);
+  var fenleitable = _fenleitable(sequelize, DataTypes);
 
   return {
     titles, //表就是题目,改个名字
+    fenleitable
   };
 }
 // 创建titles表格

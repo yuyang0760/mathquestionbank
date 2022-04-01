@@ -802,7 +802,9 @@ export default {
     });
     console.log("数据库已连接")
     this.connect = sequelize;
-    this.titles = initModels(sequelize).titles;
+      let u= initModels(sequelize);
+    this.titles = u.titles;
+    this.fenleitable=u.fenleitable;
   },
   destroyed() {
     // 断开数据库

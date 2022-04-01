@@ -3,6 +3,7 @@
 
     <el-container style="border: 1px solid #eee;">
       <el-aside width="53%">
+          <yy-cascader  :sequelize='sequelize' v-if="fenleitable" :fenleitable='fenleitable'></yy-cascader>
         <div :style="{height:window_innerheight+'px'}">
           <happy-scroll size="12" resize>
             <div>
@@ -118,6 +119,7 @@
             </el-option>
           </el-select>
           <el-button type="primary" size="small" @click="daochuruleClear()">清空规则</el-button>
+          <el-button type="primary" size="small" @click="linshi()">临时</el-button>
         </div>
       </el-container>
     </el-container>
@@ -130,9 +132,10 @@ import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import draggable from 'vuedraggable'
 import yytitledescription_search from '../components/yytitledescription_search.vue'
+import yyCascader from '../components/yyCascader.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
-import fs from 'fs';
+import fs, { rmdirSync } from 'fs';
 import config from '/extraResources/config.json'
 import miment from 'miment'
 import { time } from 'console'
@@ -144,6 +147,7 @@ export default {
   components: {
     yytitledescription_search,
     draggable,
+    yyCascader
   },
   props: [],
   data() {
@@ -163,7 +167,8 @@ export default {
       TimuDaoChuList: [],   // 储存需要导出的题目
       TimuCurrentPageList: [],   // 储存了当前页显示的所有题目
       titles: null,  // 题目类 ,数据库查询用
-      connect: null,  // 数据库连接,销毁用
+      fenleitable:null, // 分类类,数据库查询用
+      sequelize: null,  // 数据库连接,销毁用
       chaxun_ByID_word: 1,    // 以ID查询
       chaxun_Bytimu_word: '',  // 以题目关键词查询
       ruleSaveName: '',
@@ -278,7 +283,13 @@ export default {
   watch: {
   },
   methods: {
+ 
+    async linshi() {
+      // console.log("你点击了临时按钮");
+      // const rows = await this.fenleitable.findAll();
+      // console.log(rows)
 
+    },
     // 查询中 被标记的标签
     chaxun_biaoqian_checkedlist(checkedlist) {
       this.chaxunData.biaoqian = checkedlist;
@@ -577,7 +588,7 @@ export default {
   created() {
     console.log("About_created");
   },
-  mounted() {
+   mounted() {
     console.log("About_mounted")
 
     // 开始就读取分类
@@ -588,7 +599,7 @@ export default {
     // 连接数据库
     const Sequelize = require("sequelize");
     const initModels = require("../tools/init-models").initModels;
-    // const connect = new Sequelize({
+    // const sequelize = new Sequelize({
     //   host: 'localhost',
     //   username: 'root',
     //   password: '123456',
@@ -605,13 +616,15 @@ export default {
       // timezone: '+08:00' //  sqlite不支持!,慢几小时就加几小时，快则减
     });
     console.log("数据库已连接")
-    this.connect = sequelize;
-    this.titles = initModels(sequelize).titles;
+    this.sequelize = sequelize;
+    let u = initModels(sequelize);
+    this.titles = u.titles;
+    this.fenleitable = u.fenleitable;
   },
   destroyed() {
     // 断开数据库
     console.log("About_destroyed")
-    // this.connect.close();
+    // this.sequelize.close();
     // console.log("数据库已关闭")
   },
 }
