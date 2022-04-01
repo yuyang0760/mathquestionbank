@@ -1,19 +1,23 @@
 <template>
-  <div style=" display: flex;">
-    yyCascader
+<div>
     <el-button @click="ceshi()"></el-button>
+    <br>
+    <br>
+  <div style=" display: flex;">
     <div style="yy-cascader-menu__list">
-      <div v-for="(item,index) in fenlei1s" :key="index" :style="item.style" @click="clickfenlei1(item.item,index)">{{item.item}}{{item.style}}</div>
+      <div v-for="(item,index) in fenlei1s" :key="index" :style="item.style" @click="clickfenlei1(item.item,index)">
+        {{item.item}}</div>
     </div>
     <div style="yy-cascader-menu__list">
-      <div v-for="(item,index) in fenlei2s" :key="index" :style="item.style" @click="clickfenlei2(item.item)">{{item.item}}</div>
+      <div v-for="(item,index) in fenlei2s" :key="index" :style="item.style" @click="clickfenlei2(item.item,index)">{{item.item}}</div>
     </div>
     <div style="yy-cascader-menu__list">
-      <div v-for="(item,index) in fenlei3s" :key="index" :style="item.style" @click="clickfenlei3(item.item)">{{item.item}}</div>
+      <div v-for="(item,index) in fenlei3s" :key="index" :style="item.style" @click="clickfenlei3(item.item,index)">{{item.item}}</div>
     </div>
     <div style="yy-cascader-menu__list">
-      <div v-for="(item,index) in fenlei4s" :key="index" :style="item.style" @click="clickfenlei4(item.item)">{{item.item}}</div>
+      <div v-for="(item,index) in fenlei4s" :key="index" :style="item.style" @click="clickfenlei4(item.item,index)">{{item.item}}</div>
     </div>
+  </div>
   </div>
 </template>
 
@@ -52,11 +56,17 @@ export default {
 
   },
   methods: {
-    clickfenlei4(clickfenlei4) {
+    clickfenlei4(clickfenlei4,xuhao) {
       console.log(`你点击了${clickfenlei4}`)
       this.currentClickFenlei4 = clickfenlei4;
+
+      // 改变样式
+      for (let index = 0; index < this.fenlei4s.length; index++) {
+        this.fenlei4s[index]['style'] = this.style1;
+      }
+      this.fenlei4s[xuhao]['style'] = this.style2;
     },
-    async clickfenlei3(clickfenlei3) {
+    async clickfenlei3(clickfenlei3,xuhao) {
       console.log(`你点击了${clickfenlei3}`)
       // 先清空分类
       this.fenlei4s = []
@@ -80,9 +90,14 @@ export default {
       }
       this.fenlei4s = linfenlei;
       this.currentClickFenlei3 = clickfenlei3;
+      // 改变样式
+      for (let index = 0; index < this.fenlei3s.length; index++) {
+        this.fenlei3s[index]['style'] = this.style1;
+      }
+      this.fenlei3s[xuhao]['style'] = this.style2;
 
     },
-    async clickfenlei2(clickfenlei2) {
+    async clickfenlei2(clickfenlei2,xuhao) {
       console.log(`你点击了${clickfenlei2}`)
       // 先清空分类
       this.fenlei3s = []
@@ -107,9 +122,13 @@ export default {
       }
       this.fenlei3s = linfenlei;
       this.currentClickFenlei2 = clickfenlei2;
-
+      // 改变样式
+      for (let index = 0; index < this.fenlei2s.length; index++) {
+        this.fenlei2s[index]['style'] = this.style1;
+      }
+      this.fenlei2s[xuhao]['style'] = this.style2;
     },
-    async clickfenlei1(clickfenlei1,xuhao) {
+    async clickfenlei1(clickfenlei1, xuhao) {
       console.log(`你点击了${clickfenlei1}`)
       // 先清空分类
       this.fenlei2s = []
@@ -137,7 +156,10 @@ export default {
       this.fenlei2s = linfenlei;
       this.currentClickFenlei1 = clickfenlei1;
       // 改变样式
-      this.fenlei1s[xuhao]['style']=this.style2;
+      for (let index = 0; index < this.fenlei1s.length; index++) {
+        this.fenlei1s[index]['style'] = this.style1;
+      }
+      this.fenlei1s[xuhao]['style'] = this.style2;
 
     },
     ceshi() {
