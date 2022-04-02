@@ -1,51 +1,49 @@
 <template>
-<div>
-  <div style="display:flex;" class="yycascader">
-    <br>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}">
-      <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei1s" :key="item.value+'f1'"
-          @click="clickfenlei1(item.value,index)">
-          <input class="yy_radio radio_type" type="radio" name="fenlei1name" v-model="currentSelectFenlei[0]" :value="item.value" />
-          <span class="yy_value">{{item.value}}</span>
-          <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei1s[index]['children']"></span>
-        </div>
-      </el-scrollbar>
-    </div>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei2s==undefined||fenlei2s.length==0)">
-      <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei2s" :key="item.value+'f2'"
-          @click="clickfenlei2(item.value,index)">
-          <input class="yy_radio radio_type" type="radio" name="fenlei2name" v-model="currentSelectFenlei[1]" :value="item.value" />
-          <span class="yy_value">{{item.value}}</span>
-          <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei2s[index]['children']"></span>
-        </div>
-      </el-scrollbar>
-    </div>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei3s==undefined||fenlei3s.length==0)">
-      <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei3s" :key="item.value+'f3'"
-          @click="clickfenlei3(item.value,index)">
-          <input class="yy_radio radio_type" type="radio" name="fenlei3name" v-model="currentSelectFenlei[2]" :value="item.value" />
-          <span class="yy_value">{{item.value}}</span>
-          <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei3s[index]['children']"></span>
+  <div>
+    <div style="display:flex;" class="yycascader">
+      <div class="yycascader_fenleis_view" :style="{height:height+'px'}">
+        <el-scrollbar style="height:100%">
+          <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei1s" :key="item.value+'f1'"
+            @click="clickfenlei1(item.value,index)">
+            <input class="yy_radio radio_type" type="radio" name="fenlei1name" v-model="currentSelectFenlei[0]" :value="item.value" />
+            <span class="yy_value">{{item.value}}</span>
+            <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei1s[index]['children']"></span>
+          </div>
+        </el-scrollbar>
+      </div>
+      <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei2s==undefined||fenlei2s.length==0)">
+        <el-scrollbar style="height:100%">
+          <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei2s" :key="item.value+'f2'"
+            @click="clickfenlei2(item.value,index)">
+            <input class="yy_radio radio_type" type="radio" name="fenlei2name" v-model="currentSelectFenlei[1]" :value="item.value" />
+            <span class="yy_value">{{item.value}}</span>
+            <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei2s[index]['children']"></span>
+          </div>
+        </el-scrollbar>
+      </div>
+      <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei3s==undefined||fenlei3s.length==0)">
+        <el-scrollbar style="height:100%">
+          <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei3s" :key="item.value+'f3'"
+            @click="clickfenlei3(item.value,index)">
+            <input class="yy_radio radio_type" type="radio" name="fenlei3name" v-model="currentSelectFenlei[2]" :value="item.value" />
+            <span class="yy_value">{{item.value}}</span>
+            <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei3s[index]['children']"></span>
 
-        </div>
-      </el-scrollbar>
-    </div>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}"
-      v-show="!(fenlei4s==undefined||fenlei4s.length==0)">
-      <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei4s" :key="item.value+'f4'"
-          @click="clickfenlei4(item.value,index)">
-          <input class="yy_radio radio_type" type="radio" name="fenlei4name" v-model="currentSelectFenlei[3]" :value="item.value" />
-          <span class="yy_value">{{item.value}}</span>
-          <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei4s[index]['children']"></span>
+          </div>
+        </el-scrollbar>
+      </div>
+      <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei4s==undefined||fenlei4s.length==0)">
+        <el-scrollbar style="height:100%">
+          <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei4s" :key="item.value+'f4'"
+            @click="clickfenlei4(item.value,index)">
+            <input class="yy_radio radio_type" type="radio" name="fenlei4name" v-model="currentSelectFenlei[3]" :value="item.value" />
+            <span class="yy_value">{{item.value}}</span>
+            <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei4s[index]['children']"></span>
 
-        </div>
-      </el-scrollbar>
+          </div>
+        </el-scrollbar>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -68,13 +66,24 @@ export default {
     }
   },
   watch: {
-
+    options(newvalue) {
+      console.log('options改变了')
+      // options改变后,重新选择当前路径,这样可以显示新添加的分类
+      this.fenlei1s = newvalue;
+      if (this.currentSelectFenleiIndex[0] != -1) {
+        this.fenlei2s = this.fenlei1s[this.currentSelectFenleiIndex[0]]['children'];
+      }
+      if (this.currentSelectFenleiIndex[1] != -1) {
+        this.fenlei3s = this.fenlei2s[this.currentSelectFenleiIndex[1]]['children'];
+      }
+      if (this.currentSelectFenleiIndex[2] != -1) {
+        this.fenlei4s = this.fenlei3s[this.currentSelectFenleiIndex[2]]['children'];
+      }
+    }
   },
   // ['options','currentSelectFenlei'],
   data() {
     return {
-      style1: { color: 'red', fontSize: '13px' },
-      style2: { color: 'blue', fontSize: '13px' },
       fenlei1s: this.options,         // 每一个分类
       fenlei2s: [],
       fenlei3s: [],
@@ -129,6 +138,7 @@ export default {
       // 触发change事件 输出数组,空的去掉
       this.$emit('change', _.compact(this.currentSelectFenlei))
     },
+    // 清空
     clear() {
       this.currentSelectFenlei[0] = '';
       this.currentSelectFenlei[1] = '';

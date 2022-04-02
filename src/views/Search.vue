@@ -24,7 +24,6 @@
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
           </div>
-          {{this.chaxunData.fenlei}}
           <yy-cascader height="200" ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
           <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
              @change="fenleiHandleChange">
@@ -95,7 +94,7 @@
             <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
             <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
             <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
-            <div class="tip">换行用:$\\$</div>
+            <span class="tip">换行用:$\\$</span>
 
           </div>
 
@@ -119,7 +118,6 @@
             </el-option>
           </el-select>
           <el-button type="primary" size="small" @click="daochuruleClear()">清空规则</el-button>
-          <el-button type="primary" size="small" @click="linshi()">临时</el-button>
         </div>
       </el-container>
     </el-container>
@@ -292,13 +290,6 @@ export default {
       this.select_当前选中的分类 = [];
       this.chaxunData.fenlei = [];
       console.log('分类查询:',this.chaxunData.fenlei);
-    },
-
-    async linshi() {
-      // console.log("你点击了临时按钮");
-      // const rows = await this.fenleitable.findAll();
-      // console.log(rows)
-
     },
     // 查询中 被标记的标签
     chaxun_biaoqian_checkedlist(checkedlist) {

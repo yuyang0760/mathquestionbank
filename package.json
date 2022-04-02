@@ -1,6 +1,6 @@
 {
   "name": "mathquestionbank",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "author": "yy",
 	"description": "latex题库,添加查询题目",
   "private": true,
