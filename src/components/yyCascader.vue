@@ -1,12 +1,10 @@
 <template>
-
+<div>
   <div style="display:flex;" class="yycascader">
-    <!-- {{fenlei2s}} -->
-    <!-- <div v-show="fenlei2s==[]">你好</div> -->
-
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="true">
+    <br>
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}">
       <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei1s" :key="item.value+'f1'" :style="item.style"
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei1s" :key="item.value+'f1'"
           @click="clickfenlei1(item.value,index)">
           <input class="yy_radio radio_type" type="radio" name="fenlei1name" v-model="currentSelectFenlei[0]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
@@ -14,9 +12,9 @@
         </div>
       </el-scrollbar>
     </div>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="fenlei2s.length>0">
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei2s==undefined||fenlei2s.length==0)">
       <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei2s" :key="item.value+'f2'" :style="item.style"
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei2s" :key="item.value+'f2'"
           @click="clickfenlei2(item.value,index)">
           <input class="yy_radio radio_type" type="radio" name="fenlei2name" v-model="currentSelectFenlei[1]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
@@ -24,9 +22,9 @@
         </div>
       </el-scrollbar>
     </div>
-    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="fenlei3s.length>0">
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="!(fenlei3s==undefined||fenlei3s.length==0)">
       <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei3s" :key="item.value+'f3'" :style="item.style"
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei3s" :key="item.value+'f3'"
           @click="clickfenlei3(item.value,index)">
           <input class="yy_radio radio_type" type="radio" name="fenlei3name" v-model="currentSelectFenlei[2]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
@@ -35,9 +33,10 @@
         </div>
       </el-scrollbar>
     </div>
-    <div class="yycascader_fenleis_view yycascader_fenleis_view_last" :style="{height:height+'px'}" v-show="fenlei4s.length>0">
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}"
+      v-show="!(fenlei4s==undefined||fenlei4s.length==0)">
       <el-scrollbar style="height:100%">
-        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei4s" :key="item.value+'f4'" :style="item.style"
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei4s" :key="item.value+'f4'"
           @click="clickfenlei4(item.value,index)">
           <input class="yy_radio radio_type" type="radio" name="fenlei4name" v-model="currentSelectFenlei[3]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
@@ -46,6 +45,7 @@
         </div>
       </el-scrollbar>
     </div>
+  </div>
   </div>
 </template>
 
@@ -64,7 +64,7 @@ export default {
       type: Array,
     },
     height: {
-      type: Number
+      type: String
     }
   },
   watch: {
@@ -105,6 +105,7 @@ export default {
       this.currentSelectFenlei[3] = '';
       this.currentSelectFenleiIndex[2] = -1;
       this.currentSelectFenleiIndex[3] = -1;
+      console.log(value, "第二个")
       this.$set(this.currentSelectFenlei, 1, value);
       this.$set(this.currentSelectFenleiIndex, 1, index);
       this.fenlei3s = this.fenlei2s[index]['children'];
@@ -151,17 +152,16 @@ export default {
 </script>
 <style scoped>
 .yycascader {
-  border: solid 1px #e4e7ed;
+  border-top: solid 1px #e4e7ed;
+  border-bottom: solid 1px #e4e7ed;
+  border-right: solid 1px #e4e7ed;
 }
 .yycascader_fenleis_view {
   height: 200px;
   min-width: 170px;
   flex-direction: column;
-  border-right: solid 1px #e4e7ed;
+  border-left: solid 1px #e4e7ed;
   display: flex;
-}
-.yycascader_fenleis_view_last{
-  border-right: solid 0px #e4e7ed;
 }
 .yycascader_fenlei_view {
   display: flex;

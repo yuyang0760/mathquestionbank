@@ -61,7 +61,7 @@
         <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
           v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel> -->
-        <yy-cascader height="400" :options="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
+        <yy-cascader height="400" v-if="fenleiOptions" :options="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
         <!-- </el-drawer> -->
       </el-col>
     </el-row>

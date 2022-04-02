@@ -26,9 +26,9 @@
           </div>
           {{this.chaxunData.fenlei}}
           <yy-cascader height="200" ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
-          <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
+          <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
              @change="fenleiHandleChange">
-          </el-cascader-panel>
+          </el-cascader-panel> -->
           <div style="margin:0px 0px 0px 0px;border: 2px solid #eee;">
             <el-switch v-model="biaoqian_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
             </el-switch>
