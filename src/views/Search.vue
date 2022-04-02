@@ -25,7 +25,7 @@
             </el-pagination>
           </div>
           {{this.chaxunData.fenlei}}
-          <yy-cascader ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
+          <yy-cascader height="200" ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
           <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
              @change="fenleiHandleChange">
           </el-cascader-panel>

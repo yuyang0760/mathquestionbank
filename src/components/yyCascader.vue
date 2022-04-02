@@ -1,36 +1,50 @@
 <template>
-  <div>
-    <div style="display:flex;">
-      <div>
-        <div v-for="(item,index) in fenlei1s" :key="item.value+'f1'" :style="item.style" @click="clickfenlei1(item.value,index)">
-          <input class="yy_radio" type="radio" name="fenlei1name" v-model="currentSelectFenlei[0]" :value="item.value" />
+
+  <div style="display:flex;" class="yycascader">
+    <!-- {{fenlei2s}} -->
+    <!-- <div v-show="fenlei2s==[]">你好</div> -->
+
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="true">
+      <el-scrollbar style="height:100%">
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei1s" :key="item.value+'f1'" :style="item.style"
+          @click="clickfenlei1(item.value,index)">
+          <input class="yy_radio radio_type" type="radio" name="fenlei1name" v-model="currentSelectFenlei[0]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
           <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei1s[index]['children']"></span>
         </div>
-      </div>
-      <div>
-        <div v-for="(item,index) in fenlei2s" :key="item.value+'f2'" :style="item.style" @click="clickfenlei2(item.value,index)">
-          <input class="yy_radio" type="radio" name="fenlei2name" v-model="currentSelectFenlei[1]" :value="item.value" />
+      </el-scrollbar>
+    </div>
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="fenlei2s.length>0">
+      <el-scrollbar style="height:100%">
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei2s" :key="item.value+'f2'" :style="item.style"
+          @click="clickfenlei2(item.value,index)">
+          <input class="yy_radio radio_type" type="radio" name="fenlei2name" v-model="currentSelectFenlei[1]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
           <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei2s[index]['children']"></span>
         </div>
-      </div>
-      <div>
-        <div v-for="(item,index) in fenlei3s" :key="item.value+'f3'" :style="item.style" @click="clickfenlei3(item.value,index)">
-          <input class="yy_radio" type="radio" name="fenlei3name" v-model="currentSelectFenlei[2]" :value="item.value" />
+      </el-scrollbar>
+    </div>
+    <div class="yycascader_fenleis_view" :style="{height:height+'px'}" v-show="fenlei3s.length>0">
+      <el-scrollbar style="height:100%">
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei3s" :key="item.value+'f3'" :style="item.style"
+          @click="clickfenlei3(item.value,index)">
+          <input class="yy_radio radio_type" type="radio" name="fenlei3name" v-model="currentSelectFenlei[2]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
           <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei3s[index]['children']"></span>
 
         </div>
-      </div>
-      <div>
-        <div v-for="(item,index) in fenlei4s" :key="item.value+'f4'" :style="item.style" @click="clickfenlei4(item.value,index)">
-          <input class="yy_radio" type="radio" name="fenlei4name" v-model="currentSelectFenlei[3]" :value="item.value" />
+      </el-scrollbar>
+    </div>
+    <div class="yycascader_fenleis_view yycascader_fenleis_view_last" :style="{height:height+'px'}" v-show="fenlei4s.length>0">
+      <el-scrollbar style="height:100%">
+        <div class="yycascader_fenlei_view" v-for="(item,index) in fenlei4s" :key="item.value+'f4'" :style="item.style"
+          @click="clickfenlei4(item.value,index)">
+          <input class="yy_radio radio_type" type="radio" name="fenlei4name" v-model="currentSelectFenlei[3]" :value="item.value" />
           <span class="yy_value">{{item.value}}</span>
           <span class="el-icon-arrow-right yy_arrow_right" v-show="fenlei4s[index]['children']"></span>
 
         </div>
-      </div>
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -49,6 +63,9 @@ export default {
     options: {
       type: Array,
     },
+    height: {
+      type: Number
+    }
   },
   watch: {
 
@@ -133,14 +150,95 @@ export default {
 };
 </script>
 <style scoped>
+.yycascader {
+  border: solid 1px #e4e7ed;
+}
+.yycascader_fenleis_view {
+  height: 200px;
+  min-width: 170px;
+  flex-direction: column;
+  border-right: solid 1px #e4e7ed;
+  display: flex;
+}
+.yycascader_fenleis_view_last{
+  border-right: solid 0px #e4e7ed;
+}
+.yycascader_fenlei_view {
+  display: flex;
+  padding: 0px 10px 0px 10px;
+  line-height: 34px;
+  justify-content: center; /* 子元素水平居中 */
+  align-items: center; /* 子元素垂直居中 */
+}
+.yycascader_fenlei_view:hover {
+  background-color: #f6f7fb;
+}
 .yy_radio {
   cursor: pointer;
+  width: 14px;
+  height: 14px;
 }
 .yy_value {
   cursor: pointer;
+  flex: 1;
+  color: #606266;
+  padding: 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
 }
 .yy_arrow_right {
   cursor: pointer;
+  width: 14px;
+  height: 14px;
+  color: #606266;
+}
+
+.radio_type {
+  width: 14px;
+  height: 14px;
+  appearance: none;
+  position: relative;
+  outline: none;
+  line-height: 0.9px;
+}
+.radio_type:before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  border: 1px solid #e1e4ea;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.radio_type:checked:before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 0px solid #409eff;
+  display: inline-block;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: #409eff;
+}
+.radio_type:checked:after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  text-align: center;
+  background: #409eff;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+.radio_type:checked + span {
+  color: #409eff;
+  font-weight: bold;
+  font-size: 14px;
 }
 </style>
 

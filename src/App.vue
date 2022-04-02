@@ -66,6 +66,9 @@ export default {
 }
 </script>
 <style>
+body .el-scrollbar__wrap {
+    overflow-x: hidden;
+}
 html,
 body {
   padding: 0px;

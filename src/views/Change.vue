@@ -58,10 +58,10 @@
             <el-input v-model="formData.jiexi" type="textarea" placeholder="请输入解析:" :autosize="{minRows: 1 }"> </el-input>
           </div>
         </div>
-        <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
+        <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
           v-model="formData.fenlei" @change="fenleiHandleChange">
-        </el-cascader-panel>
-
+        </el-cascader-panel> -->
+        <yy-cascader height="400" :options="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
         <!-- </el-drawer> -->
       </el-col>
     </el-row>
@@ -73,6 +73,7 @@
 import _ from 'lodash'  // lodash工具库
 import Vue from 'vue'
 import yytitledescription_change from '../components/yytitledescription_change.vue'
+import yyCascader from '../components/yyCascader.vue'
 import { titlesCopy } from '../tools/mytools'
 import { clipboard } from 'electron';
 import fs from 'fs';
@@ -84,6 +85,7 @@ export default {
   name: "Change",
   components: {
     yytitledescription_change,
+    yyCascader,
   },
   data() {
     return {
