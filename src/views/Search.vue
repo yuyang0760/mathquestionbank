@@ -3,7 +3,6 @@
 
     <el-container style="border: 1px solid #eee;">
       <el-aside width="53%">
-          <yy-cascader  :sequelize='sequelize' v-if="fenleitable" :fenleitable='fenleitable'></yy-cascader>
         <div :style="{height:window_innerheight+'px'}">
           <happy-scroll size="12" resize>
             <div>
@@ -24,10 +23,11 @@
               :page-sizes="[1,3,4, 5, 50,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
               layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
             </el-pagination>
-
           </div>
+          {{this.chaxunData.fenlei}}
+          <yy-cascader ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
           <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
-            v-model="chaxunData.fenlei" @change="fenleiHandleChange">
+             @change="fenleiHandleChange">
           </el-cascader-panel>
           <div style="margin:0px 0px 0px 0px;border: 2px solid #eee;">
             <el-switch v-model="biaoqian_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
@@ -76,7 +76,7 @@
             <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
               :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
             <el-button size="small" type="danger" @click="clearAllTimu()">清空所有题目</el-button>
-            <el-button size="small" type="danger" @click="chaxunData.fenlei=[]">清空分类</el-button>
+            <el-button size="small" type="danger" @click="clearfenlei()">清空分类</el-button>
             <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
             <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
             </el-input-number>
@@ -147,7 +147,7 @@ export default {
   components: {
     yytitledescription_search,
     draggable,
-    yyCascader
+    yyCascader,
   },
   props: [],
   data() {
@@ -167,7 +167,7 @@ export default {
       TimuDaoChuList: [],   // 储存需要导出的题目
       TimuCurrentPageList: [],   // 储存了当前页显示的所有题目
       titles: null,  // 题目类 ,数据库查询用
-      fenleitable:null, // 分类类,数据库查询用
+      fenleitable: null, // 分类类,数据库查询用
       sequelize: null,  // 数据库连接,销毁用
       chaxun_ByID_word: 1,    // 以ID查询
       chaxun_Bytimu_word: '',  // 以题目关键词查询
@@ -283,7 +283,17 @@ export default {
   watch: {
   },
   methods: {
- 
+    // 清空分类
+    clearfenlei() {
+      this.$nextTick(() => {
+        this.$refs.yycascader.clear();
+      });
+      this.input_添加分类 = '';
+      this.select_当前选中的分类 = [];
+      this.chaxunData.fenlei = [];
+      console.log('分类查询:',this.chaxunData.fenlei);
+    },
+
     async linshi() {
       // console.log("你点击了临时按钮");
       // const rows = await this.fenleitable.findAll();
@@ -577,19 +587,20 @@ export default {
 
     },
     fenleiHandleChange(fenlei) {
-      console.log("你选择了分类:", fenlei);
+      // console.log("你选择了分类:", fenlei);
       this.input_添加分类 = fenlei.join('▲');
       this.select_当前选中的分类 = fenlei;
-      // 读取当前分类下的标签
+      this.chaxunData.fenlei = fenlei;
+      console.log('分类查询:',this.chaxunData.fenlei);
     },
 
   },
 
   created() {
-    console.log("About_created");
+    console.log("Search_created");
   },
-   mounted() {
-    console.log("About_mounted")
+  mounted() {
+    console.log("Search_mounted")
 
     // 开始就读取分类
     // 读取文件
@@ -623,7 +634,7 @@ export default {
   },
   destroyed() {
     // 断开数据库
-    console.log("About_destroyed")
+    console.log("Search_destroyed")
     // this.sequelize.close();
     // console.log("数据库已关闭")
   },

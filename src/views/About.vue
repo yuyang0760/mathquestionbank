@@ -866,9 +866,7 @@ el-dialog {
   margin-left: 10px;
   vertical-align: bottom;
 }
-.el-cascader-menu__wrap {
-  height: 300px;
-}
+
 .el-dialog__header {
   padding: 0px 0px 0px;
 }

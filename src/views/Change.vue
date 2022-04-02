@@ -374,9 +374,9 @@ export default {
     });
     console.log("数据库已连接")
     this.connect = sequelize;
-    let u= initModels(sequelize);
+    let u = initModels(sequelize);
     this.titles = u.titles;
-    this.fenleitable=u.fenleitable;
+    this.fenleitable = u.fenleitable;
   },
   destroyed() {
     // 断开数据库
