@@ -61,7 +61,8 @@
         <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
           v-model="formData.fenlei" @change="fenleiHandleChange">
         </el-cascader-panel> -->
-        <yy-cascader height="400" v-if="fenleiOptions" :options="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
+        <yy-cascader height="400" :pcurrentSelectFenlei="select_当前选中的分类" v-if="fenleiOptions" :options="fenleiOptions"
+          @change="fenleiHandleChange"></yy-cascader>
         <!-- </el-drawer> -->
       </el-col>
     </el-row>
@@ -201,10 +202,8 @@ export default {
         console.log(this.formData, "this.formData")
         this.chaXunID = this.formData.id;
         this.input_添加分类 = this.formData.fenlei.join('▲');
-        if (this.select_当前选中的分类.length == 0) {
-          // 更新当前选中的分类可以更新显示的标签
-          this.select_当前选中的分类 = this.formData.fenlei;
-        }
+        // 更新当前选中的分类可以更新显示的标签
+        this.select_当前选中的分类 = this.formData.fenlei;
       }
     },
     // 分类改变
@@ -212,7 +211,7 @@ export default {
       console.log("你点击了分类:", fenlei);
       this.input_添加分类 = fenlei.join('▲');
       this.select_当前选中的分类 = fenlei;
-      // 读取当前分类下的标签
+      this.formData.fenlei = fenlei;
     },
     // 分析题目中的图片,并添加到数据库
     bt_添加题目图片() {

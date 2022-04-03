@@ -12,10 +12,10 @@
       <div id="titleName">Latex题库({{version}}) </div>
       <TitleButton class="nodrag TitleButtons" />
     </div>
-    <!-- <el-collapse-transition> -->
     <div id="content">
       <router-view></router-view>
     </div>
+    <!-- <el-collapse-transition> -->
     <!-- </el-collapse-transition> -->
 
   </div>
@@ -74,6 +74,8 @@ body .el-scrollbar__wrap {
 #App {
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+ 
 }
 #content {
   flex: 1;
@@ -82,6 +84,7 @@ body .el-scrollbar__wrap {
   display: flex;
   width: 100%;
   height: 30px;
+ 
   align-items: center; /* 上下居中*/
   justify-content: center; /* 左右居中*/
   background-color: rgb(255, 255, 255);

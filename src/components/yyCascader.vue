@@ -1,5 +1,6 @@
 <template>
   <div>
+    <br>
     <div style="display:flex;" class="yycascader">
       <div class="yycascader_fenleis_view" :style="{height:height+'px'}">
         <el-scrollbar style="height:100%">
@@ -63,9 +64,39 @@ export default {
     },
     height: {
       type: String
+    },
+    pcurrentSelectFenlei: {
+      type: Array
     }
   },
   watch: {
+    pcurrentSelectFenlei(newvalue) {
+      console.log(newvalue, 'newvalue')
+      this.fenlei2s = [];
+      this.fenlei3s = [];
+      this.fenlei4s = [];
+      if (_.compact(newvalue).length >= 1) {
+      }
+      if (_.compact(newvalue).length >= 2) {
+        // 显示
+        this.fenlei2s = _.find(this.fenlei1s, ['value', newvalue[0]])['children'];
+      }
+      if (_.compact(newvalue).length >= 3) {
+        // 显示
+        this.fenlei3s = _.find(this.fenlei2s, ['value', newvalue[1]])['children'];
+      }
+      if (_.compact(newvalue).length >= 4) {
+        // 显示
+        this.fenlei4s = _.find(this.fenlei3s, ['value', newvalue[2]])['children'];
+      }
+      // 选中
+      this.currentSelectFenlei = newvalue;
+      //设置 index
+      this.currentSelectFenleiIndex[0] = _.findIndex(this.fenlei1s, ['value', newvalue[0]]);
+      this.currentSelectFenleiIndex[1] = _.findIndex(this.fenlei2s, ['value', newvalue[1]]);
+      this.currentSelectFenleiIndex[2] = _.findIndex(this.fenlei3s, ['value', newvalue[2]]);
+      this.currentSelectFenleiIndex[3] = _.findIndex(this.fenlei4s, ['value', newvalue[3]]);
+    },
     options(newvalue) {
       console.log('options改变了')
       // options改变后,重新选择当前路径,这样可以显示新添加的分类

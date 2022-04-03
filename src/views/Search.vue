@@ -1,126 +1,123 @@
 <template>
-  <div>
+  <div style="display:flex;">
 
-    <el-container style="border: 1px solid #eee;">
-      <el-aside width="53%">
-        <div :style="{height:window_innerheight+'px'}">
-          <happy-scroll size="12" resize>
-            <div>
-              <div v-for="(item,index) in TimuCurrentPageList" :key="item.id" style="margin:0px 30px 0px 0px">
-                <yytitledescription_search v-bind="item" :tihao="index" :isShowMini="true">
-                  <el-button type="danger" icon="el-icon-star-off" size="mini" @click="addDaoChuTimuID(item)"></el-button>
-                </yytitledescription_search>
-              </div>
-            </div>
-          </happy-scroll>
-        </div>
-      </el-aside>
-
-      <el-container width="40%">
-        <div>
+    <!-- <el-container style="border: 1px solid #eee;"> -->
+    <div style="width:55%;height:100%">
+      <div :style="{height:window_innerheight+'px'}">
+        <happy-scroll size="12" resize>
           <div>
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
-              :page-sizes="[1,3,4, 5, 50,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
-              layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
-            </el-pagination>
+            <div v-for="(item,index) in TimuCurrentPageList" :key="item.id" style="margin:0px 30px 0px 0px">
+              <yytitledescription_search v-bind="item" :tihao="index" :isShowMini="true">
+                <el-button type="danger" icon="el-icon-star-off" size="mini" @click="addDaoChuTimuID(item)"></el-button>
+              </yytitledescription_search>
+            </div>
           </div>
-          <yy-cascader height="200" ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange"></yy-cascader>
-          <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
+        </happy-scroll>
+      </div>
+    </div>
+    <div style=" ">
+      <div>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+          :page-sizes="[1,3,4, 5, 50,200,TimuALlCount]" :current-page.sync="currentPage" :page-size="pagesize"
+          layout="total, sizes, prev, pager, next, jumper" :total="TimuALlCount">
+        </el-pagination>
+      </div>
+      <yy-cascader height="200" ref="yycascader" :options="fenleiOptions" v-if="fenleiOptions" @change="fenleiHandleChange">
+      </yy-cascader>
+      <!-- <el-cascader-panel class="el-cascader-panel" :props="{ checkStrictly: true }" :options="fenleiOptions"
              @change="fenleiHandleChange">
           </el-cascader-panel> -->
-          <div style="margin:0px 0px 0px 0px;border: 2px solid #eee;">
-            <el-switch v-model="biaoqian_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
-            </el-switch>
-            <el-button style="margin-left:10px" type="danger" round size="mini" @click="chaxunData.biaoqian=[]">
-              清空标签
-            </el-button>
-            {{chaxunData.biaoqian}}
-            <!-- <el-checkbox-group v-model="chaxunData.biaoqian" size="mini" >
+      <div style="margin:0px 0px 0px 0px;border: 2px solid #eee;">
+        <el-switch v-model="biaoqian_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
+        </el-switch>
+        <el-button style="margin-left:10px" type="danger" round size="mini" @click="chaxunData.biaoqian=[]">
+          清空标签
+        </el-button>
+        {{chaxunData.biaoqian}}
+        <!-- <el-checkbox-group v-model="chaxunData.biaoqian" size="mini" >
               <el-checkbox-button   v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]" :label="tag.value" :key="index">{{title}}
               </el-checkbox-button>
             </el-checkbox-group> -->
-            <div>
-              <el-button style="margin:1px 0px 0px 1px;" type="primary" round size="mini" @click="快速添加标签(tag.value)" :key="index"
-                v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
-                {{tag['value']}}
-              </el-button>
-            </div>
-          </div>
-          <div>
-            <div>
-              <div style="display:inline;">
-                <el-switch v-model="timu_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
-                </el-switch>
-                <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
-                  <template slot="prepend">题目:</template>
-                </el-input>
-                高度:
-                <el-input-number style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
-                </el-input-number>
-              </div>
-            </div>
-            <div>
-              <div style="display:inline;">
-                <el-switch v-model="daan2_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
-                </el-switch>
-                <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
-                  <template slot="prepend">答案:</template>
-                </el-input>
-              </div>
-            </div>
-
-          </div>
-          <div style="margin:2px 0px">
-            <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
-            <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
-              :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
-            <el-button size="small" type="danger" @click="clearAllTimu()">清空所有题目</el-button>
-            <el-button size="small" type="danger" @click="clearfenlei()">清空分类</el-button>
-            <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
-            <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
+        <div>
+          <el-button style="margin:1px 0px 0px 1px;" type="primary" round size="mini" @click="快速添加标签(tag.value)" :key="index"
+            v-for="(tag,index) in biaoqianOptions[this.select_当前选中的分类[0]]">
+            {{tag['value']}}
+          </el-button>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div style="display:inline;">
+            <el-switch v-model="timu_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
+            </el-switch>
+            <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入题目关键词,用逗号分割" v-model="chaxunData.timu">
+              <template slot="prepend">题目:</template>
+            </el-input>
+            高度:
+            <el-input-number style="margin-left:10px" size="small" v-model="window_innerheight" :min="1" :precision="0">
             </el-input-number>
           </div>
-
-          <div style="margin:2px 2px 2px 2px" v-show="TimuDaoChuList.length!=0">试题篮:
-            <!-- <span :key="index" v-for="(item,index) in TimuDaoChuList"> {{item.id}}</span> -->
-            <el-button style="margin:0px 2px 0px 2px" type="success" size="small" @click="removeDaoChuList(item)" :key="index"
-              v-for="(item,index) in TimuDaoChuList">
-              {{item.id}}</el-button>
-          </div>
-
-          <div style="margin-top:5px">
-            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
-            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
-            <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
-            <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
-            <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
-            <span class="tip">换行用:$\\$</span>
-
-          </div>
-
-          <draggable v-model="daochurule" @start="drag=true" @end="drag=false" v-bind="{animation: 200}">
-            <transition-group tag="div">
-              <div v-for="(element,index) in daochurule" :key="element.id">
-                <el-switch v-model="element.isout" active-color="#13ce66" inactive-color="#ff4949">
-                </el-switch>
-                <span style="width:60px;display:inline-block;"> {{index+1}}. {{element.name}}:</span>
-
-                <el-input v-model="element.qian" size="small" style="width:290px" :placeholder="element.placeholderqian"></el-input>
-                <el-input v-model="element.hou" size="small" style="width:290px" :placeholder="element.placeholderhou"></el-input>
-              </div>
-            </transition-group>
-          </draggable>
-          <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
-          <el-input v-model="ruleSaveName" size="small" style="width:200px" placeholder="请输入"></el-input>
-          <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
-          <el-select size="small" v-model="currentSelectRuleName" placeholder="请选择">
-            <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="index">
-            </el-option>
-          </el-select>
-          <el-button type="primary" size="small" @click="daochuruleClear()">清空规则</el-button>
         </div>
-      </el-container>
-    </el-container>
+        <div>
+          <div style="display:inline;">
+            <el-switch v-model="daan2_switch" active-color="#13ce66" inactive-color="#ff4949" active-text="and" inactive-text="or">
+            </el-switch>
+            <el-input size="small" style="width:350px;margin-left:10px" placeholder="请输入答案关键词,用逗号分割" v-model="chaxunData.daan2">
+              <template slot="prepend">答案:</template>
+            </el-input>
+          </div>
+        </div>
+
+      </div>
+      <div style="margin:2px 0px">
+        <el-button type="success" size="small" @click="chaxunButton(1,false)">查询</el-button>
+        <el-button type="success" size="small" @click="chaxunButton(currentPage+1,false)"
+          :disabled="currentPage>=Math.ceil(TimuALlCount/pagesize)">下一页</el-button>
+        <el-button size="small" type="danger" @click="clearAllTimu()">清空所有题目</el-button>
+        <el-button size="small" type="danger" @click="clearfenlei()">清空分类</el-button>
+        <el-button type="success" size="small" @click="chaxunButton_ByID(chaxun_ByID_word)">查询ID</el-button>
+        <el-input-number style="margin-left:10px" size="small" v-model="chaxun_ByID_word" :min="1" label="题库ID" :precision="0">
+        </el-input-number>
+      </div>
+
+      <div style="margin:2px 2px 2px 2px" v-show="TimuDaoChuList.length!=0">试题篮:
+        <!-- <span :key="index" v-for="(item,index) in TimuDaoChuList"> {{item.id}}</span> -->
+        <el-button style="margin:0px 2px 0px 2px" type="success" size="small" @click="removeDaoChuList(item)" :key="index"
+          v-for="(item,index) in TimuDaoChuList">
+          {{item.id}}</el-button>
+      </div>
+
+      <div style="margin-top:5px">
+        <el-button type="primary" size="small" @click="chaxunButton(currentPage,'all')">导出所有题目</el-button>
+        <el-button type="primary" size="small" @click="chaxunButton(currentPage,'currentPage')">导出此页题目</el-button>
+        <el-button type="primary" size="small" @click="addCurrentPageTimuToShitilan()">添加本页到试题篮</el-button>
+        <el-button type="primary" size="small" @click="chaxunButton(currentPage,'shitilan')">导出试题篮</el-button>
+        <el-button type="danger" size="small" @click="TimuDaoChuList=[]">清空试题篮</el-button>
+        <span class="tip">换行用:$\\$</span>
+
+      </div>
+
+      <draggable v-model="daochurule" @start="drag=true" @end="drag=false" v-bind="{animation: 200}">
+        <transition-group tag="div">
+          <div v-for="(element,index) in daochurule" :key="element.id">
+            <el-switch v-model="element.isout" active-color="#13ce66" inactive-color="#ff4949">
+            </el-switch>
+            <span style="width:60px;display:inline-block;"> {{index+1}}. {{element.name}}:</span>
+
+            <el-input v-model="element.qian" size="small" style="width:290px" :placeholder="element.placeholderqian"></el-input>
+            <el-input v-model="element.hou" size="small" style="width:290px" :placeholder="element.placeholderhou"></el-input>
+          </div>
+        </transition-group>
+      </draggable>
+      <el-button type="primary" size="small" @click="daochuruleSave()">保存导出规则</el-button>
+      <el-input v-model="ruleSaveName" size="small" style="width:200px" placeholder="请输入"></el-input>
+      <el-button type="primary" size="small" @click="daochuruleRead()">读取导出规则</el-button>
+      <el-select size="small" v-model="currentSelectRuleName" placeholder="请选择">
+        <el-option v-for="(item,index) in daochurulesOptions" :key="index" :label="index" :value="index">
+        </el-option>
+      </el-select>
+      <el-button type="primary" size="small" @click="daochuruleClear()">清空规则</el-button>
+    </div>
 
   </div>
 </template>
@@ -289,7 +286,7 @@ export default {
       this.input_添加分类 = '';
       this.select_当前选中的分类 = [];
       this.chaxunData.fenlei = [];
-      console.log('分类查询:',this.chaxunData.fenlei);
+      console.log('分类查询:', this.chaxunData.fenlei);
     },
     // 查询中 被标记的标签
     chaxun_biaoqian_checkedlist(checkedlist) {
@@ -582,7 +579,7 @@ export default {
       this.input_添加分类 = fenlei.join('▲');
       this.select_当前选中的分类 = fenlei;
       this.chaxunData.fenlei = fenlei;
-      console.log('分类查询:',this.chaxunData.fenlei);
+      console.log('分类查询:', this.chaxunData.fenlei);
     },
 
   },
