@@ -1,8 +1,10 @@
 <template>
-  <div style="display: flex;  width: 138px; height:30px">
-    <div class="titlebtn el-icon-minus" @click="click('min')"></div>
-    <div class="titlebtn el-icon-plus" @click="click('max')"></div>
-    <div class="titlebtn el-icon-close" @click="click('close')"></div>
+  <div>
+    <div style="display: flex;  width: 138px; height:30px">
+      <div class="titlebtn el-icon-minus" @click="click('min')"></div>
+      <div class="titlebtn el-icon-plus" @click="click('max')"></div>
+      <div class="titlebtn el-icon-close" @click="click('close')"></div>
+    </div>
   </div>
 </template>
 

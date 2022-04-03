@@ -9,11 +9,13 @@
         <router-link class="nodrag" to="/search">查询</router-link>
 
       </div>
-      <div class="titleName">版本:{{version}} </div>
+      <div id="titleName">Latex题库({{version}}) </div>
       <TitleButton class="nodrag TitleButtons" />
     </div>
     <!-- <el-collapse-transition> -->
-    <router-view></router-view>
+    <div id="content">
+      <router-view></router-view>
+    </div>
     <!-- </el-collapse-transition> -->
 
   </div>
@@ -67,15 +69,14 @@ export default {
 </script>
 <style>
 body .el-scrollbar__wrap {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
-html,
-body {
-  padding: 0px;
-  margin: 0px;
-  border: 0px;
-  width: 100%;
-  height: 100%;
+#App {
+  display: flex;
+  flex-direction: column;
+}
+#content {
+  flex: 1;
 }
 #mytitle {
   display: flex;
@@ -93,14 +94,17 @@ body {
 #nav {
   display: flex;
 }
+#titleName {
+  flex: 1;
+  display: flex;
+  align-items: center; /* 上下居中*/
+  /* justify-content: center; 左右居中 */
+  font-family: "微软雅黑";
+}
 .drag {
   -webkit-app-region: drag;
 }
 .nodrag {
   -webkit-app-region: no-drag;
-}
- 
-.TitleButtons {
-  margin-left: auto;
 }
 </style>
